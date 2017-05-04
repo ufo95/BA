@@ -871,5 +871,8 @@ int injector_start_app(drakvuf_t drakvuf, vmi_pid_t pid, uint32_t tid, const cha
 done:
     PRINT_DEBUG("Finished with injection. Ret: %i\n", injector.rc);
     drakvuf_release_vmi(drakvuf);
-    return injector.rc;
+    if (injector.rc){
+        return injector.pid;
+    }
+    return -1;
 }
