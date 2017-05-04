@@ -114,6 +114,7 @@
 #include "debugmon/debugmon.h"
 #include "cpuidmon/cpuidmon.h"
 #include "socketmon/socketmon.h"
+#include "packeranalyser/packeranalyser.h"
 
 drakvuf_plugins::drakvuf_plugins(const drakvuf_t drakvuf, output_format_t output, os_t os)
 {
@@ -191,6 +192,11 @@ int drakvuf_plugins::start(const drakvuf_plugin_t plugin_id,
 #ifdef ENABLE_PLUGIN_SOCKETMON
             case PLUGIN_SOCKETMON:
                 this->plugins[plugin_id] = new socketmon(this->drakvuf, config, this->output);
+                break;
+#endif
+#ifdef ENABLE_PLUGIN_PACKERANALYSER
+            case PLUGIN_PACKERANALYSER:
+                this->plugins[plugin_id] = new packeranalyser(this->drakvuf, config, this->output);
                 break;
 #endif
             default:

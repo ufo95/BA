@@ -146,6 +146,14 @@ if PLUGIN_SOCKETMON
 sources += socketmon/socketmon.cpp
 endif
 
+if PLUGIN_SOCKETMON
+sources += socketmon/socketmon.cpp
+endif
+
+if PLUGIN_PACKERANALYSER
+sources += packeranalyser/packeranalyser.cpp
+endif
+
 ###############################################################################
 sources += plugins.cpp plugins.h
 

@@ -219,6 +219,16 @@ if test x$plugin_socketmon = xyes; then
   AC_DEFINE_UNQUOTED(ENABLE_PLUGIN_SOCKETMON, 1, "")
 fi
 
+
+AC_ARG_ENABLE([plugin_packeranalyser],
+  [AS_HELP_STRING([--disable-plugin-packeranalyser],
+    [Enable the packeranalyser example plugin @<:@yes@:>@])],
+  [plugin_packeranalyser="$enableval"],
+  [plugin_packeranalyser="yes"])   
+AM_CONDITIONAL([PLUGIN_PACKERANALYSER], [test x$plugin_packeranalyser = xyes])
+if test x$plugin_packeranalyser = xyes; then
+  AC_DEFINE_UNQUOTED(ENABLE_PLUGIN_PACKERANALYSER, 1, "")
+fi
 #####################################################
 
 AC_ARG_ENABLE([hardening],
@@ -385,4 +395,5 @@ SSDTmon:    $plugin_ssdtmon
 CPUIDmon:   $plugin_cpuidmon
 Debugmon:   $plugin_debugmon
 Socketmon:  $plugin_socketmon
+Packerana:  $plugin_packeranalyser
 -------------------------------------------------------------------------------])
