@@ -9,8 +9,10 @@ class packeranalyser: public plugin {
 
     private:
         GSList *traps;
+        int pid;
 
     public:
+    	drakvuf_trap_t poolalloc;
         uint8_t reg_size;
         output_format_t format;
         os_t os;
