@@ -12,7 +12,11 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config, output_for
 	const struct packeranalyser_config *c = (const struct packeranalyser_config *)config;
 
 	pid = c-> injected_pid;
-	//pid = injector_start_app(drakvuf, 1144, 0, "C:\\Windows\\System32\\Notepad.exe");
+
+	if(!pid || pid < 0){
+		printf("packeranalyser: no pid found!\n");
+		return;
+	}
 	printf("Hellooo! PID: %i\n", pid);
 }
 
