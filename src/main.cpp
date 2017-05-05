@@ -127,7 +127,7 @@ static inline void disable_plugin(char *optarg, bool *plugin_list) {
 }
 
 int main(int argc, char** argv) {
-    int c, rc = 1, timeout = 0;
+    int c, rc = 1, timeout = 0, ret = -1;
     char *inject_cmd = NULL;
     char *domain = NULL;
     char *rekall_profile = NULL;
@@ -255,7 +255,7 @@ int main(int argc, char** argv) {
 
     if ( injection_pid > 0 && inject_cmd ) {
         PRINT_DEBUG("Starting injection with PID %i(%i) for %s\n", injection_pid, injection_thread, inject_cmd);
-        int ret = drakvuf->inject_cmd(injection_pid, injection_thread, inject_cmd);
+        ret = drakvuf->inject_cmd(injection_pid, injection_thread, inject_cmd);
         if (!ret)
             goto exit;
     }
@@ -268,7 +268,7 @@ int main(int argc, char** argv) {
 
     PRINT_DEBUG("Starting plugins\n");
 
-    if ( drakvuf->start_plugins(plugin_list, dump_folder, cpuid_stealth) < 0 )
+    if ( drakvuf->start_plugins(plugin_list, dump_folder, cpuid_stealth, ret) < 0 )
         goto exit;
 
     PRINT_DEBUG("Beginning DRAKVUF loop\n");

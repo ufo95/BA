@@ -117,6 +117,11 @@ struct filedelete_config {
     const char *dump_folder;
 };
 
+struct packeranalyser_config{
+    const char *rekall_profile;
+    const int injected_pid;
+};
+
 /***************************************************************************/
 
 typedef enum {

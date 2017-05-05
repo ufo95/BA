@@ -125,7 +125,7 @@ static gpointer timer(gpointer data)
     return NULL;
 }
 
-int drakvuf_c::start_plugins(const bool* plugin_list, const char *dump_folder, bool cpuid_stealth)
+int drakvuf_c::start_plugins(const bool* plugin_list, const char *dump_folder, bool cpuid_stealth, int injected_pid)
 {
     int i, rc;
 
@@ -144,6 +144,18 @@ int drakvuf_c::start_plugins(const bool* plugin_list, const char *dump_folder, b
                 break;
             }
 
+            case PLUGIN_PACKERANALYSER:
+            {
+                struct packeranalyser_config c = {
+                    .rekall_profile = this->rekall_profile,
+                    .injected_pid = injected_pid
+                };
+
+                rc = this->plugins->start((drakvuf_plugin_t)i, &c);
+                break;
+            }
+
+
             case PLUGIN_CPUIDMON:
                 rc = this->plugins->start((drakvuf_plugin_t)i, &cpuid_stealth);
                 break;
@@ -152,6 +164,7 @@ int drakvuf_c::start_plugins(const bool* plugin_list, const char *dump_folder, b
                 rc = this->plugins->start((drakvuf_plugin_t)i, this->rekall_profile);
                 break;
             };
+
 
             if ( rc < 0 )
                 return rc;
