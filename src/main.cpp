@@ -256,7 +256,7 @@ int main(int argc, char** argv) {
     if ( injection_pid > 0 && inject_cmd ) {
         PRINT_DEBUG("Starting injection with PID %i(%i) for %s\n", injection_pid, injection_thread, inject_cmd);
         ret = drakvuf->inject_cmd(injection_pid, injection_thread, inject_cmd);
-        if (!ret)
+        if (!ret || ret < 0)
             goto exit;
     }
 
