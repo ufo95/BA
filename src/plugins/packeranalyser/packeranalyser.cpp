@@ -7,9 +7,8 @@
 #include "../plugins.h"
 #include <libdrakvuf/libdrakvuf.h>
 
-void recover_adress(drakvuf_t drakvuf, drakvuf_trap_info_t *info){
-    packeranalyser *p = (packeranalyser*)info->trap->data;
-
+void recover_address(drakvuf_t drakvuf, drakvuf_trap_info_t *info){
+    //packeranalyser *p = (packeranalyser*)info->trap->data;
 }
 
 
@@ -25,13 +24,14 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
     uint64_t *buf64 = NULL;
 
 
+    printf("%s\n", info->trap->name);
 
-    if(strcmp(info->trap->name, "ntpvm_cb_trap")){
+    if(!strcmp(info->trap->name, "NtProtectVirtualMemory")){
         number_of_args = 5;
         index_address = 1;
         index_protect = 3;
     } else {
-        recover_adress(drakvuf, info);
+        recover_address(drakvuf, info);
         goto exit;
     }
 
