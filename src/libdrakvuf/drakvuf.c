@@ -210,7 +210,7 @@ bool inject_trap_breakpoint(drakvuf_t drakvuf, drakvuf_trap_t *trap) {
             const char *name = NULL;
             addr_t module_list = 0;
 
-            if(trap->breakpoint.pid == 4 || !strcmp(trap->breakpoint.proc, "System")) {
+            if((trap->breakpoint.lookup_type == LOOKUP_PID && trap->breakpoint.pid == 4) || (trap->breakpoint.lookup_type == LOOKUP_NAME && !strcmp(trap->breakpoint.proc, "System"))) {
 
                 pid = 4;
                 name = "System";
@@ -227,8 +227,10 @@ bool inject_trap_breakpoint(drakvuf_t drakvuf, drakvuf_trap_t *trap) {
                 if(trap->breakpoint.lookup_type == LOOKUP_NAME)
                     name = trap->breakpoint.proc;
 
-                if( !drakvuf_find_process(drakvuf, pid, name, &process_base) )
+                if( !drakvuf_find_process(drakvuf, pid, name, &process_base) ){
+                    printf("Could not find process: %x\n", pid);
                     return 0;
+                }
 
                 if (pid == -1)
                 {
@@ -312,7 +314,6 @@ bool inject_trap_cpuid(drakvuf_t drakvuf, drakvuf_trap_t *trap) {
 };
 
 bool drakvuf_add_trap(drakvuf_t drakvuf, drakvuf_trap_t *trap) {
-
     bool ret;
 
     if (!trap)

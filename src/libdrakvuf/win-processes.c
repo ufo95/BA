@@ -320,6 +320,7 @@ bool win_get_module_list(drakvuf_t drakvuf, addr_t eprocess_base, addr_t *module
     if(VMI_FAILURE == vmi_read_addr(vmi, &ctx, &ldr))
         return false;
 
+
     ctx.addr = ldr + drakvuf->offsets[PEB_LDR_DATA_INLOADORDERMODULELIST];
     if(VMI_FAILURE == vmi_read_addr(vmi, &ctx, &modlist))
         return false;
@@ -359,11 +360,13 @@ bool win_find_eprocess(drakvuf_t drakvuf, vmi_pid_t find_pid, const char *find_p
             return false;
         }
 
+
         char *procname = vmi_read_str_va(vmi, current_process + drakvuf->offsets[EPROCESS_PNAME], 0);
 
         if((find_pid != ~0 && pid == find_pid) || (find_procname && procname && !strcmp(procname, find_procname))) {
             *eprocess_addr = current_process;
             free(procname);
+            printf("Found pid %i\n", pid);
             return true;
         }
 

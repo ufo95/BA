@@ -507,10 +507,10 @@ event_response_t cr3_cb(vmi_instance_t vmi, vmi_event_t *event) {
     event->x86_regs->cr3 = event->reg_event.value;
 
     /* Flush the LibVMI caches */
-    vmi_v2pcache_flush(drakvuf->vmi, event->reg_event.previous);
+    /*vmi_v2pcache_flush(drakvuf->vmi, event->reg_event.previous);
     vmi_pidcache_flush(drakvuf->vmi);
     vmi_rvacache_flush(drakvuf->vmi);
-    vmi_symcache_flush(drakvuf->vmi);
+    vmi_symcache_flush(drakvuf->vmi);*/
 
     if ( drakvuf->os == VMI_OS_WINDOWS )
     {
@@ -1075,6 +1075,7 @@ void drakvuf_loop(drakvuf_t drakvuf) {
             drakvuf->interrupted = -1;
         }
     }
+    printf("Pausing...\n");
 
     vmi_pause_vm(drakvuf->vmi);
     //print_sharing_info(drakvuf->xen, drakvuf->domID);
