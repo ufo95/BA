@@ -6,17 +6,27 @@
 #include "packeranalyser.h"
 #include "../plugins.h"
 #include <libdrakvuf/libdrakvuf.h>
-//TODO: Refactor code so that only one syscall argument read function is needed
+#include <libvmi/libvmi.h>
 
+//TODO: Refactor code so that only one syscall argument read function is needed
+static event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
+    printf("!!!!!!!!!!!!!!!Execution_CB_TRAP!!!!!!!!!!!!!!!!!!!!\n");
+    return 0;
+}
 
 static event_response_t recover_address_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
     //TODO: check return value in eax
-    //packeranalyser *p = (packeranalyser*)info->trap->data;
-    //TODO: Fixme: Gets segfaulted!!!
+    packeranalyser *p = (packeranalyser*)info->trap->data;
+    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
 
+    //TODO: Fixme: Gets segfaulted!!!
+    if(p->pid != (int) vmi_dtb_to_pid (vmi, info->regs->cr3)){
+        drakvuf_release_vmi(drakvuf);
+        return 0;
+    }
     printf("!!!!!!!!!recover_address_cb!!!!!!!!!!!!\n");
 
-    int number_of_args = 0, index_address = 0, index_protect = 0;
+    /*int number_of_args = 0, index_address = 0, index_protect = 0;
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
     uint8_t reg_size = vmi_get_address_width(vmi);
     size_t size = 0;
@@ -61,7 +71,7 @@ static event_response_t recover_address_cb(drakvuf_t drakvuf, drakvuf_trap_info_
     printf("Allocated Address: 0x%" PRIx32 "\n", buf32[index_address]);
 
 exit:
-    g_free(buf);
+    g_free(buf);*/
     drakvuf_release_vmi(drakvuf);
   
     return 0;
@@ -89,9 +99,9 @@ int recover_address(drakvuf_t drakvuf, drakvuf_trap_info_t *info, vmi_instance_t
     p->get_address_trap.cb = recover_address_cb;
     p->get_address_trap.data = p;
 
-    printf("Return_Adress: 0x%" PRIx32 "\n", return_address);
+    printf("!!!! OMG !!!!! Memory Allocation Requested with Executable Rights Return_Adress: 0x%" PRIx32 "\n", return_address);
 
-    p->get_address_trap.breakpoint.rva = (addr_t)return_address;//TODO: add return address;
+    p->get_address_trap.breakpoint.addr = (addr_t)return_address;//TODO: add return address;
 
     if ( !drakvuf_add_trap(drakvuf, &p->get_address_trap) ){
             printf("Couldn't add trap\n");; 
@@ -111,9 +121,16 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
     size_t size = 0;
     uint32_t *buf32 = NULL;
     uint64_t *buf64 = NULL;
+    addr_t gfn;
+
+    if(p->pid != (int) vmi_dtb_to_pid (vmi, info->regs->cr3)){
+        drakvuf_release_vmi(drakvuf);
+        return 0;
+    }
 
 
     //TODO: get the size argument for index_address = 0 functions so we can calculate the memory region
+    //printf("Trap: %s\n", info->trap->name);
     if(!strcmp(info->trap->name, "NtProtectVirtualMemory")){
         number_of_args = 5;
         index_address = 1;
@@ -129,13 +146,6 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
     } else {
         printf("Error in syscall_cb: Do not know the trapped syscall\n");
         goto exit;
-    }
-
-    
-
-    if(p->pid != (int) vmi_dtb_to_pid (vmi, info->regs->cr3)){
-        drakvuf_release_vmi(drakvuf);
-        return 0;
     }
 
     size = reg_size * number_of_args;
@@ -171,18 +181,24 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
                 goto exit;
     }
 
+    if ((buf32[index_protect]&0xF0)!=0){//test if executable right is requested if not nothing to do here
+            //printf("Protection: 0x%" PRIx32 "\n", buf32[index_protect]);
+            buf32[index_protect]=0x04;
 
-    if(index_address==0){
-        printf("recover_address!\n");
-        recover_address(drakvuf, info, &vmi);
-        goto exit;
+            if( size !=vmi_write(vmi, &ctx, buf, size)){
+                printf("ERROR\n");
+            }
     }
+
 
 
     if ( 4 == reg_size ){
         if ((buf32[index_protect]&0xF0)==0){//test if executable right is requested if not nothing to do here
+            //printf("Protection: 0x%" PRIx32 "\n", buf32[index_protect]);
+
             goto exit;
         }
+
         if(index_address==0){
             printf("recover_address!\n");
             recover_address(drakvuf, info, &vmi);
@@ -197,7 +213,22 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
     }else{
         //printf("0x%" PRIx64, buf64[i]);
     }
-    //printf("Callback: Adress: 0x%" PRIx32 " Protect: 0x%" PRIx32 "\n", buf32[index_address], buf32[index_protect]);
+    printf("Callback: Adress: 0x%" PRIx32 " Protect: 0x%" PRIx32 "\n", buf32[index_address], buf32[index_protect]);
+
+    //Adding Trap to be called if page with new excutable rights get accesssed
+    gfn = vmi_pagetable_lookup (vmi, info->regs->cr3, buf32[index_address]);
+
+    p->execution_cb_trap.memaccess.gfn = gfn;
+    p->execution_cb_trap.memaccess.access = VMI_MEMACCESS_RWX;
+    p->execution_cb_trap.memaccess.type = PRE;
+    p->execution_cb_trap.name = "execution_cb_trap";
+    p->execution_cb_trap.type = MEMACCESS;
+    p->execution_cb_trap.cb = execution_cb;
+    p->execution_cb_trap.data = p;
+
+    if ( !drakvuf_add_trap(drakvuf, &p->execution_cb_trap) ){
+        printf("Couldn't add trap\n");; 
+    }
 
     exit:
         g_free(buf);

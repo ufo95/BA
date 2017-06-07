@@ -14,7 +14,7 @@ class packeranalyser: public plugin {
     	page_mode_t pm;
         int trap=0;
     	int pid=0;
-    	drakvuf_trap_t first_cb_trap, ntpvm_cb_trap, ntcontinuecb_trap, thrd_cb_trap, get_address_trap;
+    	drakvuf_trap_t first_cb_trap, ntpvm_cb_trap, ntcontinuecb_trap, thrd_cb_trap, get_address_trap, execution_cb_trap;
         uint8_t reg_size;
         output_format_t format;
         os_t os;
