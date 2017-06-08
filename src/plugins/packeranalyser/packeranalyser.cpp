@@ -15,63 +15,64 @@ static event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *inf
 }
 
 static event_response_t recover_address_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
-    //TODO: check return value in eax
+    //TODO: check return value in eax if allocation was successful
     packeranalyser *p = (packeranalyser*)info->trap->data;
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
 
-    //TODO: Fixme: Gets segfaulted!!!
+    //TODO: Fixme: Not segfault but still seems to get the wrong address
     if(p->pid != (int) vmi_dtb_to_pid (vmi, info->regs->cr3)){
         drakvuf_release_vmi(drakvuf);
         return 0;
     }
     printf("!!!!!!!!!recover_address_cb!!!!!!!!!!!!\n");
 
-    /*int number_of_args = 0, index_address = 0, index_protect = 0;
-    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
+    int number_of_args = 0, index_address = 0, index_protect = 0;
     uint8_t reg_size = vmi_get_address_width(vmi);
     size_t size = 0;
     unsigned char* buf = NULL; // pointer to buffer to hold argument values
-
+    uint32_t *buf32 = NULL;
     access_context_t ctx;
     ctx.translate_mechanism = VMI_TM_PROCESS_DTB;
     ctx.dtb = info->regs->cr3;
 
-    size = reg_size * number_of_args;
-
-    buf  = (unsigned char *)g_malloc(sizeof(char)*size);
-
-    uint32_t *buf32 = (uint32_t *)buf;
-
-
-
 
     if (!strcmp(info->trap->name, "NtAllocateVirtualMemory")){
         number_of_args = 6;
-        index_address = 1;//We need recover_address to get the resulting adress
+        index_address = 1;
         index_protect = 5;
     } else if (!strcmp(info->trap->name, "NtMapViewOfSection")){
         number_of_args = 10;
-        index_address = 2;//We need recover_address to get the resulting adress
+        index_address = 2;
         index_protect = 9;
     } else {
         printf("Error in recover_address_cb: Do not know the trapped syscall\n");
         goto exit;
     }
 
+    size = reg_size * number_of_args;
+
+    buf  = (unsigned char *)g_malloc(sizeof(char)*size);
+
+    buf32 = (uint32_t *)buf;
+
+
+
     ctx.addr = info->regs->rsp + reg_size;  // jump over base pointer
 
     if ( size != vmi_read(vmi, &ctx, buf, size) )
                 goto exit;
 
+
     ctx.addr = buf32[index_address];
-    if(VMI_SUCCESS != vmi_read_32(vmi, &ctx, &buf32[index_address])){
+
+    if(VMI_SUCCESS != vmi_read(vmi, &ctx, &buf32[index_address], sizeof(uint32_t))){
         printf("ERROR\n");
     }
 
     printf("Allocated Address: 0x%" PRIx32 "\n", buf32[index_address]);
 
 exit:
-    g_free(buf);*/
+    g_free(buf);
     drakvuf_release_vmi(drakvuf);
   
     return 0;
@@ -99,7 +100,7 @@ int recover_address(drakvuf_t drakvuf, drakvuf_trap_info_t *info, vmi_instance_t
     p->get_address_trap.cb = recover_address_cb;
     p->get_address_trap.data = p;
 
-    printf("!!!! OMG !!!!! Memory Allocation Requested with Executable Rights Return_Adress: 0x%" PRIx32 "\n", return_address);
+    //printf("!!!! OMG !!!!! Memory Allocation Requested with Executable Rights Return_Adress: 0x%" PRIx32 "\n", return_address);
 
     p->get_address_trap.breakpoint.addr = (addr_t)return_address;//TODO: add return address;
 
@@ -181,26 +182,26 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
                 goto exit;
     }
 
-    if ((buf32[index_protect]&0xF0)!=0){//test if executable right is requested if not nothing to do here
-            //printf("Protection: 0x%" PRIx32 "\n", buf32[index_protect]);
-            buf32[index_protect]=0x04;
+    if ((buf32[index_protect]&0xF0)!=0){//NONESENSE Read also Executable
+        //printf("Protection: 0x%" PRIx32 "\n", buf32[index_protect]);
+        //buf32[index_protect]=0x0;
 
-            if( size !=vmi_write(vmi, &ctx, buf, size)){
-                printf("ERROR\n");
-            }
+        /*if( size !=vmi_write(vmi, &ctx, buf, size)){
+            printf("ERROR\n");
+        }*/
+    } else {
     }
 
 
 
     if ( 4 == reg_size ){
-        if ((buf32[index_protect]&0xF0)==0){//test if executable right is requested if not nothing to do here
+        /*if ((buf32[index_protect]&0xF0)==0){//test if executable right is requested if not nothing to do here
             //printf("Protection: 0x%" PRIx32 "\n", buf32[index_protect]);
 
             goto exit;
-        }
+        }*/
 
         if(index_address==0){
-            printf("recover_address!\n");
             recover_address(drakvuf, info, &vmi);
             goto exit;
         }
@@ -213,7 +214,7 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
     }else{
         //printf("0x%" PRIx64, buf64[i]);
     }
-    printf("Callback: Adress: 0x%" PRIx32 " Protect: 0x%" PRIx32 "\n", buf32[index_address], buf32[index_protect]);
+    printf("Callback: %s Adress: 0x%" PRIx32 " Protect: 0x%" PRIx32 "\n", info->trap->name, buf32[index_address], buf32[index_protect]);
 
     //Adding Trap to be called if page with new excutable rights get accesssed
     gfn = vmi_pagetable_lookup (vmi, info->regs->cr3, buf32[index_address]);
