@@ -5,6 +5,7 @@
 #include "plugins/plugins.h"
 #include "plugins/private.h"
 #include <libdrakvuf/libdrakvuf.h>
+#include "page_table_watch.h"
 
 class packeranalyser: public plugin {
 
@@ -24,6 +25,8 @@ class packeranalyser: public plugin {
         packeranalyser(drakvuf_t drakvuf, const void *config_p, output_format_t output);
         ~packeranalyser();
 };
+
+event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info);
 
 struct return_address_data{
     packeranalyser *p;

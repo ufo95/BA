@@ -9,6 +9,12 @@
 #include <libvmi/libvmi.h>
 
 //TODO: Refactor code so that only one syscall argument read function is needed
+event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){
+    printf("!!!!!!!!Page Table accesssed!!!!!!!!!!!!!!!\n");
+    return 0;
+}
+
+
 static event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
     printf("!!!!!!!!!!!!!!!Execution_CB_TRAP!!!!!!!!!!!!!!!!!!!!%" PRIx64 "\n", info->trap_pa);
     return 0;
@@ -273,14 +279,17 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
     
 }
 
-
 static event_response_t ntcontinue_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
     packeranalyser *p = (packeranalyser*)info->trap->data;
+    
+
+    //TODO: Necessary???
     if(p->trap==0){
         p->trap=1;
     } else {
         return 0;
     }
+
 
     p->first_cb_trap.breakpoint.lookup_type = LOOKUP_PID;
     p->first_cb_trap.breakpoint.pid = 4;
@@ -325,6 +334,13 @@ static event_response_t ntcontinue_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *in
     if ( !drakvuf_add_trap(drakvuf, &p->thrd_cb_trap) )
         throw -1;
 
+    drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
+
+
+    if(add_page_table_watch(drakvuf, info)){
+        printf("Error add_page_table_watch\n");
+    }
+
 
     return 0;
 
@@ -347,9 +363,19 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
 	this->pm = vmi_get_page_mode(vmi, 0);
 	drakvuf_release_vmi(drakvuf);
 
-	if (this->pm == VMI_PM_IA32E){
-		printf("VMI_PM_IA32E\n");
+    printf("Page_Mode: ");
+    if (this->pm == VMI_PM_LEGACY){
+        printf("VMI_PM_LEGACY\n");
+    } else if (this->pm == VMI_PM_PAE){
+        printf("VMI_PM_PAE\n");
+    } else if (this->pm == VMI_PM_IA32E){
+        printf("VMI_PM_IA32E\n");
+    } else if (this->pm == VMI_PM_UNKNOWN){
+        printf("VMI_PM_UNKNOWN\n");
+    } else {
+        printf("Unknown\n");
     }
+
 
     if(vmi_get_address_width(vmi)==8){
         printf("64 bit not yet supporter\n");
