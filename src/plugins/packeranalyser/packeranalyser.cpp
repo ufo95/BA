@@ -21,14 +21,15 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
     uint64_t b = 0;*/
 
     //printf("Write_CB_TRAP 0x%" PRIx64 "\n", info->trap_pa);
-    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
+    //vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
     /*vmi_read_8_pa(vmi, info->trap_pa, &a);
 
     if (a==0x41){
         vmi_read_64_pa(vmi, info->trap_pa-4, &b);
         printf("0x41:  0x%" PRIx64 " 0x%" PRIx64 "\n", info->trap_pa, b);
     }*/
-    add_page_table_watch(drakvuf, (packeranalyser *)info->trap->data, vmi, 0);
+    /*add_page_table_watch(drakvuf, (packeranalyser *)info->trap->data, vmi, 0);
+    drakvuf_release_vmi(drakvuf);*/
 
 
     drakvuf_trap_t *new_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
@@ -43,7 +44,6 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
 
     //drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
 
-    drakvuf_release_vmi(drakvuf);
 
     return 0;
 }
@@ -65,7 +65,7 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
 	const struct packeranalyser_config *p = (const struct packeranalyser_config *)config_p;
 
     this->table_traps = NULL;
-
+    this->page_traps = NULL;
 
 	this->r_p = p->rekall_profile;
 	this->pid = p->injected_pid;

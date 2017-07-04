@@ -36,13 +36,15 @@ int custom_taple_trap_cmp_withlayer(const void* tmp1, const void* tmp2){
 }
 void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t page_table_address){
     drakvuf_trap_t *new_trap = NULL;
-    uint64_t page_address = 0;
+    uint64_t *page_address = NULL;
     uint64_t pte_address = 0;
     uint64_t pte = 0;
+
 
     //printf("PTA: 0x%" PRIx64 " ", page_table_address);
 
     for (int i = 0; i < 512; ++i){
+        page_address = (uint64_t *)g_malloc0(sizeof(uint64_t));
         pte_address = page_table_address+i*sizeof(uint64_t);
 
         vmi_read_64_pa(vmi, pte_address, &pte);//Get the Page Table Entry
@@ -50,21 +52,33 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
             continue;
         }
 
-        page_address = pte & VMI_BIT_MASK(12,51);
+        *page_address = pte & VMI_BIT_MASK(12,51);
 
-        if (page_address==0){
+        /*if (page_address==0){
             continue;
-        }
+        }*/
 
         //printf("PA: 0x%" PRIx64 "\n", page_address);
 
+        
+        if (!g_slist_find(p->page_traps, page_address)){//Trap already exist
+            //printf("Not Exist\n");
+            g_free(page_address);
+            return;
+        } else {
+            printf("Exist\n");
+        }
+ 
+
         new_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
-        new_trap->memaccess.gfn = page_address>>12;
+        new_trap->memaccess.gfn = (*page_address)>>12;
         new_trap->memaccess.access = VMI_MEMACCESS_W;
         new_trap->memaccess.type = POST;
         new_trap->type = MEMACCESS;
         new_trap->cb = write_cb;
         new_trap->data = p;
+
+        p->page_traps = g_slist_append(p->table_traps, page_address);
 
         drakvuf_add_trap(drakvuf, new_trap);
     }
@@ -81,6 +95,12 @@ void add_trap(uint64_t pa, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t 
     child->pa = pa;
     child->layer = pl;
     child->init = init;
+
+
+    if (pl==LAYER_PT){
+        add_page_watch_pae(drakvuf, vmi, p, pa);
+    }
+
 
     if (g_slist_find_custom(p->table_traps, child, custom_taple_trap_cmp_withlayer)){//Trap already exsist
         g_free(child);
@@ -108,10 +128,8 @@ void add_trap(uint64_t pa, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t 
         case LAYER_PDPT:
             p->table_traps = g_slist_append(p->table_traps, child);
             break;
-        
         case LAYER_2MB:
         case LAYER_PT:
-            add_page_watch_pae(drakvuf, vmi, p, pa);
         case LAYER_PDT:
             index_parent = g_slist_position(p->table_traps, g_slist_find_custom(p->table_traps, parent, custom_taple_trap_cmp_withlayer));
             if (index_parent<0){
@@ -156,7 +174,7 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
 
     parent->pa = 0;
     parent->layer = LAYER_PT;
-    parent->init = -1;
+    parent->init = init;
 
 	add_trap(pdpt, p, drakvuf, vmi, LAYER_PDPT, parent, init);//Add trap to the pdpt register
 
@@ -179,19 +197,18 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
         parent->pa = pdt;
         parent->layer = LAYER_PDT;
 
-        for (int count = 0; count < 512; ++count){
+        for (int count = 0; count < 512; ++count){//Walk the Page Directory Table
             vmi_read_64_pa(vmi, pdt, &pdte);//Get the Page Directory Table Entry
-            if(!VMI_GET_BIT(pdte, 0)){
+            /*if(!VMI_GET_BIT(pdte, 0)){
                 pdt+=sizeof(uint64_t);
                 continue;
-            }
-
+            }*/
 			if (VMI_GET_BIT(pdte, 7)){//2-MB-Page
-                pt = pdte & VMI_BIT_MASK(21, 51);
+                pt = pdte & VMI_BIT_MASK(21, 35);
                 add_trap(pt, p, drakvuf, vmi, LAYER_2MB, parent, init);
 				//printf("2MB-Page: 0x%" PRIx64 "\n", pt);
 			} else {//Page Table
-				pt = pdte & VMI_BIT_MASK(12, 51);
+				pt = pdte & VMI_BIT_MASK(12, 35);
 				add_trap(pt, p, drakvuf, vmi, LAYER_PT, parent, init);//Found a Page Table
 			}
         pdt+=sizeof(uint64_t);
