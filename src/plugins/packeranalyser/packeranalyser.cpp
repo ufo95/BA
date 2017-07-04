@@ -17,20 +17,37 @@ event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
 
 event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page was now written to, so let's see if it gets executed
     packeranalyser *p = (packeranalyser *)info->trap->data;
-    /*uint8_t a = 0;
-    uint64_t b = 0;*/
+    uint8_t a = 0;
+    uint64_t b = 0;
+    uint64_t *page_address = NULL;
+
 
     //printf("Write_CB_TRAP 0x%" PRIx64 "\n", info->trap_pa);
-    //vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
-    /*vmi_read_8_pa(vmi, info->trap_pa, &a);
+    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
+    vmi_read_8_pa(vmi, info->trap_pa, &a);
 
     if (a==0x41){
         vmi_read_64_pa(vmi, info->trap_pa-4, &b);
         printf("0x41:  0x%" PRIx64 " 0x%" PRIx64 "\n", info->trap_pa, b);
-    }*/
-    /*add_page_table_watch(drakvuf, (packeranalyser *)info->trap->data, vmi, 0);
-    drakvuf_release_vmi(drakvuf);*/
+    }
+    //add_page_table_watch(drakvuf, (packeranalyser *)info->trap->data, vmi, 0);
+    drakvuf_release_vmi(drakvuf);
 
+    page_address = (uint64_t *)g_malloc0(sizeof(uint64_t));
+
+    *page_address = info->trap_pa>>12;
+
+    if (!g_slist_find(p->page_exec_traps, page_address)){//Trap already exist
+            //printf("Not Exist\n");
+        g_free(page_address);
+            return 0;
+    } else {
+            printf("Exist\n");
+    }
+ 
+
+
+    p->page_exec_traps = g_slist_append(p->page_exec_traps, page_address);
 
     drakvuf_trap_t *new_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
     new_trap->memaccess.gfn = info->trap_pa>>12;
@@ -52,7 +69,7 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
 event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
 
-    printf("page_table_access_cb!\n");
+    //printf("page_table_access_cb!\n");
 
     add_page_table_watch(drakvuf, (packeranalyser *)info->trap->data, vmi, 0);
 
@@ -65,7 +82,8 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
 	const struct packeranalyser_config *p = (const struct packeranalyser_config *)config_p;
 
     this->table_traps = NULL;
-    this->page_traps = NULL;
+    this->page_write_traps = NULL;
+    this->page_exec_traps = NULL;
 
 	this->r_p = p->rekall_profile;
 	this->pid = p->injected_pid;

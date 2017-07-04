@@ -26,7 +26,7 @@ class packeranalyser: public plugin {
         output_format_t format;
         os_t os;
         const char *r_p;
-        GSList *table_traps, *page_traps;
+        GSList *table_traps, *page_write_traps, *page_exec_traps;
 
         packeranalyser(drakvuf_t drakvuf, const void *config_p, output_format_t output);
         ~packeranalyser();

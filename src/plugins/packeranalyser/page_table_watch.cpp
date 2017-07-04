@@ -52,7 +52,7 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
             continue;
         }
 
-        *page_address = pte & VMI_BIT_MASK(12,51);
+        *page_address = (pte & VMI_BIT_MASK(12,51))>>12;
 
         /*if (page_address==0){
             continue;
@@ -61,7 +61,7 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
         //printf("PA: 0x%" PRIx64 "\n", page_address);
 
         
-        if (!g_slist_find(p->page_traps, page_address)){//Trap already exist
+        if (!g_slist_find(p->page_write_traps, page_address)){//Trap already exist
             //printf("Not Exist\n");
             g_free(page_address);
             return;
@@ -71,14 +71,14 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
  
 
         new_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
-        new_trap->memaccess.gfn = (*page_address)>>12;
+        new_trap->memaccess.gfn = *page_address;
         new_trap->memaccess.access = VMI_MEMACCESS_W;
         new_trap->memaccess.type = POST;
         new_trap->type = MEMACCESS;
         new_trap->cb = write_cb;
         new_trap->data = p;
 
-        p->page_traps = g_slist_append(p->table_traps, page_address);
+        p->page_write_traps = g_slist_append(p->page_write_traps, page_address);
 
         drakvuf_add_trap(drakvuf, new_trap);
     }
