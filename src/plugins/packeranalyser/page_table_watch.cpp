@@ -140,7 +140,7 @@ void add_trap(uint64_t pa, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t 
     return;
 }
 
-int pae_walk(vmi_instance_t vmi, drakvuf_trap_info_t *info, packeranalyser *p, drakvuf_t drakvuf, int init){
+int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init){
     table_trap *parent = (table_trap *)g_malloc0(sizeof(table_trap));
 	uint64_t pdpte, pdpte_i, pdt, pdte, pt;
 	uint64_t pdpt = get_pdptb(vmi_pid_to_dtb(vmi, p->pid));
@@ -197,14 +197,14 @@ int pae_walk(vmi_instance_t vmi, drakvuf_trap_info_t *info, packeranalyser *p, d
 	return 0;
 }
 
-int add_page_table_watch(drakvuf_t drakvuf, drakvuf_trap_info_t *info, vmi_instance_t vmi, int init) {
-    packeranalyser *p = (packeranalyser*)info->trap->data;
+int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vmi, int init) {
+    //packeranalyser *p = (packeranalyser*)info->trap->data;
 	page_mode pm = vmi_get_page_mode(vmi, 0);
 
     if (pm == VMI_PM_LEGACY){
         
     } else if (pm == VMI_PM_PAE){
-        pae_walk(vmi, info, p, drakvuf, init);
+        pae_walk(vmi, p, drakvuf, init);
     } else if (pm == VMI_PM_IA32E){
        	
     } else if (pm == VMI_PM_UNKNOWN){

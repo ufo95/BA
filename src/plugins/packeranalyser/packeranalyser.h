@@ -35,6 +35,9 @@ class packeranalyser: public plugin {
 event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info);
 event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info);
 
+//Implementation in page_table_watch
+int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vmi, int init);
+
 enum page_layer {LAYER_PDPT, LAYER_PDT, LAYER_PT, LAYER_2MB};
 
 struct return_address_data{

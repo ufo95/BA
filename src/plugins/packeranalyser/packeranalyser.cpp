@@ -52,14 +52,14 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
 event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
 
-    add_page_table_watch(drakvuf, info, vmi, 0);
+    add_page_table_watch(drakvuf, (packeranalyser *)info->trap->data, vmi, 0);
 
     drakvuf_release_vmi(drakvuf);
 
     return 0;
 }
 
-static event_response_t ntcontinue_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
+/*static event_response_t ntcontinue_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
     packeranalyser *p = (packeranalyser*)info->trap->data;
     
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
@@ -84,7 +84,7 @@ static event_response_t ntcontinue_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *in
 
     return 0;
 
-}
+}*/
 
 packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_format_t output){
 	const struct packeranalyser_config *p = (const struct packeranalyser_config *)config_p;
@@ -124,7 +124,7 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
         throw -1;
     }
 
-    this->ntcontinuecb_trap.breakpoint.lookup_type = LOOKUP_PID;
+    /*this->ntcontinuecb_trap.breakpoint.lookup_type = LOOKUP_PID;
     this->ntcontinuecb_trap.breakpoint.pid = 4;
     this->ntcontinuecb_trap.breakpoint.addr_type = ADDR_RVA;
     this->ntcontinuecb_trap.breakpoint.module = "ntoskrnl.exe";
@@ -136,7 +136,12 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
     if ( !drakvuf_get_function_rva(this->r_p, "NtContinue", &this->ntcontinuecb_trap.breakpoint.rva) )
         throw -1;
     if ( !drakvuf_add_trap(drakvuf, &this->ntcontinuecb_trap) )
-        throw -1; 
+        throw -1; */
+
+
+    if(add_page_table_watch(drakvuf, this, vmi, 1)){
+        printf("Error add_page_table_watch\n");
+    }
 
 }
 
