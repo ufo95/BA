@@ -17,19 +17,19 @@ event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
 
 event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page was now written to, so let's see if it gets executed
     packeranalyser *p = (packeranalyser *)info->trap->data;
-    uint8_t a = 0;
-    uint64_t b = 0;
+    /*uint8_t a = 0;
+    uint64_t b = 0;*/
 
     //printf("Write_CB_TRAP 0x%" PRIx64 "\n", info->trap_pa);
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
-    vmi_read_8_pa(vmi, info->trap_pa, &a);
+    /*vmi_read_8_pa(vmi, info->trap_pa, &a);
 
     if (a==0x41){
-
         vmi_read_64_pa(vmi, info->trap_pa-4, &b);
-
         printf("0x41:  0x%" PRIx64 " 0x%" PRIx64 "\n", info->trap_pa, b);
-    }
+    }*/
+    add_page_table_watch(drakvuf, (packeranalyser *)info->trap->data, vmi, 0);
+
 
     drakvuf_trap_t *new_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
     new_trap->memaccess.gfn = info->trap_pa>>12;
@@ -52,39 +52,14 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
 event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
 
+    printf("page_table_access_cb!\n");
+
     add_page_table_watch(drakvuf, (packeranalyser *)info->trap->data, vmi, 0);
 
     drakvuf_release_vmi(drakvuf);
 
     return 0;
 }
-
-/*static event_response_t ntcontinue_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
-    packeranalyser *p = (packeranalyser*)info->trap->data;
-    
-    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
-
-    //TODO: Necessary???
-    if(p->trap==0){
-        p->trap=1;
-    } else {
-        drakvuf_release_vmi(drakvuf);
-        return 0;
-    }
-    
-    //drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
-
-
-    if(add_page_table_watch(drakvuf, info, vmi, 1)){//Not my process?
-        printf("Error add_page_table_watch\n");
-    }
-    drakvuf_release_vmi(drakvuf);
-
-    printf("------------End of NtContinue------------------\n");
-
-    return 0;
-
-}*/
 
 packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_format_t output){
 	const struct packeranalyser_config *p = (const struct packeranalyser_config *)config_p;
@@ -123,21 +98,6 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
         printf("64 bit not yet supporter\n");
         throw -1;
     }
-
-    /*this->ntcontinuecb_trap.breakpoint.lookup_type = LOOKUP_PID;
-    this->ntcontinuecb_trap.breakpoint.pid = 4;
-    this->ntcontinuecb_trap.breakpoint.addr_type = ADDR_RVA;
-    this->ntcontinuecb_trap.breakpoint.module = "ntoskrnl.exe";
-    this->ntcontinuecb_trap.name = "NtContinue";
-    this->ntcontinuecb_trap.type = BREAKPOINT;
-    this->ntcontinuecb_trap.cb = ntcontinue_cb;
-    this->ntcontinuecb_trap.data = (void*)this;
-
-    if ( !drakvuf_get_function_rva(this->r_p, "NtContinue", &this->ntcontinuecb_trap.breakpoint.rva) )
-        throw -1;
-    if ( !drakvuf_add_trap(drakvuf, &this->ntcontinuecb_trap) )
-        throw -1; */
-
 
     if(add_page_table_watch(drakvuf, this, vmi, 1)){
         printf("Error add_page_table_watch\n");
