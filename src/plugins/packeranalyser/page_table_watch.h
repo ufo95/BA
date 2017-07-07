@@ -14,8 +14,8 @@
 
 
 
-//int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vmi, int init);
-int custom_taple_trap_cmp_withlayer(const void* tmp1, const void* tmp2);
-int custom_taple_trap_cmp_address(const void* tmp1, const void* tmp2);
 
+int custom_page_write_cmp_address(const void* tmp1, const void* tmp2);
+int custom_taple_trap_cmp_withlayer(const void* tmp1, const void* tmp2);
+int custom_taple_trap_cmp_gfn(const void* tmp1, const void* tmp2);
 #endif

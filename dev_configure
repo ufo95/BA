@@ -1,1 +1,1 @@
-./configure --disable-plugin-filetracer --disable-plugin-poolmon --disable-plugin-filedelete --disable-plugin-objmon --disable-plugin-exmon --disable-plugin-ssdtmon --disable-plugin-cpuidmon --disable-plugin-debugmon --disable-plugin-socketmon --enable-debug --disable-plugin-syscalls
+./configure --disable-plugin-filetracer --disable-plugin-poolmon --disable-plugin-filedelete --disable-plugin-objmon --disable-plugin-exmon --disable-plugin-ssdtmon --disable-plugin-cpuidmon --disable-plugin-debugmon --disable-plugin-socketmon --enable-debug #--disable-plugin-syscalls

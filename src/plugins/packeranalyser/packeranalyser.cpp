@@ -12,13 +12,14 @@
 
 event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
     printf("!!!!!!!!!!!!!!!Execution_CB_TRAP!!!!!!!!!!!!!!!!!!!! 0x%" PRIx64 "\n", info->trap_pa);
+    //throw -1;
     return 0;
 }
 
 event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page was now written to, so let's see if it gets executed
     packeranalyser *p = (packeranalyser *)info->trap->data;
     uint8_t a = 0;
-    uint64_t b = 0;
+    uint32_t b = 0;
     uint64_t *page_address = NULL;
 
 
@@ -27,22 +28,20 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
     vmi_read_8_pa(vmi, info->trap_pa, &a);
 
     if (a==0x41){
-        vmi_read_64_pa(vmi, info->trap_pa-4, &b);
-        printf("0x41:  0x%" PRIx64 " 0x%" PRIx64 "\n", info->trap_pa, b);
+        vmi_read_32_pa(vmi, info->trap_pa-4, &b);
+        if(b==0x41414141){
+            printf("0x41:  0x%" PRIx64 " 0x%" PRIx32 "\n", info->trap_pa, b);
+        }
     }
-    //add_page_table_watch(drakvuf, (packeranalyser *)info->trap->data, vmi, 0);
     drakvuf_release_vmi(drakvuf);
 
     page_address = (uint64_t *)g_malloc0(sizeof(uint64_t));
 
-    *page_address = info->trap_pa>>12;
+    *page_address = info->trap_pa & VMI_BIT_MASK(12,61);
 
-    if (!g_slist_find(p->page_exec_traps, page_address)){//Trap already exist
-            //printf("Not Exist\n");
+    if (g_slist_find_custom(p->page_exec_traps, page_address, custom_page_write_cmp_address)){//Trap already exist
         g_free(page_address);
-            return 0;
-    } else {
-            printf("Exist\n");
+        return 0;
     }
  
 
@@ -52,7 +51,7 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
     drakvuf_trap_t *new_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
     new_trap->memaccess.gfn = info->trap_pa>>12;
     new_trap->memaccess.access = VMI_MEMACCESS_X;
-    new_trap->memaccess.type = PRE;
+    new_trap->memaccess.type = POST;
     new_trap->type = MEMACCESS;
     new_trap->cb = execution_cb;
     new_trap->data = p;
@@ -60,6 +59,7 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
     drakvuf_add_trap(drakvuf, new_trap);
 
     //drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
+    printf("Table_lengths: table_traps: %i page_write_traps: %i page_exec_traps: %i\n", g_slist_length(p->table_traps), g_slist_length(p->page_write_traps), g_slist_length(p->page_exec_traps));
 
 
     return 0;
@@ -67,11 +67,35 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
 
 
 event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){
+    packeranalyser *p = (packeranalyser *)info->trap->data;
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
 
-    //printf("page_table_access_cb!\n");
+    GSList *list_entry = NULL;
+    table_trap *entry =  NULL;
+    uint64_t page_gfn = info->trap_pa>>12;
 
-    add_page_table_watch(drakvuf, (packeranalyser *)info->trap->data, vmi, 0);
+    printf("page_table_access_cb!\n");
+
+    list_entry = (GSList *)g_slist_find_custom(p->table_traps, &page_gfn, custom_taple_trap_cmp_gfn);//Get the coressponding trable_traps entry
+    
+    if (list_entry == NULL){
+        printf("page_table_access_cb This shouldn't happen!\n");
+        goto exit;
+    }
+
+
+    entry = (table_trap *)list_entry->data;
+
+
+    printf(" PA: 0x%" PRIx64, info->trap_pa);
+
+    printf(" l:%i entry->gfn: 0x%" PRIx64 "\n", entry->layer, entry->gfn);
+
+    pae_walk_from_entry(vmi, p, drakvuf, entry, info->trap_pa);
+
+    //printf("Table_lengths: table_traps: %i page_write_traps: %i page_exec_traps: %i\n", g_slist_length(p->table_traps), g_slist_length(p->page_write_traps), g_slist_length(p->page_exec_traps));
+
+exit:
 
     drakvuf_release_vmi(drakvuf);
 
@@ -117,9 +141,18 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
         throw -1;
     }
 
+    
+
+    
+    printf("1Table_lengths: table_traps: %i page_write_traps: %i page_exec_traps: %i\n", g_slist_length(this->table_traps), g_slist_length(this->page_write_traps), g_slist_length(this->page_exec_traps));
+
     if(add_page_table_watch(drakvuf, this, vmi, 1)){
         printf("Error add_page_table_watch\n");
     }
+    printf("2Table_lengths: table_traps: %i page_write_traps: %i page_exec_traps: %i\n", g_slist_length(this->table_traps), g_slist_length(this->page_write_traps), g_slist_length(this->page_exec_traps));
+
+
+
 
 }
 
