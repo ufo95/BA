@@ -10,28 +10,31 @@
 
 //TODO: Refactor code so that only one syscall argument read function is needed
 static event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
-    printf("!!!!!!!!!!!!!!!Execution_CB_TRAP!!!!!!!!!!!!!!!!!!!!%" PRIx64 "\n", info->trap_pa);
+    printf("!!!!!!!!!!!!!!!Execution_CB_TRAP!!!!!!!!!!!!!!!!!!!! 0x%" PRIx64 "\n", info->trap_pa);
+    drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
+
     return 0;
 }
 
 event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page was now written to, so let's see if it gets executed
     packeranalyser *p = (packeranalyser *)info->trap->data;
-    uint8_t a = 0;
-    uint32_t b = 0;
     uint64_t *page_address = NULL;
 
-
+    /*uint8_t a = 0;
+    uint32_t b = 0;
+    drakvuf_pause(drakvuf);
     //printf("Write_CB_TRAP 0x%" PRIx64 "\n", info->trap_pa);
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
     vmi_read_8_pa(vmi, info->trap_pa, &a);
 
-    if (a==0x41){
-        vmi_read_32_pa(vmi, info->trap_pa-4, &b);
-        if(b==0x41414141){
+    if (a==0x41 || a==0x42){
+        vmi_read_32_pa(vmi, info->trap_pa-2, &b);
+        //if(b==0x41414141 || b==0x42424242){
             printf("0x41:  0x%" PRIx64 " 0x%" PRIx32 "\n", info->trap_pa, b);
-        }
+        //}
     }
     drakvuf_release_vmi(drakvuf);
+    drakvuf_resume(drakvuf);*/
 
     page_address = (uint64_t *)g_malloc0(sizeof(uint64_t));
 
@@ -56,7 +59,7 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
 
     drakvuf_add_trap(drakvuf, new_trap);
 
-    //drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
+    drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
     printf("Table_lengths: table_traps: %i page_write_traps: %i page_exec_traps: %i\n", g_slist_length(p->table_traps), g_slist_length(p->page_write_traps), g_slist_length(p->page_exec_traps));
 
 
@@ -72,7 +75,6 @@ event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *in
     table_trap *entry =  NULL;
     uint64_t page_gfn = info->trap_pa>>12;
 
-    printf("page_table_access_cb!\n");
 
     list_entry = (GSList *)g_slist_find_custom(p->table_traps, &page_gfn, custom_taple_trap_cmp_gfn);//Get the coressponding trable_traps entry
     
@@ -85,9 +87,9 @@ event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *in
     entry = (table_trap *)list_entry->data;
 
 
-    printf(" PA: 0x%" PRIx64, info->trap_pa);
+    /*printf(" PA: 0x%" PRIx64, info->trap_pa);
 
-    printf(" l:%i entry->gfn: 0x%" PRIx64 "\n", entry->layer, entry->gfn);
+    printf(" l:%i entry->gfn: 0x%" PRIx64 "\n", entry->layer, entry->gfn);*/
 
     pae_walk_from_entry(vmi, p, drakvuf, entry, info->trap_pa);
 
@@ -143,7 +145,7 @@ static event_response_t recover_address_cb(drakvuf_t drakvuf, drakvuf_trap_info_
     if(reg_size == vmi_read(vmi, &ctx, &buf32[1], reg_size)){
         ctx.addr = buf32[1];
         if(reg_size != vmi_read(vmi, &ctx, &buf32[1], reg_size)){
-            printf("ERROR 2\n");
+            //printf("ERROR 2\n");
         }
     } else {
         printf("ERROR 1\n");
@@ -258,7 +260,7 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
     size_t size = 0;
     uint32_t *buf32 = NULL;
     uint64_t *buf64 = NULL;
-    addr_t gfn;
+    addr_t paddr;
     page_info_t *lookup_info = NULL;
     //drakvuf_trap_t *new_trap=NULL;
 
@@ -325,6 +327,10 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
             if(VMI_SUCCESS != vmi_read_32(vmi, &ctx, &buf32[index_address])){
                 printf("ERROR\n");
             }
+            ctx.addr = buf32[index_size];
+            if(VMI_SUCCESS != vmi_read_32(vmi, &ctx, &buf32[index_size])){
+                printf("ERROR\n");
+            }
         }
 
     }
@@ -332,21 +338,24 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
 
     lookup_info = (page_info_t *)g_malloc(sizeof(page_info_t));
 
-    gfn = vmi_pagetable_lookup_extended(vmi, info->regs->cr3, buf32[index_address], lookup_info);
+    paddr = vmi_pagetable_lookup_extended(vmi, info->regs->cr3, buf32[index_address], lookup_info);
+    paddr = lookup_info->paddr;
 
-    gfn = lookup_info->paddr;
-
-    if (gfn == 0){
+    if (paddr == 0){
         printf("No matching page found: %s, 0x%" PRIx32 "\n", info->trap->name, (unsigned int)buf32[index_address]);
-        printf("Page: pte: 0x%" PRIx64 " pgd: 0x%" PRIx64 "\n", lookup_info->x86_pae.pte_location, lookup_info->x86_pae.pgd_location);
         goto exit;
     } else {
-        printf("Page: gfb: 0x%" PRIx64 " pte: 0x%" PRIx64 " pgd: 0x%" PRIx64 "\n", gfn, lookup_info->x86_pae.pte_location, lookup_info->x86_pae.pgd_location);
+        printf("Page: paddr: 0x%" PRIx64 " pte: 0x%" PRIx64 " pgd: 0x%" PRIx64 "\n", paddr, lookup_info->x86_pae.pte_location, lookup_info->x86_pae.pgd_location);
     }
 
-
-
     g_free(lookup_info);
+
+
+
+    /*if(buf32[index_protect]==0x10){
+        add_page_table_watch(drakvuf, p, vmi, 0);
+    }*/
+
     /*new_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
 
     new_trap->memaccess.gfn = gfn;
@@ -430,8 +439,14 @@ static event_response_t ntcontinue_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *in
 
 packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_format_t output){
 	const struct packeranalyser_config *p = (const struct packeranalyser_config *)config_p;
+    //int explorer_pid = 0;
 
 
+    //drakvuf_lock_pause(drakvuf);
+    //drakvuf_pause(drakvuf);
+    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
+
+    //scanf("Explorer pid: %i\n", explorer_pid);
 
 	this->r_p = p->rekall_profile;
 	this->pid = p->injected_pid;
@@ -440,23 +455,12 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
     this->page_write_traps = NULL;
     this->page_exec_traps = NULL;
 
+
 	if(!pid || pid < 0){
 		printf("packeranalyser: no pid found!\n");
 		return;
 	}
 	printf("[packeranalyser] PID: %i\n", pid);
-	
-
-    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
-
-    drakvuf_pause(drakvuf);
-
-    this->pm = vmi_get_page_mode(vmi, 0);
-
-    if(vmi_get_address_width(vmi)==8){
-        printf("64 bit not yet supporter\n");
-        throw -1;
-    }
 
     this->ntcontinuecb_trap.breakpoint.lookup_type = LOOKUP_PID;
     this->ntcontinuecb_trap.breakpoint.pid = 4;
@@ -472,17 +476,26 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
     if ( !drakvuf_add_trap(drakvuf, &this->ntcontinuecb_trap) )
         throw -1; 
 
-    printf("1Table_lengths: table_traps: %i page_write_traps: %i page_exec_traps: %i\n", g_slist_length(this->table_traps), g_slist_length(this->page_write_traps), g_slist_length(this->page_exec_traps));
 
-    if(add_page_table_watch(drakvuf, this, vmi, 1)){
-        printf("Error add_page_table_watch\n");
+	this->pm = vmi_get_page_mode(vmi, 0);
+    printf("add_page_table_watch\n");
+    add_page_table_watch(drakvuf, this, vmi, 1);
+
+	if (this->pm == VMI_PM_IA32E){
+		printf("VMI_PM_IA32E\n");
     }
-    printf("2Table_lengths: table_traps: %i page_write_traps: %i page_exec_traps: %i\n", g_slist_length(this->table_traps), g_slist_length(this->page_write_traps), g_slist_length(this->page_exec_traps));
 
-    drakvuf_resume(drakvuf);
+    if(vmi_get_address_width(vmi)==8){
+        printf("64 bit not yet supporter\n");
+        throw -1;
+    }
+
+
+
 
     drakvuf_release_vmi(drakvuf);
-
+    //drakvuf_resume(drakvuf);
+    //drakvuf_unlock_resume(drakvuf);
 }
 
 

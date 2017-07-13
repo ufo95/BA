@@ -188,7 +188,7 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
 	add_trap(pdpt>>12, p, drakvuf, vmi, LAYER_PDPT, parent, init);//Add trap to the pdpt register
 
 
-	for (i = 0; i < 4; ++i){//Walk the PDPT
+	for (i = 0; i < 2; ++i){//Walk the PDPT but only the lower two registers the upper two are kernel space
 		pdpte_i = pdpt+(i*sizeof(uint64_t));
 		vmi_read_64_pa(vmi, pdpte_i, &pdpte);//Read the PDBT i
 
@@ -233,6 +233,7 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
 
 int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vmi, int init) {
     //packeranalyser *p = (packeranalyser*)info->trap->data;
+    //drakvuf_lock_pause(drakvuf);
     drakvuf_pause(drakvuf);
     int toreturn = 0;
 	page_mode pm = vmi_get_page_mode(vmi, 0);
@@ -249,6 +250,7 @@ int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vm
         toreturn=-1;
     }
     drakvuf_resume(drakvuf);
+    //drakvuf_unlock_resume(drakvuf);
     return toreturn;
 
 }
@@ -256,7 +258,7 @@ int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vm
 int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, table_trap *entry, uint64_t pa){
     uint64_t pdte, pt=0;
 
-    drakvuf_pause(drakvuf);
+    //drakvuf_lock_pause(drakvuf);
 
     table_trap *parent = (table_trap *)g_malloc0(sizeof(table_trap));
 
@@ -294,8 +296,9 @@ int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf
             add_trap(pa>>12, p, drakvuf, vmi, LAYER_2MB, parent, 0);
             break;
         }
-        drakvuf_resume(drakvuf);
+        //drakvuf_unlock_resume(drakvuf);
 exit:
+    //drakvuf_unlock_resume(drakvuf);
     g_free(parent);        
     return 0;
 }
