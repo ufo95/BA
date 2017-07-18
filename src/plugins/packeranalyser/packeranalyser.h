@@ -7,11 +7,15 @@
 #include <libdrakvuf/libdrakvuf.h>
 #include "page_table_watch.h"
 
-enum page_layer {LAYER_PDPT, LAYER_PDT, LAYER_PT, LAYER_2MB};
+#define likely(x)       __builtin_expect((x),1)
+#define unlikely(x)     __builtin_expect((x),0)
+
+enum page_layer {LAYER_PDPT, LAYER_PDT, LAYER_PT, LAYER_PAGE, LAYER_2MB};
 
 struct table_trap{
     uint64_t gfn;
     page_layer layer;
+    int index;
     int init;
 };
 
@@ -29,17 +33,20 @@ class packeranalyser: public plugin {
         output_format_t format;
         os_t os;
         const char *r_p;
-        GSList *table_traps, *page_write_traps, *page_exec_traps;
+        GSList *page_write_traps, *page_exec_traps;
+        GList *table_traps;
 
 
         packeranalyser(drakvuf_t drakvuf, const void *config_p, output_format_t output);
         ~packeranalyser();
 };
-
+void print_list_entries(void *item, void *stuff);
 event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info);
 event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info);
 int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, table_trap *entry, uint64_t pa);
 int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vmi, int init);
+addr_t p2v(packeranalyser *p, uint64_t pa);
+
 
 struct return_address_data{
     packeranalyser *p;

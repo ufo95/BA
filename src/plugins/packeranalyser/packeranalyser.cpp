@@ -9,8 +9,14 @@
 #include <libvmi/libvmi.h>
 
 //TODO: Refactor code so that only one syscall argument read function is needed
+void print_list_entries(void *item, void *stuff){
+    table_trap *tmp = (table_trap *)item;
+
+    printf("GFN: 0x%" PRIx64 " Layer: %i\n", tmp->gfn, tmp->layer);
+}
+
 static event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
-    printf("!!!!!!!!!!!!!!!Execution_CB_TRAP!!!!!!!!!!!!!!!!!!!! 0x%" PRIx64 "\n", info->trap_pa);
+    printf("!!!!!!!!!!!!!!!Execution_CB_TRAP!!!!!!!!!!!!!!!!!!!! Trap_PA: 0x%" PRIx64 " va: 0x%" PRIx64 "\n", info->trap_pa, p2v((packeranalyser *)info->trap->data, info->trap_pa));
     drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
 
     return 0;
@@ -60,36 +66,37 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
     drakvuf_add_trap(drakvuf, new_trap);
 
     drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
-    printf("Table_lengths: table_traps: %i page_write_traps: %i page_exec_traps: %i\n", g_slist_length(p->table_traps), g_slist_length(p->page_write_traps), g_slist_length(p->page_exec_traps));
+    printf("Table_lengths: table_traps: %i page_write_traps: %i page_exec_traps: %i\n", g_list_length(p->table_traps), g_slist_length(p->page_write_traps), g_slist_length(p->page_exec_traps));
 
 
     return 0;
 }
 
 
+
 event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){
     packeranalyser *p = (packeranalyser *)info->trap->data;
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
 
-    GSList *list_entry = NULL;
+    GList *list_entry = NULL;
     table_trap *entry =  NULL;
     uint64_t page_gfn = info->trap_pa>>12;
 
 
-    list_entry = (GSList *)g_slist_find_custom(p->table_traps, &page_gfn, custom_taple_trap_cmp_gfn);//Get the coressponding trable_traps entry
+    list_entry = (GList *)g_list_find_custom(p->table_traps, &page_gfn, custom_taple_trap_cmp_no_page);//Get the coressponding trable_traps entry
     
     if (list_entry == NULL){
         printf("page_table_access_cb This shouldn't happen!\n");
         goto exit;
     }
 
-
     entry = (table_trap *)list_entry->data;
 
 
-    /*printf(" PA: 0x%" PRIx64, info->trap_pa);
-
-    printf(" l:%i entry->gfn: 0x%" PRIx64 "\n", entry->layer, entry->gfn);*/
+    /*printf("PA: 0x%" PRIx64, info->trap_pa);
+    printf(" l:%i entry->gfn: 0x%" PRIx64 "\n", entry->layer, entry->gfn);
+    
+    g_list_foreach(p->table_traps, print_list_entries, NULL);*/
 
     pae_walk_from_entry(vmi, p, drakvuf, entry, info->trap_pa);
 
@@ -350,6 +357,8 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
 
     g_free(lookup_info);
 
+    printf("P2V: 0x%" PRIx64 "\n", p2v(p, paddr));
+
 
 
     /*if(buf32[index_protect]==0x10){
@@ -502,5 +511,7 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
 
 packeranalyser::~packeranalyser() {
 	printf("Goodbye!\n");
+    printf("-----------------Table_Traps----------------\n");
+    g_list_foreach(this->table_traps, print_list_entries, NULL);
 }
 

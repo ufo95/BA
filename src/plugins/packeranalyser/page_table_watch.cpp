@@ -16,18 +16,39 @@ int custom_page_write_cmp_address(const void* tmp1, const void* tmp2){
     uint64_t *one = (uint64_t *)tmp1;
     uint64_t *two = (uint64_t *)tmp2;
 
-    if (*one==*two){
+    if (unlikely(*one==*two)){
+        return 0;
+    } else {
+        return 1;
+    }
+}
+int custom_taple_trap_cmp_gfn(const void* tmp1, const void* tmp2){
+    table_trap *one = (table_trap *)tmp1;
+    uint64_t *two = (uint64_t *)tmp2;
+
+    if (unlikely((uint64_t)one->gfn==*two)){
         return 0;
     } else {
         return 1;
     }
 }
 
-int custom_taple_trap_cmp_gfn(const void* tmp1, const void* tmp2){
+int custom_table_trap_ins_index(const void* tmp1, const void* tmp2){
     table_trap *one = (table_trap *)tmp1;
-    uint64_t *two = (uint64_t *)tmp2;
+    table_trap *two = (table_trap *)tmp2; 
 
-    if ((uint64_t)one->gfn==*two){
+    if (unlikely(one->gfn == two->gfn && one->layer == two->layer)){
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+int custom_taple_trap_cmp_no_page(const void* tmp1, const void* tmp2){
+    table_trap *one = (table_trap *)tmp1;
+    table_trap *two = (table_trap *)tmp2; 
+
+    if (unlikely(one->gfn == two->gfn && one->layer != LAYER_PAGE)){
         return 0;
     } else {
         return 1;
@@ -38,7 +59,7 @@ int custom_taple_trap_cmp_withlayer(const void* tmp1, const void* tmp2){
     table_trap *one = (table_trap *)tmp1;
     table_trap *two = (table_trap *)tmp2; 
 
-    if (one->gfn == two->gfn && one->layer == two->layer){
+    if (unlikely(one->gfn == two->gfn && one->layer == two->layer)){
         return 0;
     } else {
         return 1;
@@ -46,9 +67,17 @@ int custom_taple_trap_cmp_withlayer(const void* tmp1, const void* tmp2){
 }
 void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t page_table_address, int init){
     drakvuf_trap_t *new_trap = NULL;
+    GList *parent_list = NULL;
+    table_trap *child_entry = NULL, *parent_entry = NULL;
     uint64_t *page_gfn = NULL;
     uint64_t pte_address = 0;
     uint64_t pte = 0;
+    uint64_t reserved = 0;
+    uint64_t page_table_gfn = 0;
+    int index_parent = -1;
+
+    parent_entry = (table_trap *)g_malloc0(sizeof(table_trap));
+
 
     for (int i = 0; i < 512; ++i){
         page_gfn = (uint64_t *)g_malloc0(sizeof(uint64_t));
@@ -58,6 +87,12 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
         if(!VMI_GET_BIT(pte, 0)){
             continue;
         }
+
+        reserved = (pte &  VMI_BIT_MASK(52, 60))>>52;
+        if (reserved != 0){//Seems necessary otherwise we will index some weird stuff.
+            continue;
+        }
+
 
         *page_gfn = (pte & VMI_BIT_MASK(12,51))>>12;
 
@@ -78,23 +113,64 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
 
         drakvuf_add_trap(drakvuf, new_trap);
 
+        page_table_gfn = page_table_address>>12;
+
+
+
+        parent_entry->gfn = page_table_gfn;
+        parent_entry->layer = LAYER_PT;
+        
+
+        parent_list = (GList *)g_list_find_custom(p->table_traps, parent_entry, custom_taple_trap_cmp_withlayer);//Get the coressponding trable_traps entry
+    
+
+        if (parent_list == NULL){
+            printf("add_page_watch_pae This shouldn't happen!: 0x%" PRIx64 "\n", page_table_address);
+            continue;
+        }
+
+
+        child_entry = (table_trap *)g_malloc0(sizeof(table_trap));
+        child_entry->gfn = *page_gfn;
+        child_entry->layer = LAYER_PAGE;
+        child_entry->index = i;
+        child_entry->init = init;
+
+
+        /*printf("add_page_watch_pae: parent: ");
+        print_list_entries(parent_list->data, NULL);
+        printf("child: ");
+        print_list_entries(child_entry, NULL);*/
+
+
+        index_parent = g_list_position(p->table_traps, parent_list);
+        if (index_parent<0){
+            p->table_traps = g_list_prepend(p->table_traps, child_entry);
+        } else {
+            p->table_traps = g_list_insert(p->table_traps, child_entry, index_parent+1);
+        }
+
+
+
         if (init==0){
             printf("PTE_Adress: 0x%" PRIx64 " Page: 0x%" PRIx64 " PTE: 0x%" PRIx64 "\n", pte_address, *page_gfn, pte);
         }
     }
 
+    g_free(parent_entry);
 
     return;
 }
 
 
-void add_trap(uint64_t gfn, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t vmi, page_layer pl, table_trap *parent, int init){
+void add_trap(uint64_t gfn, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t vmi, page_layer pl, table_trap *parent, int init, int index){
     drakvuf_trap_t *new_trap;
     int index_parent = -1;
     table_trap *child = (table_trap * )g_malloc0(sizeof(table_trap));
     child->gfn = gfn;
     child->layer = pl;
     child->init = init;
+    child->index = index;
 
     if(pl==LAYER_2MB){
         if(!g_slist_find_custom(p->page_write_traps, &(child->gfn), custom_page_write_cmp_address)){
@@ -110,12 +186,12 @@ void add_trap(uint64_t gfn, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t
             p->page_write_traps = g_slist_append(p->page_write_traps, &(child->gfn));
 
             return;
-        } else {
+        } else if(pl==LAYER_PAGE){
             return;
         }
     }
 
-    if (g_slist_find_custom(p->table_traps, child, custom_taple_trap_cmp_withlayer)){//Trap already exist
+    if (g_list_find_custom(p->table_traps, child, custom_taple_trap_cmp_withlayer)){//Trap already exist
         g_free(child);
         return;
     }
@@ -135,17 +211,21 @@ void add_trap(uint64_t gfn, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t
         return;
     } 
 
+    //g_list_foreach(p->table_traps, print_list_entries, NULL);
+
     switch (pl){
         case LAYER_PDPT:
-            p->table_traps = g_slist_append(p->table_traps, child);
+            printf("PDPT\n");
+            p->table_traps = g_list_append(p->table_traps, child);
             break;
         case LAYER_PT:
         case LAYER_PDT:
-            index_parent = g_slist_position(p->table_traps, g_slist_find_custom(p->table_traps, parent, custom_taple_trap_cmp_withlayer));
+            index_parent = g_list_position(p->table_traps, g_list_find_custom(p->table_traps, parent, custom_taple_trap_cmp_withlayer));
             if (index_parent<0){
-                p->table_traps = g_slist_append(p->table_traps, child);
+                printf("add_trap: couldn't find parent!\n");
+                p->table_traps = g_list_append(p->table_traps, child);
             } else {
-                p->table_traps = g_slist_insert(p->table_traps, child, index_parent);
+                p->table_traps = g_list_insert(p->table_traps, child, index_parent+1);
             }
 
             break;
@@ -153,7 +233,8 @@ void add_trap(uint64_t gfn, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t
             printf("Huch!\n");
             break;
     }
-    if (init==0){
+    if (init>-1){
+        printf("add_trap: ");
         switch (child->layer){
             case LAYER_PDPT:
                 printf("PDPT");
@@ -166,6 +247,9 @@ void add_trap(uint64_t gfn, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t
                 break;
             case LAYER_2MB:
                 printf("2MB");
+                break;
+            case LAYER_PAGE:
+                printf("Page");
                 break;
         }
         printf(": 0x%" PRIx64 "\n", child->gfn);
@@ -183,9 +267,10 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
 
     parent->gfn = 0;
     parent->layer = LAYER_PT;
+    parent->index = 0;
     parent->init = init;
 
-	add_trap(pdpt>>12, p, drakvuf, vmi, LAYER_PDPT, parent, init);//Add trap to the pdpt register
+	add_trap(pdpt>>12, p, drakvuf, vmi, LAYER_PDPT, parent, init, 0);//Add trap to the pdpt register
 
 
 	for (i = 0; i < 2; ++i){//Walk the PDPT but only the lower two registers the upper two are kernel space
@@ -201,7 +286,7 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
         parent->gfn = pdpt>>12;
         parent->layer = LAYER_PDPT;
 
-		add_trap(pdt>>12, p, drakvuf, vmi, LAYER_PDT, parent, init);//Add trap to the page_directory!
+		add_trap(pdt>>12, p, drakvuf, vmi, LAYER_PDT, parent, init, i);//Add trap to the page_directory!
 
         parent->gfn = pdt>>12;
         parent->layer = LAYER_PDT;
@@ -216,11 +301,11 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
             }
 			if (VMI_GET_BIT(pdte, 7)){//2-MB-Page
                 pt = (pdte & VMI_BIT_MASK(21, 35));
-                add_trap(pt>>12, p, drakvuf, vmi, LAYER_2MB, parent, init);
+                add_trap(pt>>12, p, drakvuf, vmi, LAYER_2MB, parent, init, count);
 			} else {//Page Table
 				pt = (pdte & VMI_BIT_MASK(12, 35));
                //printf("PT: 0x%" PRIx64 "\n", pt);
-				add_trap(pt>>12, p, drakvuf, vmi, LAYER_PT, parent, init);
+				add_trap(pt>>12, p, drakvuf, vmi, LAYER_PT, parent, init, count);
                 add_page_watch_pae(drakvuf, vmi, p, pt, init);
 			}
         }
@@ -255,19 +340,14 @@ int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vm
 
 }
 
-int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, table_trap *entry, uint64_t pa){
+int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, table_trap *parent, uint64_t pa){
     uint64_t pdte, pt=0;
 
     //drakvuf_lock_pause(drakvuf);
 
-    table_trap *parent = (table_trap *)g_malloc0(sizeof(table_trap));
+    int index = pa & VMI_BIT_MASK(3,11)>>3;//Get the index from the pa: | gfn | index in the table | offset |
 
-    parent->gfn = -1;
-    parent->layer = LAYER_PT;
-    parent->init = 0;
-
-
-    switch (entry->layer){
+    switch (parent->layer){
         case LAYER_PDPT:
             if((pa-get_pdptb(vmi_pid_to_dtb(vmi, p->pid)))>(3*sizeof(uint64_t))){//The entry->pa is not pointing at our pdpt so ignore it
                 goto exit;
@@ -281,10 +361,10 @@ int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf
             }
             if (VMI_GET_BIT(pdte, 7)){//2-MB-Page
                 pt = (pdte & VMI_BIT_MASK(21, 35))>>12;
-                add_trap(pt, p, drakvuf, vmi, LAYER_2MB, parent, 0);
+                add_trap(pt, p, drakvuf, vmi, LAYER_2MB, parent, 0, index);
             } else {//Page Table
                 pt = (pdte & VMI_BIT_MASK(12, 35))>>12;
-                add_trap(pt, p, drakvuf, vmi, LAYER_PT, parent, 0);
+                add_trap(pt, p, drakvuf, vmi, LAYER_PT, parent, 0, index);
                 add_page_watch_pae(drakvuf, vmi, p, pa, 0);
             }
             break;
@@ -293,12 +373,52 @@ int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf
             add_page_watch_pae(drakvuf, vmi, p, pa, 0);
             break;
         case LAYER_2MB:
-            add_trap(pa>>12, p, drakvuf, vmi, LAYER_2MB, parent, 0);
+            add_trap(pa>>12, p, drakvuf, vmi, LAYER_2MB, parent, 0, index);
+            break;
+        case LAYER_PAGE:
+            printf("Shouldn't happen\n");
             break;
         }
         //drakvuf_unlock_resume(drakvuf);
 exit:
     //drakvuf_unlock_resume(drakvuf);
-    g_free(parent);        
     return 0;
+}
+
+
+addr_t p2v(packeranalyser *p, uint64_t pa){
+    int current_layer = -1, current_index = -1, offset = -1;
+    uint64_t va = 0;
+    GList *loop = NULL;
+    table_trap *page_entry = (table_trap *)g_malloc0(sizeof(table_trap));
+    page_entry->gfn = pa>>12;
+    page_entry->layer = LAYER_PAGE;
+
+    offset = pa & VMI_BIT_MASK(0, 11);
+
+    GList *list_entry = g_list_find_custom(p->table_traps, page_entry, custom_taple_trap_cmp_withlayer);
+    if (!list_entry){
+        printf("p2v: Error\n");
+        g_free(page_entry);
+        return -1;
+    }
+    //list_entry_index = g_list_position(p->table_traps, list_entry);
+
+    current_layer = ((table_trap *)list_entry->data)->layer;
+
+    for (int i = 0; i < 3; ++i){
+        loop = list_entry->prev;
+        while(((table_trap *)loop->data)->layer>=current_layer){
+            loop = loop->prev;
+        }
+        current_index = ((table_trap *)loop->data)->index;
+        current_layer = ((table_trap *)loop->data)->layer;
+        printf("index: %i gfn: 0x%" PRIx64 " layer:%i \n", current_index, ((table_trap *)loop->data)->gfn, current_layer);
+        va |= current_index<<(12+(i*9));
+    }
+    va += offset;
+
+    g_free(page_entry);
+
+    return va;
 }
