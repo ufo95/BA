@@ -65,6 +65,35 @@ int custom_taple_trap_cmp_withlayer(const void* tmp1, const void* tmp2){
         return 1;
     }
 }
+void add_2mb_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t page_address, table_trap parent){
+    uint64_t gfn = page_address>>12;
+    drakvuf_trap_t *mb_trap;
+
+    int index_parent = g_slist_index(p->page_write_traps, &parent);
+
+    if (index_parent<0){
+        printf("add_2mb_page_watch_pae error\n");
+        return;
+    }
+
+    for (int i = 0; i < 512; ++i){
+        mb_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
+        p->page_write_traps = g_slist_insert(p->page_write_traps, &gfn, index_parent+1);
+
+        mb_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
+        mb_trap->memaccess.gfn = gfn;
+        mb_trap->memaccess.access = VMI_MEMACCESS_W;
+        mb_trap->memaccess.type = POST;
+        mb_trap->type = MEMACCESS;
+        mb_trap->cb = write_cb;
+        mb_trap->data = p;
+
+
+        drakvuf_add_trap(drakvuf, mb_trap);
+        gfn++;
+    }
+}
+
 void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t page_table_address, int init){
     drakvuf_trap_t *new_trap = NULL;
     GList *parent_list = NULL;
@@ -301,7 +330,7 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
             }
 			if (VMI_GET_BIT(pdte, 7)){//2-MB-Page
                 pt = (pdte & VMI_BIT_MASK(21, 35));
-                add_trap(pt>>12, p, drakvuf, vmi, LAYER_2MB, parent, init, count);
+                add_2mb_page_watch_pae(drakvuf, vmi, p, pt, *parent);
 			} else {//Page Table
 				pt = (pdte & VMI_BIT_MASK(12, 35));
                //printf("PT: 0x%" PRIx64 "\n", pt);
@@ -339,7 +368,7 @@ int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vm
     return toreturn;
 
 }
-
+//TODO: remove the entries under THE entry from the lists so they get correctly reindexed
 int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, table_trap *parent, uint64_t pa){
     uint64_t pdte, pt=0;
 
@@ -361,7 +390,7 @@ int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf
             }
             if (VMI_GET_BIT(pdte, 7)){//2-MB-Page
                 pt = (pdte & VMI_BIT_MASK(21, 35))>>12;
-                add_trap(pt, p, drakvuf, vmi, LAYER_2MB, parent, 0, index);
+                add_2mb_page_watch_pae(drakvuf, vmi, p, pt, *parent);
             } else {//Page Table
                 pt = (pdte & VMI_BIT_MASK(12, 35))>>12;
                 add_trap(pt, p, drakvuf, vmi, LAYER_PT, parent, 0, index);
