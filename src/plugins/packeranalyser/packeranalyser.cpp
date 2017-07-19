@@ -15,11 +15,29 @@ void print_list_entries(void *item, void *stuff){
     printf("GFN: 0x%" PRIx64 " Layer: %i\n", tmp->gfn, tmp->layer);
 }
 
-static event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {    
-    printf("Execution_CB_TRAP From RIP: 0x%" PRIx64 " Trap_PA: 0x%" PRIx64 " va: 0x%" PRIx64 "\n", info->regs->rip, info->trap_pa, p2v((packeranalyser *)info->trap->data, info->trap_pa));
+static event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
+    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
+    addr_t va = p2v((packeranalyser *)info->trap->data, info->trap_pa);
+    addr_t paddr;
+
+    printf("Execution_CB_TRAP From RIP: 0x%" PRIx64 " Trap_PA: 0x%" PRIx64 " va: 0x%" PRIx64 "\n", info->regs->rip, info->trap_pa, va);
 
     drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
 
+    page_info_t *lookup_info = (page_info_t *)g_malloc(sizeof(page_info_t));
+
+    paddr = vmi_pagetable_lookup_extended(vmi, info->regs->cr3, info->regs->rip, lookup_info);
+    paddr = lookup_info->paddr;
+
+    if (paddr == 0){
+        printf("No matching page found: %s, 0x%" PRIx32 "\n", info->trap->name, (unsigned int)va);
+        goto exit;
+    } else {
+        printf("Page: paddr: 0x%" PRIx64 " pte: 0x%" PRIx64 " pgd: 0x%" PRIx64 "\n", paddr, lookup_info->x86_pae.pte_location, lookup_info->x86_pae.pgd_location);
+    }
+exit:
+    drakvuf_release_vmi(drakvuf);
+    g_free(lookup_info);
 
 
     return 0;
@@ -61,7 +79,7 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
     drakvuf_trap_t *new_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
     new_trap->memaccess.gfn = info->trap_pa>>12;
     new_trap->memaccess.access = VMI_MEMACCESS_X;
-    new_trap->memaccess.type = POST;
+    new_trap->memaccess.type = PRE;
     new_trap->type = MEMACCESS;
     new_trap->cb = execution_cb;
     new_trap->data = p;
