@@ -15,9 +15,12 @@ void print_list_entries(void *item, void *stuff){
     printf("GFN: 0x%" PRIx64 " Layer: %i\n", tmp->gfn, tmp->layer);
 }
 
-static event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
-    printf("!!!!!!!!!!!!!!!Execution_CB_TRAP!!!!!!!!!!!!!!!!!!!! Trap_PA: 0x%" PRIx64 " va: 0x%" PRIx64 "\n", info->trap_pa, p2v((packeranalyser *)info->trap->data, info->trap_pa));
+static event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {    
+    printf("Execution_CB_TRAP From RIP: 0x%" PRIx64 " Trap_PA: 0x%" PRIx64 " va: 0x%" PRIx64 "\n", info->regs->rip, info->trap_pa, p2v((packeranalyser *)info->trap->data, info->trap_pa));
+
     drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
+
+
 
     return 0;
 }

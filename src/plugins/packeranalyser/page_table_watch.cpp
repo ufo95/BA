@@ -406,8 +406,13 @@ addr_t p2v(packeranalyser *p, uint64_t pa){
 
     current_layer = ((table_trap *)list_entry->data)->layer;
 
-    for (int i = 0; i < 3; ++i){
-        loop = list_entry->prev;
+    va = ((table_trap *)list_entry->data)->index<<12;
+
+    printf("index: %i gfn: 0x%" PRIx64 " layer:%i \n", ((table_trap *)list_entry->data)->index, ((table_trap *)list_entry->data)->gfn, current_layer);
+
+    loop = list_entry->prev;
+
+    for (int i = 1; i < 3; ++i){
         while(((table_trap *)loop->data)->layer>=current_layer){
             loop = loop->prev;
         }
@@ -415,6 +420,7 @@ addr_t p2v(packeranalyser *p, uint64_t pa){
         current_layer = ((table_trap *)loop->data)->layer;
         printf("index: %i gfn: 0x%" PRIx64 " layer:%i \n", current_index, ((table_trap *)loop->data)->gfn, current_layer);
         va |= current_index<<(12+(i*9));
+
     }
     va += offset;
 
