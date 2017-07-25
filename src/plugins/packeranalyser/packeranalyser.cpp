@@ -7,20 +7,76 @@
 #include "../plugins.h"
 #include <libdrakvuf/libdrakvuf.h>
 #include <libvmi/libvmi.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
-//TODO: Refactor code so that only one syscall argument read function is needed
+#define SIZE 1
+
 void print_list_entries(void *item, void *stuff){
     table_trap *tmp = (table_trap *)item;
 
     printf("GFN: 0x%" PRIx64 " Layer: %i\n", tmp->gfn, tmp->layer);
 }
 
+void write_page_to_file(vmi_instance_t vmi, drakvuf_trap_info_t *info) {
+    const char dirpath[28] = "/tmp/packeranalyser_output/";
+    FILE *fd = NULL;
+    char *filepath = (char *)g_malloc0(sizeof(dirpath)+sizeof(addr_t));
+    uint64_t buf = 0;
+    int file_index = 1;
+    addr_t paddr = info->trap_pa & VMI_BIT_MASK(12,63);
+
+    mkdir(dirpath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH | S_IWOTH );
+
+    snprintf(filepath, sizeof(dirpath)+sizeof(addr_t), "%s%" PRIx64, dirpath, paddr);
+    
+    while(access(filepath, F_OK) != -1){
+        snprintf(filepath, sizeof(dirpath)+sizeof(addr_t), "%s%" PRIx64, dirpath, paddr+file_index);
+        file_index++;
+    }
+
+    fd = fopen(filepath, "w");
+
+    if(fd==NULL){
+        g_free(filepath);
+        printf("write_page_to_file error opening the file:%s\n", filepath);
+        return;
+    }
+
+    printf("trap_pa: 0x%" PRIx64 " paddr: 0x%" PRIx64 "\n", info->trap_pa, paddr);
+
+    for (int i = 0; i < 512; ++i){
+        vmi_read_64_pa(vmi, paddr, &buf);
+        fwrite(&buf, 8, 1, fd);
+        paddr+=8;
+    }
+    
+
+
+    fclose(fd);
+
+    g_free(filepath);
+    return;
+}
+
+
 static event_response_t execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
+    reg_t a_value = 0;
     addr_t va = p2v((packeranalyser *)info->trap->data, info->trap_pa);
     addr_t paddr;
 
-    printf("Execution_CB_TRAP From RIP: 0x%" PRIx64 " Trap_PA: 0x%" PRIx64 " va: 0x%" PRIx64 "\n", info->regs->rip, info->trap_pa, va);
+
+
+
+    /*if(VMI_SUCCESS != vmi_get_vcpureg(vmi, &a_value, IA32_DEBUGCTLMSR_BTS, info->vcpu)){
+        printf("Nope\n");
+    }*/
+
+
+    printf("Execution_CB_TRAP From RIP: 0x%" PRIx64 " Trap_PA: 0x%" PRIx64 " va: 0x%" PRIx64 " a_value: 0x%" PRIx64 "\n", info->regs->rip, info->trap_pa, va, a_value);
+
+    write_page_to_file(vmi, info);
 
     drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
 

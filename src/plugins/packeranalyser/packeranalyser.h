@@ -9,7 +9,24 @@
 
 #define likely(x)       __builtin_expect((x),1)
 #define unlikely(x)     __builtin_expect((x),0)
+#define MSR_IA32_DEBUGCTLMSR        0x000001d9
+#define IA32_DEBUGCTLMSR_LBR        (1<<0) /* Last Branch Record */
+#define IA32_DEBUGCTLMSR_BTF        (1<<1) /* Single Step on Branches */
+#define IA32_DEBUGCTLMSR_TR     (1<<6) /* Trace Message Enable */
+#define IA32_DEBUGCTLMSR_BTS        (1<<7) /* Branch Trace Store */
+#define IA32_DEBUGCTLMSR_BTINT      (1<<8) /* Branch Trace Interrupt */
+#define IA32_DEBUGCTLMSR_BTS_OFF_OS (1<<9)  /* BTS off if CPL 0 */
+#define IA32_DEBUGCTLMSR_BTS_OFF_USR    (1<<10) /* BTS off if CPL > 0 */
+#define IA32_DEBUGCTLMSR_RTM        (1<<15) /* RTM debugging enable */
+static inline __attribute__ (( always_inline )) uint64_t
+rdmsr ( unsigned int msr ) {
+    uint32_t high;
+    uint32_t low;
 
+    __asm__ __volatile__ ( "rdmsr" :
+                   "=d" ( high ), "=a" ( low ) : "c" ( msr ) );
+    return ( ( ( ( uint64_t ) high ) << 32 ) | low );
+}
 enum page_layer {LAYER_PDPT, LAYER_PDT, LAYER_PT, LAYER_PAGE, LAYER_2MB};
 
 struct table_trap{
