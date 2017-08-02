@@ -19,4 +19,5 @@ int custom_page_write_cmp_address(const void* tmp1, const void* tmp2);
 int custom_taple_trap_cmp_withlayer(const void* tmp1, const void* tmp2);
 int custom_taple_trap_cmp_gfn(const void* tmp1, const void* tmp2);
 int custom_taple_trap_cmp_no_page(const void* tmp1, const void* tmp2);
+int custom_page_exec_cmp_gfn(const void* tmp1, const void* tmp2);
 #endif

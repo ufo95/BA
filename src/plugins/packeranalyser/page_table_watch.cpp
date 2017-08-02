@@ -12,6 +12,17 @@
 static inline uint64_t get_pdptb (uint64_t pdpr){
     return pdpr & VMI_BIT_MASK(5,63);
 }
+int custom_page_exec_cmp_gfn(const void* tmp1, const void* tmp2){
+    page_exec_trap *one = (page_exec_trap *)tmp1;
+    uint64_t *two = (uint64_t *)tmp2;
+
+    if (unlikely((uint64_t)one->gfn==*two)){
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
 int custom_page_write_cmp_address(const void* tmp1, const void* tmp2){
     uint64_t *one = (uint64_t *)tmp1;
     uint64_t *two = (uint64_t *)tmp2;
@@ -95,9 +106,10 @@ void add_2mb_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyse
 }
 
 void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t page_table_address, int init){
-    drakvuf_trap_t *new_trap = NULL;
+    drakvuf_trap_t *new_trap = NULL;//, *exec_trap = NULL;
     GList *parent_list = NULL;
     table_trap *child_entry = NULL, *parent_entry = NULL;
+    //page_exec_trap *pet = NULL;
     uint64_t *page_gfn = NULL;
     uint64_t pte_address = 0;
     uint64_t pte = 0;
@@ -142,8 +154,24 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
 
         drakvuf_add_trap(drakvuf, new_trap);
 
-        page_table_gfn = page_table_address>>12;
+        /*exec_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
+        exec_trap->memaccess.gfn = (*page_gfn);
+        exec_trap->memaccess.access = VMI_MEMACCESS_X;
+        exec_trap->memaccess.type = PRE;
+        exec_trap->type = MEMACCESS;
+        exec_trap->cb = page_exec_cb;
+        exec_trap->data = p;
 
+        pet = (page_exec_trap *)g_malloc(sizeof(page_exec_trap));
+        pet->gfn = (*page_gfn);
+        pet->trap = exec_trap;
+
+        p->page_exec_traps = g_slist_append(p->page_exec_traps, pet);
+
+        drakvuf_add_trap(drakvuf, exec_trap);*/
+
+
+        page_table_gfn = page_table_address>>12;
 
 
         parent_entry->gfn = page_table_gfn;
@@ -200,25 +228,6 @@ void add_trap(uint64_t gfn, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t
     child->layer = pl;
     child->init = init;
     child->index = index;
-
-    if(pl==LAYER_2MB){
-        if(!g_slist_find_custom(p->page_write_traps, &(child->gfn), custom_page_write_cmp_address)){
-            new_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
-
-            new_trap->memaccess.gfn = child->gfn;
-            new_trap->memaccess.access = VMI_MEMACCESS_W;
-            new_trap->memaccess.type = POST;
-            new_trap->type = MEMACCESS;
-            new_trap->cb = write_cb;
-            new_trap->data = p;
-
-            p->page_write_traps = g_slist_append(p->page_write_traps, &(child->gfn));
-
-            return;
-        } else if(pl==LAYER_PAGE){
-            return;
-        }
-    }
 
     if (g_list_find_custom(p->table_traps, child, custom_taple_trap_cmp_withlayer)){//Trap already exist
         g_free(child);
