@@ -7,13 +7,12 @@
 #include "packeranalyser.h"
 #include "../plugins.h"
 #include <libdrakvuf/libdrakvuf.h>
-#include <libvmi/libvmi.h>
 
 static inline uint64_t get_pdptb (uint64_t pdpr){
     return pdpr & VMI_BIT_MASK(5,63);
 }
 int custom_page_exec_cmp_gfn(const void* tmp1, const void* tmp2){
-    page_exec_trap *one = (page_exec_trap *)tmp1;
+    layer_entry *one = (layer_entry *)tmp1;
     uint64_t *two = (uint64_t *)tmp2;
 
     if (unlikely((uint64_t)one->gfn==*two)){
@@ -76,7 +75,7 @@ int custom_taple_trap_cmp_withlayer(const void* tmp1, const void* tmp2){
         return 1;
     }
 }
-void add_2mb_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t page_address, table_trap parent){
+void add_2mb_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t page_address, table_trap parent, int init){
     uint64_t gfn = page_address>>12;
     drakvuf_trap_t *mb_trap;
 
@@ -99,6 +98,11 @@ void add_2mb_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyse
         mb_trap->cb = write_cb;
         mb_trap->data = p;
 
+	if(init==1){
+		add_to_first_layer(drakvuf, p, gfn);
+	} else {
+		add_to_layer(drakvuf, p, gfn, p->current_layer);
+	}
 
         drakvuf_add_trap(drakvuf, mb_trap);
         gfn++;
@@ -154,22 +158,12 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
 
         drakvuf_add_trap(drakvuf, new_trap);
 
-        /*exec_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
-        exec_trap->memaccess.gfn = (*page_gfn);
-        exec_trap->memaccess.access = VMI_MEMACCESS_X;
-        exec_trap->memaccess.type = PRE;
-        exec_trap->type = MEMACCESS;
-        exec_trap->cb = page_exec_cb;
-        exec_trap->data = p;
 
-        pet = (page_exec_trap *)g_malloc(sizeof(page_exec_trap));
-        pet->gfn = (*page_gfn);
-        pet->trap = exec_trap;
-
-        p->page_exec_traps = g_slist_append(p->page_exec_traps, pet);
-
-        drakvuf_add_trap(drakvuf, exec_trap);*/
-
+	if(init==1){
+		add_to_first_layer(drakvuf, p, *page_gfn);
+	} else {
+		add_to_layer(drakvuf, p, *page_gfn, p->current_layer);
+	}
 
         page_table_gfn = page_table_address>>12;
 
@@ -339,7 +333,7 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
             }
 			if (VMI_GET_BIT(pdte, 7)){//2-MB-Page
                 pt = (pdte & VMI_BIT_MASK(21, 35));
-                add_2mb_page_watch_pae(drakvuf, vmi, p, pt, *parent);
+                add_2mb_page_watch_pae(drakvuf, vmi, p, pt, *parent, init);
 			} else {//Page Table
 				pt = (pdte & VMI_BIT_MASK(12, 35));
                //printf("PT: 0x%" PRIx64 "\n", pt);
@@ -399,7 +393,7 @@ int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf
             }
             if (VMI_GET_BIT(pdte, 7)){//2-MB-Page
                 pt = (pdte & VMI_BIT_MASK(21, 35))>>12;
-                add_2mb_page_watch_pae(drakvuf, vmi, p, pt, *parent);
+                add_2mb_page_watch_pae(drakvuf, vmi, p, pt, *parent, 0);
             } else {//Page Table
                 pt = (pdte & VMI_BIT_MASK(12, 35))>>12;
                 add_trap(pt, p, drakvuf, vmi, LAYER_PT, parent, 0, index);

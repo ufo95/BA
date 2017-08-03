@@ -153,6 +153,7 @@ endif
 if PLUGIN_PACKERANALYSER
 sources += packeranalyser/packeranalyser.cpp
 sources += packeranalyser/page_table_watch.cpp
+sources += packeranalyser/layers.cpp
 endif
 
 ###############################################################################

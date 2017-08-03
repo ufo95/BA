@@ -7,7 +7,7 @@
 #include "plugins/private.h"
 #include <libdrakvuf/libdrakvuf.h>
 #include "packeranalyser.h"
-
+#include "layers.h"
 
 #define VMI_BIT_MASK(a, b) (((unsigned long long) -1 >> (63 - (b))) & ~((1ULL << (a)) - 1))
 #define VMI_GET_BIT(reg, bit) (!!(reg & (1ULL<<bit)))
