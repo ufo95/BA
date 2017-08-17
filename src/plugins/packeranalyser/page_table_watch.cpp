@@ -160,8 +160,10 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
 
 
 	if(init==1){
+		printf("add_page_watch_pae: add_to_first_layer: 0x%" PRIx64 "\n", *page_gfn);
 		add_to_first_layer(drakvuf, p, *page_gfn);
 	} else {
+		printf("add_page_watch_pae: add_to_layer: 0x%" PRIx64 "\n", *page_gfn);
 		add_to_layer(drakvuf, p, *page_gfn, p->current_layer);
 	}
 
@@ -318,7 +320,7 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
         parent->gfn = pdpt>>12;
         parent->layer = LAYER_PDPT;
 
-		add_trap(pdt>>12, p, drakvuf, vmi, LAYER_PDT, parent, init, i);//Add trap to the page_directory!
+	add_trap(pdt>>12, p, drakvuf, vmi, LAYER_PDT, parent, init, i);//Add trap to the page_directory!
 
         parent->gfn = pdt>>12;
         parent->layer = LAYER_PDT;
@@ -331,15 +333,15 @@ int pae_walk(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf, int init)
             if(!VMI_GET_BIT(pdte, 0)){
                 continue;
             }
-			if (VMI_GET_BIT(pdte, 7)){//2-MB-Page
-                pt = (pdte & VMI_BIT_MASK(21, 35));
-                add_2mb_page_watch_pae(drakvuf, vmi, p, pt, *parent, init);
-			} else {//Page Table
-				pt = (pdte & VMI_BIT_MASK(12, 35));
-               //printf("PT: 0x%" PRIx64 "\n", pt);
-				add_trap(pt>>12, p, drakvuf, vmi, LAYER_PT, parent, init, count);
-                add_page_watch_pae(drakvuf, vmi, p, pt, init);
-			}
+		if (VMI_GET_BIT(pdte, 7)){//2-MB-Page
+                	pt = (pdte & VMI_BIT_MASK(21, 35));
+                	add_2mb_page_watch_pae(drakvuf, vmi, p, pt, *parent, init);
+		} else {//Page Table
+			pt = (pdte & VMI_BIT_MASK(12, 35));
+               		//printf("PT: 0x%" PRIx64 "\n", pt);
+			add_trap(pt>>12, p, drakvuf, vmi, LAYER_PT, parent, init, count);
+                	add_page_watch_pae(drakvuf, vmi, p, pt, init);
+		}
         }
 	}
 
@@ -356,7 +358,7 @@ int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vm
 	page_mode pm = vmi_get_page_mode(vmi, 0);
 
     if (pm == VMI_PM_LEGACY){
-        toreturn=-1;
+	toreturn=-1;
     } else if (pm == VMI_PM_PAE){
         pae_walk(vmi, p, drakvuf, init);
     } else if (pm == VMI_PM_IA32E){

@@ -59,50 +59,15 @@ void write_page_to_file(vmi_instance_t vmi, drakvuf_trap_info_t *info) {
     return;
 }
 
-static event_response_t written_execution_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
-    packeranalyser *p = (packeranalyser *)info->trap->data;
-    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
-    addr_t va = p2v(p, info->trap_pa);
-    addr_t paddr;
-
-    /*if(VMI_SUCCESS != vmi_get_vcpureg(vmi, &a_value, IA32_DEBUGCTLMSR_BTS, info->vcpu)){
-        printf("Nope\n");
-    }*/
-
-
-    printf("Execution_CB_TRAP From RIP: 0x%" PRIx64 " Trap_PA: 0x%" PRIx64 "\n", info->regs->rip, info->trap_pa);
-
-
-    write_page_to_file(vmi, info);
-
-    drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
-
-    page_info_t *lookup_info = (page_info_t *)g_malloc(sizeof(page_info_t));
-
-    paddr = vmi_pagetable_lookup_extended(vmi, info->regs->cr3, info->regs->rip, lookup_info);
-    paddr = lookup_info->paddr;
-
-    if (paddr == 0){
-        printf("No matching page found: %s, 0x%" PRIx32 "\n", info->trap->name, (unsigned int)va);
-    } else {
-        printf("Page: paddr: 0x%" PRIx64 " pte: 0x%" PRIx64 " pgd: 0x%" PRIx64 "\n", paddr, lookup_info->x86_pae.pte_location, lookup_info->x86_pae.pgd_location);
-    }
-
-    drakvuf_release_vmi(drakvuf);
-    g_free(lookup_info);
-
-
-    return 0;
-}
-
-event_response_t page_exec_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){//any page got executed
+event_response_t page_exec_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){//a page outside our current layer got executed
     packeranalyser *p = (packeranalyser *)info->trap->data;
 
-    int old_layer = p->current_layer;
+
+    printf("page_exec_cb\n");
 
     switch_to_layer_with_address(drakvuf, p, info->trap_pa);
 
-    printf("switched from layer %i to %i\n", old_layer, p->current_layer);
+    //printf("Switched from layer %i to %i\n", old_layer, p->current_layer);
 
     return 0;
 }
@@ -110,6 +75,7 @@ event_response_t page_exec_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){//an
 
 event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page was now written to, so let's see if it gets executed
     packeranalyser *p = (packeranalyser *)info->trap->data;
+    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
     uint64_t *page_address = NULL;
     uint64_t *page_gfn = NULL;
 
@@ -125,22 +91,11 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
         return 0;
     }
  
-
-
-    p->page_written_exec_traps = g_slist_append(p->page_written_exec_traps, page_address);
-
-    drakvuf_trap_t *new_trap = (drakvuf_trap_t *)g_malloc0(sizeof(drakvuf_trap_t));
-    new_trap->memaccess.gfn = info->trap_pa>>12;
-    new_trap->memaccess.access = VMI_MEMACCESS_X;
-    new_trap->memaccess.type = PRE;
-    new_trap->type = MEMACCESS;
-    new_trap->cb = written_execution_cb;
-    new_trap->data = p;
-
-    drakvuf_add_trap(drakvuf, new_trap);
+    printf("write_cb\n");
+    add_to_layer_with_address(drakvuf, vmi, p, info->regs->rip, *page_gfn);
+    drakvuf_release_vmi(drakvuf);
 
     drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
-    printf("Table_lengths: table_traps: %i page_write_traps: %i page_written_exec_traps: %i\n", g_list_length(p->table_traps), g_slist_length(p->page_write_traps), g_slist_length(p->page_written_exec_traps));
 
     g_free(page_gfn);
 
@@ -557,10 +512,10 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
         throw -1; 
 
 
-	this->pm = vmi_get_page_mode(vmi, 0);
-    printf("add_page_table_watch\n");
+    this->pm = vmi_get_page_mode(vmi, 0);
     add_page_table_watch(drakvuf, this, vmi, 1);
 
+    printf("add_page_table_watch\n");
       
 
     drakvuf_release_vmi(drakvuf);
@@ -572,6 +527,7 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
 
 packeranalyser::~packeranalyser() {
 	printf("Goodbye!\n");
+    print_layers(this->layers);
     printf("-----------------Table_Traps----------------\n");
     g_list_foreach(this->table_traps, print_list_entries, NULL);
 }

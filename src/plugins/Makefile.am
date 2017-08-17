@@ -159,6 +159,8 @@ endif
 ###############################################################################
 sources += plugins.cpp plugins.h
 
+CXXFLAGS+="-D__STRICT_ANSI__"
+
 AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(srcdir)
 AM_CPPFLAGS += $(CPPFLAGS)
 AM_CPPFLAGS += $(CXXFLAGS)
