@@ -11,16 +11,6 @@
 static inline uint64_t get_pdptb (uint64_t pdpr){
     return pdpr & VMI_BIT_MASK(5,63);
 }
-int custom_page_exec_cmp_gfn(const void* tmp1, const void* tmp2){
-    layer_entry *one = (layer_entry *)tmp1;
-    uint64_t *two = (uint64_t *)tmp2;
-
-    if (unlikely((uint64_t)one->gfn==*two)){
-        return 0;
-    } else {
-        return 1;
-    }
-}
 
 int custom_page_write_cmp_address(const void* tmp1, const void* tmp2){
     uint64_t *one = (uint64_t *)tmp1;
@@ -100,9 +90,7 @@ void add_2mb_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyse
 
 	if(init==1){
 		add_to_first_layer(drakvuf, p, gfn);
-	} else {
-		add_to_layer(drakvuf, p, gfn, p->current_layer);
-	}
+	} 
 
         drakvuf_add_trap(drakvuf, mb_trap);
         gfn++;
@@ -162,10 +150,7 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
 	if(init==1){
 		printf("add_page_watch_pae: add_to_first_layer: 0x%" PRIx64 "\n", *page_gfn);
 		add_to_first_layer(drakvuf, p, *page_gfn);
-	} else {
-		printf("add_page_watch_pae: add_to_layer: 0x%" PRIx64 "\n", *page_gfn);
-		add_to_layer(drakvuf, p, *page_gfn, p->current_layer);
-	}
+	} 
 
         page_table_gfn = page_table_address>>12;
 

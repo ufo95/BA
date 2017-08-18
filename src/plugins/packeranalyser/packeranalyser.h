@@ -20,6 +20,12 @@ struct table_trap{
 };
 
 struct layer_entry{
+    GSList *frames = NULL;
+    int wrote_from = -1, executed_from = -1;
+    
+};
+
+struct frame{
     uint64_t gfn;
     drakvuf_trap_t *trap;
 };
@@ -40,10 +46,11 @@ class packeranalyser: public plugin {
         GSList *page_write_traps, *page_written_exec_traps, *page_exec_traps;
         GList *table_traps, *layers;
 
-	int current_layer = -1;
+	int current_exec_layer = -1, current_write_layer = -1;
         packeranalyser(drakvuf_t drakvuf, const void *config_p, output_format_t output);
         ~packeranalyser();
 };
+
 void print_list_entries(void *item, void *stuff);
 event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info);
 event_response_t page_exec_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info);
@@ -53,8 +60,7 @@ int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vm
 addr_t p2v(packeranalyser *p, uint64_t pa);
 
 void switch_to_layer_with_address(drakvuf_t drakvuf, packeranalyser *p, uint64_t pa);
-void add_to_first_layer(drakvuf_t drakvuf, packeranalyser *p, uint64_t page_gfn);
-void add_to_layer(drakvuf_t drakvuf, packeranalyser *p, uint64_t page_gfn, int layer);
+void add_to_first_layer(drakvuf_t drakvuf, packeranalyser *p, uint64_t gfn);
 void add_to_layer_with_address(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t from_va, uint64_t page_gfn);
 void print_layers(GList *layers);
 

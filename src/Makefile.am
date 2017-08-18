@@ -110,6 +110,8 @@ drakvuf_SOURCES = main.cpp drakvuf.cpp
 xen_memclone_SOURCES  = xen_memclone.c
 injector_SOURCES = injector.c
 
+CXXFLAGS+="-D__STRICT_ANSI__"
+
 AM_CFLAGS = $(CFLAGS)
 AM_CFLAGS += $(VMI_CFLAGS)
 AM_CFLAGS += $(GLIB_CFLAGS)
