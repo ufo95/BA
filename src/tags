@@ -1160,7 +1160,7 @@ add_2mb_page_watch_pae	plugins/packeranalyser/page_table_watch.cpp	/^void add_2m
 add_page_table_watch	plugins/packeranalyser/page_table_watch.cpp	/^int add_page_table_watch(drakvuf_t drakvuf, packeranalyser *p, vmi_instance_t vmi, int init) {$/;"	f
 add_page_watch_pae	plugins/packeranalyser/page_table_watch.cpp	/^void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t page_table_address, int init){$/;"	f
 add_to_first_layer	plugins/packeranalyser/layers.cpp	/^void add_to_first_layer(drakvuf_t drakvuf, packeranalyser *p, uint64_t page_gfn){$/;"	f
-add_to_layer	plugins/packeranalyser/layers.cpp	/^void add_to_layer(drakvuf_t drakvuf, packeranalyser *p, uint64_t page_gfn, int layer){$/;"	f
+add_to_layer	plugins/packeranalyser/layers.cpp	/^void add_to_layer(drakvuf_t drakvuf, packeranalyser *p, uint64_t page_gfn, int layer_index){$/;"	f
 add_to_layer_with_address	plugins/packeranalyser/layers.cpp	/^void add_to_layer_with_address(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t from_va, uint64_t page_gfn){$/;"	f
 add_trap	plugins/packeranalyser/page_table_watch.cpp	/^void add_trap(uint64_t gfn, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t vmi, page_layer pl, table_trap *parent, int init, int index){$/;"	f
 addr	libdrakvuf/libdrakvuf.h	/^                addr_t addr;$/;"	m	union:drakvuf_trap::__anon17::__anon18::__anon20
@@ -1572,8 +1572,8 @@ createtime	plugins/socketmon/private.h	/^    uint64_t createtime;$/;"	m	struct:t
 createtime	plugins/socketmon/private.h	/^    uint64_t createtime;$/;"	m	struct:tcp_listener_x86
 createtime	plugins/socketmon/private.h	/^    uint64_t createtime;$/;"	m	struct:udp_endpoint_x64
 createtime	plugins/socketmon/private.h	/^    uint64_t createtime;$/;"	m	struct:udp_endpoint_x86
-current_layer	plugins/packeranalyser/packeranalyser.h	/^	int current_layer = -1;$/;"	m	class:packeranalyser
-custom_page_exec_cmp_gfn	plugins/packeranalyser/page_table_watch.cpp	/^int custom_page_exec_cmp_gfn(const void* tmp1, const void* tmp2){$/;"	f
+current_exec_layer	plugins/packeranalyser/packeranalyser.h	/^	int current_exec_layer = -1, current_write_layer = -1;$/;"	m	class:packeranalyser
+current_write_layer	plugins/packeranalyser/packeranalyser.h	/^	int current_exec_layer = -1, current_write_layer = -1;$/;"	m	class:packeranalyser
 custom_page_write_cmp_address	plugins/packeranalyser/page_table_watch.cpp	/^int custom_page_write_cmp_address(const void* tmp1, const void* tmp2){$/;"	f
 custom_table_trap_ins_index	plugins/packeranalyser/page_table_watch.cpp	/^int custom_table_trap_ins_index(const void* tmp1, const void* tmp2){$/;"	f
 custom_taple_trap_cmp_gfn	plugins/packeranalyser/page_table_watch.cpp	/^int custom_taple_trap_cmp_gfn(const void* tmp1, const void* tmp2){$/;"	f
@@ -1775,6 +1775,7 @@ format	plugins/poolmon/poolmon.h	/^        output_format_t format;$/;"	m	class:p
 format	plugins/socketmon/socketmon.h	/^        output_format_t format;$/;"	m	class:socketmon
 format	plugins/ssdtmon/ssdtmon.h	/^        output_format_t format;$/;"	m	class:ssdtmon
 format	plugins/syscalls/syscalls.h	/^        output_format_t format;$/;"	m	class:syscalls
+frame	plugins/packeranalyser/packeranalyser.h	/^struct frame{$/;"	s
 frames	plugins/packeranalyser/packeranalyser.h	/^    GSList *frames = NULL;$/;"	m	struct:layer_entry
 free_routine	libdrakvuf/private.h	/^    drakvuf_trap_free_t free_routine;$/;"	m	struct:free_trap_wrapper
 free_trap_wrapper	libdrakvuf/private.h	/^struct free_trap_wrapper {$/;"	s
@@ -1799,7 +1800,7 @@ get_thread_previous_mode	libdrakvuf/os.h	/^    bool (*get_thread_previous_mode)$
 gfn	libdrakvuf/libdrakvuf.h	/^            addr_t gfn;$/;"	m	struct:drakvuf_trap::__anon17::__anon21
 gfn	libdrakvuf/private.h	/^    addr_t gfn;$/;"	m	struct:memaccess
 gfn	libdrakvuf/private.h	/^    uint64_t gfn;$/;"	m	struct:memcb_pass
-gfn	plugins/packeranalyser/packeranalyser.h	/^    uint64_t gfn;$/;"	m	struct:layer_address_entry
+gfn	plugins/packeranalyser/packeranalyser.h	/^    uint64_t gfn;$/;"	m	struct:frame
 gfn	plugins/packeranalyser/packeranalyser.h	/^    uint64_t gfn;$/;"	m	struct:table_trap
 ghashtable_foreach	libdrakvuf/vmi.h	118;"	d
 grab_file_by_handle	plugins/filedelete/filedelete.cpp	/^static void grab_file_by_handle(filedelete *f, drakvuf_t drakvuf,$/;"	f	file:
@@ -1966,7 +1967,6 @@ kiservicetable	plugins/ssdtmon/ssdtmon.h	/^        addr_t kiservicetable;$/;"	m	
 kpcr	libdrakvuf/private.h	/^    addr_t kpcr[16]; \/\/ vCPU specific kpcr recorded on mov-to-cr3$/;"	m	struct:drakvuf
 ktrap_frame_size	plugins/exmon/exmon.h	/^        size_t ktrap_frame_size;$/;"	m	class:exmon
 layer	plugins/packeranalyser/packeranalyser.h	/^    page_layer layer;$/;"	m	struct:table_trap
-layer_address_entry	plugins/packeranalyser/packeranalyser.h	/^struct layer_address_entry{$/;"	s
 layer_entry	plugins/packeranalyser/packeranalyser.h	/^struct layer_entry{$/;"	s
 layers	plugins/packeranalyser/packeranalyser.h	/^        GList *table_traps, *layers;$/;"	m	class:packeranalyser
 leave_paused	drakvuf.h	/^        bool leave_paused;$/;"	m	class:drakvuf_c
@@ -2484,7 +2484,7 @@ trap	plugins/exmon/exmon.h	/^        drakvuf_trap_t trap = {$/;"	m	class:exmon
 trap	plugins/filetracer/filetracer.cpp	/^    drakvuf_trap_t *trap;$/;"	m	struct:rettrap_struct	file:
 trap	plugins/objmon/objmon.h	/^        drakvuf_trap_t trap = {$/;"	m	class:objmon
 trap	plugins/packeranalyser/packeranalyser.h	/^        int trap=0, pid=0;$/;"	m	class:packeranalyser
-trap	plugins/packeranalyser/packeranalyser.h	/^    drakvuf_trap_t *trap;$/;"	m	struct:layer_address_entry
+trap	plugins/packeranalyser/packeranalyser.h	/^    drakvuf_trap_t *trap;$/;"	m	struct:frame
 trap	plugins/poolmon/poolmon.h	/^        drakvuf_trap_t trap;$/;"	m	class:poolmon
 trap	plugins/socketmon/socketmon.cpp	/^    drakvuf_trap_t *trap;$/;"	m	struct:rettrap_struct	file:
 trap_pa	libdrakvuf/libdrakvuf.h	/^    addr_t trap_pa;$/;"	m	struct:drakvuf_trap_info

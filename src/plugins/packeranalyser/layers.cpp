@@ -7,33 +7,32 @@
 #include "../plugins.h"
 #include <libdrakvuf/libdrakvuf.h>
 
-void print_layers(GList *layers){
-	frame *tmp;
+
+void print_frame(gpointer *frame_ptr){
+	printf("0x%" PRIx64 "\n", ((frame*)frame_ptr)->gfn);
+}
+
+void print_layers(packeranalyser *p){
 	printf("---LAYERS---\n");
-	for(int i = 0; i<(int)g_list_length(layers); ++i){
+	for(int i = 0; i<(int)g_list_length(p->layers); ++i){
 		printf("layer %i\n", i);
-		layer_entry *entry = (layer_entry*)g_list_nth_data(layers, i);
+		layer_entry *entry = (layer_entry*)g_list_nth_data(p->layers, i);
 		if(!entry)
 			continue;
-		GSList *iterator = (GSList *)entry->frames;
-		while(iterator!=NULL){
-			tmp = (frame *)iterator->data;
-			if(tmp)
-				printf("0x%" PRIx64 "\n", tmp->gfn);
-			iterator = iterator->next;
-		}
+		g_slist_foreach(entry->frames, (GFunc)print_frame, NULL);
+
 	}
 }
 
 
-int get_layer_with_gfn(GList *layers, uint64_t page_gfn){
+int get_layer_with_gfn(GList *layers, uint64_t page_gfn){//Doesn't work yet! Needs a rewrite!
 	frame *tmp;
 	for(int i = 0; i<(int)g_list_length(layers); ++i){
 		 layer_entry* entry = (layer_entry *)g_list_nth_data(layers, i);
 		if(!entry)
 			continue;
 		GSList *iterator = (GSList *)entry->frames;
-		while(iterator!=NULL){
+		while(iterator){
 			tmp = (frame *)iterator->data;
 			if(tmp && tmp->gfn == page_gfn){
 				return i;
@@ -66,10 +65,15 @@ void add_to_layer(drakvuf_t drakvuf, packeranalyser *p, uint64_t page_gfn, int l
 	new_entry->trap = exec_trap;
 	new_entry->gfn = page_gfn;
 
-	layer_entry *layer = (layer_entry *)g_list_nth(p->layers, layer_index);
-	layer->frames = (GSList *)g_slist_append(layer->frames, new_entry);
-	
-	print_layers(p->layers);
+	layer_entry *layer = (layer_entry *)g_list_nth_data(p->layers, layer_index);
+	if(!layer){
+		layer = (layer_entry *)g_malloc0(sizeof(layer_entry));
+		layer->frames = (GSList *)g_slist_append(layer->frames, new_entry);
+		p->layers = g_list_insert(p->layers, layer, layer_index);
+	} else {
+		layer->frames = (GSList *)g_slist_append(layer->frames, new_entry);
+	}
+	print_layers(p);
 
 	return;	
 }
@@ -83,6 +87,7 @@ void add_to_layer_with_address(drakvuf_t drakvuf, vmi_instance_t vmi, packeranal
 	addr_t from_pa = vmi_pagetable_lookup(vmi, vmi_pid_to_dtb(vmi, p->pid), from_va);	
 	int from_layer = get_layer_with_gfn(p->layers, from_pa>>12);
 	int to_layer = get_layer_with_gfn(p->layers, page_gfn);
+	printf("page_gfn: 0x%" PRIx64 " from_va 0x%" PRIx64 " from_pa: 0x%" PRIx64 "\n", page_gfn, from_va, from_pa);
 	printf("add_to_layer_with_address: current: %i from: %i to: %i\n", p->current_exec_layer, from_layer, to_layer);
 	if(to_layer==-2){//writing to a new layer
 		layer_entry *new_layer = (layer_entry *)g_malloc0(sizeof(layer_entry));
@@ -95,8 +100,6 @@ void add_to_layer_with_address(drakvuf_t drakvuf, vmi_instance_t vmi, packeranal
 		if(to_entry->wrote_from<to_layer)
 			to_entry->wrote_from=to_layer;
 	}
-
-	
 
 	add_to_layer(drakvuf, p, page_gfn, to_layer);
 	return;

@@ -62,7 +62,7 @@ addr_t p2v(packeranalyser *p, uint64_t pa);
 void switch_to_layer_with_address(drakvuf_t drakvuf, packeranalyser *p, uint64_t pa);
 void add_to_first_layer(drakvuf_t drakvuf, packeranalyser *p, uint64_t gfn);
 void add_to_layer_with_address(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t from_va, uint64_t page_gfn);
-void print_layers(GList *layers);
+void print_layers(packeranalyser *p);
 
 struct return_address_data{
     packeranalyser *p;

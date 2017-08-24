@@ -527,7 +527,7 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
 
 packeranalyser::~packeranalyser() {
 	printf("Goodbye!\n");
-    print_layers(this->layers);
+    print_layers(this);
     printf("-----------------Table_Traps----------------\n");
     g_list_foreach(this->table_traps, print_list_entries, NULL);
 }
