@@ -27,7 +27,8 @@ struct layer_entry{
 
 struct frame{
     uint64_t gfn;
-    drakvuf_trap_t *trap;
+    drakvuf_trap_t *write_trap;
+    drakvuf_trap_t *exec_trap;
 };
 
 class packeranalyser: public plugin {
@@ -46,7 +47,8 @@ class packeranalyser: public plugin {
         GSList *page_write_traps, *page_written_exec_traps, *page_exec_traps;
         GList *table_traps, *layers;
 
-	int current_exec_layer = -1, current_write_layer = -1;
+	//int current_exec_layer = -1, current_write_layer = -1;
+	int current_exec_layer = 0;
         packeranalyser(drakvuf_t drakvuf, const void *config_p, output_format_t output);
         ~packeranalyser();
 };

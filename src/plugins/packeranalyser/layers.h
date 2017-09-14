@@ -9,5 +9,8 @@
 #include "packeranalyser.h"
 
 
+int custom_layer_cmp_gfn(const void* tmp1, const void* tmp2);
+
+
 
 #endif

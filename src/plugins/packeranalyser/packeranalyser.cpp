@@ -60,46 +60,35 @@ void write_page_to_file(vmi_instance_t vmi, drakvuf_trap_info_t *info) {
 }
 
 event_response_t page_exec_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){//a page outside our current layer got executed
-    packeranalyser *p = (packeranalyser *)info->trap->data;
+	packeranalyser *p = (packeranalyser *)info->trap->data;
+	drakvuf_lock_and_get_vmi(drakvuf);
+	
+	
 
+	printf("page_exec_cb\n");
 
-    printf("page_exec_cb\n");
+	switch_to_layer_with_address(drakvuf, p, info->trap_pa);
 
-    switch_to_layer_with_address(drakvuf, p, info->trap_pa);
+	drakvuf_release_vmi(drakvuf);
+	//printf("Switched from layer %i to %i\n", old_layer, p->current_layer);
 
-    //printf("Switched from layer %i to %i\n", old_layer, p->current_layer);
-
-    return 0;
+	return 0;
 }
 
 
 event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page was now written to, so let's see if it gets executed
-    packeranalyser *p = (packeranalyser *)info->trap->data;
-    vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
-    uint64_t *page_address = NULL;
-    uint64_t *page_gfn = NULL;
+	uint64_t page_gfn = 0;
 
-    page_address = (uint64_t *)g_malloc(sizeof(uint64_t));
-    *page_address = info->trap_pa & VMI_BIT_MASK(12,61);
+	packeranalyser *p = (packeranalyser *)info->trap->data;
+	vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
 
-    page_gfn = (uint64_t *)g_malloc(sizeof(uint64_t));    
-    *page_gfn = info->trap_pa>>12;
+	page_gfn = info->trap_pa>>12; 
+    
+	//printf("write_cb: rip: 0x%" PRIx64  " \n", info->regs->rip);
+	add_to_layer_with_address(drakvuf, vmi, p, info->regs->rip, page_gfn);
+	drakvuf_release_vmi(drakvuf);
 
-    if (g_slist_find_custom(p->page_written_exec_traps, page_gfn, custom_page_write_cmp_address)){//Trap already exist
-        g_free(page_address);
-        g_free(page_gfn);
-        return 0;
-    }
- 
-    printf("write_cb\n");
-    add_to_layer_with_address(drakvuf, vmi, p, info->regs->rip, *page_gfn);
-    drakvuf_release_vmi(drakvuf);
-
-    drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
-
-    g_free(page_gfn);
-
-    return 0;
+	return 0;
 }
 
 
@@ -113,7 +102,7 @@ event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *in
     uint64_t page_gfn = info->trap_pa>>12;
 
 
-    list_entry = (GList *)g_list_find_custom(p->table_traps, &page_gfn, custom_taple_trap_cmp_no_page);//Get the coressponding trable_traps entry
+    list_entry = (GList *)g_list_find_custom(p->table_traps, &page_gfn, custom_table_trap_cmp_gfn);//Get the coressponding trable_traps entry
     
     if (list_entry == NULL){
         printf("page_table_access_cb This shouldn't happen!\n");
@@ -172,8 +161,7 @@ static event_response_t recover_address_cb(drakvuf_t drakvuf, drakvuf_trap_info_
 
     size = reg_size * 2;
 
-    buf  = (unsigned char *)g_malloc0(sizeof(char)*size);
-
+    buf  = (unsigned char *)g_malloc0(size);
     buf32 = (uint32_t *)buf;
     
         //NTAllocateVirtualMemory clears 0x18 from stack
@@ -228,6 +216,7 @@ exit:
     return 0;
 }
 
+
 int recover_address(drakvuf_t drakvuf, drakvuf_trap_info_t *info, vmi_instance_t *vmi, addr_t address_pointer){
     //To get the address we need to set a breakpoint at the return adress so we get the result address of the allocation
     packeranalyser *p = (packeranalyser*)info->trap->data;
@@ -276,7 +265,6 @@ int recover_address(drakvuf_t drakvuf, drakvuf_trap_info_t *info, vmi_instance_t
     return 0;
 }
 
-
 static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {
     packeranalyser *p = (packeranalyser*)info->trap->data;
 
@@ -286,9 +274,8 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
     uint8_t reg_size = vmi_get_address_width(vmi);
     size_t size = 0;
     uint32_t *buf32 = NULL;
-    uint64_t *buf64 = NULL;
     addr_t paddr;
-    page_info_t *lookup_info = NULL;
+    page_info_t lookup_info;
     //drakvuf_trap_t *new_trap=NULL;
 
 
@@ -324,10 +311,8 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
 
     size = reg_size * number_of_args;
 
-    buf  = (unsigned char *)g_malloc(sizeof(char)*size);
-
+    buf  = (unsigned char *)g_malloc(size);
     buf32 = (uint32_t *)buf;
-    buf64 = (uint64_t *)buf;
 
     access_context_t ctx;
     ctx.translate_mechanism = VMI_TM_PROCESS_DTB;
@@ -347,7 +332,7 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
             }
 
         if(need_recover==1){
-            recover_address(drakvuf, info, &vmi, buf32[index_address]);
+            //recover_address(drakvuf, info, &vmi, buf32[index_address]);
             goto exit;
         } else {
             ctx.addr = buf32[index_address];
@@ -363,23 +348,17 @@ static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info)
     }
     printf("Callback: %s Adress: 0x%" PRIx32 " Size: 0x%" PRIx32 " Protect: 0x%" PRIx32 "\n", info->trap->name, buf32[index_address], buf32[index_size], buf32[index_protect]);
 
-    lookup_info = (page_info_t *)g_malloc(sizeof(page_info_t));
-
-    paddr = vmi_pagetable_lookup_extended(vmi, info->regs->cr3, buf32[index_address], lookup_info);
-    paddr = lookup_info->paddr;
+    paddr = vmi_pagetable_lookup_extended(vmi, info->regs->cr3, buf32[index_address], &lookup_info);
+    paddr = lookup_info.paddr;
 
     if (paddr == 0){
         printf("No matching page found: %s, 0x%" PRIx32 "\n", info->trap->name, (unsigned int)buf32[index_address]);
         goto exit;
     } else {
-        printf("Page: paddr: 0x%" PRIx64 " pte: 0x%" PRIx64 " pgd: 0x%" PRIx64 "\n", paddr, lookup_info->x86_pae.pte_location, lookup_info->x86_pae.pgd_location);
+        printf("Page: paddr: 0x%" PRIx64 " pte: 0x%" PRIx64 " pgd: 0x%" PRIx64 "\n", paddr, lookup_info.x86_pae.pte_location, lookup_info.x86_pae.pgd_location);
     }
 
-    g_free(lookup_info);
-
-    printf("P2V: 0x%" PRIx64 "\n", p2v(p, paddr));
-
-
+    //printf("P2V: 0x%" PRIx64 "\n", p2v(p, paddr));
 
     /*if(buf32[index_protect]==0x10){
         add_page_table_watch(drakvuf, p, vmi, 0);
@@ -515,6 +494,7 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
     this->pm = vmi_get_page_mode(vmi, 0);
     add_page_table_watch(drakvuf, this, vmi, 1);
 
+    printf("Layer 0 frame 1: %p\n", (void *)g_slist_nth((GSList *)this->layers->data, 1));
     printf("add_page_table_watch\n");
       
 

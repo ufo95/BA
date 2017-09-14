@@ -4,7 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-ACCESS_MASK	plugins/syscalls/winscproto.h	/^    ACCESS_MASK,$/;"	e	enum:__anon12
+ACCESS_MASK	plugins/syscalls/winscproto.h	/^    ACCESS_MASK,$/;"	e	enum:__anon19
 ACLOCAL	Makefile	/^ACLOCAL = ${SHELL} \/home\/uli\/drakvuf\/missing aclocal-1.15$/;"	m
 ACLOCAL	dirwatch/Makefile	/^ACLOCAL = ${SHELL} \/home\/uli\/drakvuf\/missing aclocal-1.15$/;"	m
 ACLOCAL	libdrakvuf/Makefile	/^ACLOCAL = ${SHELL} \/home\/uli\/drakvuf\/missing aclocal-1.15$/;"	m
@@ -24,9 +24,9 @@ AF_INET	plugins/socketmon/private.h	243;"	d
 AF_INET6	plugins/socketmon/private.h	246;"	d
 ALIGN_SIZE	plugins/filetracer/filetracer.cpp	135;"	d	file:
 ALIGN_SIZE	plugins/socketmon/socketmon.cpp	144;"	d	file:
-ALPC_HANDLE	plugins/syscalls/winscproto.h	/^    ALPC_HANDLE,$/;"	e	enum:__anon12
-ALPC_MESSAGE_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    ALPC_MESSAGE_INFORMATION_CLASS,$/;"	e	enum:__anon12
-ALPC_PORT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    ALPC_PORT_INFORMATION_CLASS,$/;"	e	enum:__anon12
+ALPC_HANDLE	plugins/syscalls/winscproto.h	/^    ALPC_HANDLE,$/;"	e	enum:__anon19
+ALPC_MESSAGE_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    ALPC_MESSAGE_INFORMATION_CLASS,$/;"	e	enum:__anon19
+ALPC_PORT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    ALPC_PORT_INFORMATION_CLASS,$/;"	e	enum:__anon19
 AMTAR	Makefile	/^AMTAR = $${TAR-tar}$/;"	m
 AMTAR	dirwatch/Makefile	/^AMTAR = $${TAR-tar}$/;"	m
 AMTAR	libdrakvuf/Makefile	/^AMTAR = $${TAR-tar}$/;"	m
@@ -87,15 +87,15 @@ AM_V_lt	libdrakvuf/Makefile	/^AM_V_lt = $(am__v_lt_$(V))$/;"	m
 AM_V_lt	libinjector/Makefile	/^AM_V_lt = $(am__v_lt_$(V))$/;"	m
 AM_V_lt	plugins/Makefile	/^AM_V_lt = $(am__v_lt_$(V))$/;"	m
 AM_V_lt	xen_helper/Makefile	/^AM_V_lt = $(am__v_lt_$(V))$/;"	m
-APPHELPCOMMAND	plugins/syscalls/winscproto.h	/^    APPHELPCOMMAND,$/;"	e	enum:__anon12
+APPHELPCOMMAND	plugins/syscalls/winscproto.h	/^    APPHELPCOMMAND,$/;"	e	enum:__anon19
 AR	Makefile	/^AR = ar$/;"	m
 AR	dirwatch/Makefile	/^AR = ar$/;"	m
 AR	libdrakvuf/Makefile	/^AR = ar$/;"	m
 AR	libinjector/Makefile	/^AR = ar$/;"	m
 AR	plugins/Makefile	/^AR = ar$/;"	m
 AR	xen_helper/Makefile	/^AR = ar$/;"	m
-ATOM_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    ATOM_INFORMATION_CLASS,$/;"	e	enum:__anon12
-AUDIT_EVENT_TYPE	plugins/syscalls/winscproto.h	/^    AUDIT_EVENT_TYPE,$/;"	e	enum:__anon12
+ATOM_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    ATOM_INFORMATION_CLASS,$/;"	e	enum:__anon19
+AUDIT_EVENT_TYPE	plugins/syscalls/winscproto.h	/^    AUDIT_EVENT_TYPE,$/;"	e	enum:__anon19
 AUTOCONF	Makefile	/^AUTOCONF = ${SHELL} \/home\/uli\/drakvuf\/missing autoconf$/;"	m
 AUTOCONF	dirwatch/Makefile	/^AUTOCONF = ${SHELL} \/home\/uli\/drakvuf\/missing autoconf$/;"	m
 AUTOCONF	libdrakvuf/Makefile	/^AUTOCONF = ${SHELL} \/home\/uli\/drakvuf\/missing autoconf$/;"	m
@@ -122,7 +122,7 @@ AWK	plugins/Makefile	/^AWK = gawk$/;"	m
 AWK	xen_helper/Makefile	/^AWK = gawk$/;"	m
 BIT32	libdrakvuf/vmi.h	108;"	d
 BIT64	libdrakvuf/vmi.h	109;"	d
-BOOLEAN	plugins/syscalls/winscproto.h	/^    BOOLEAN,$/;"	e	enum:__anon12
+BOOLEAN	plugins/syscalls/winscproto.h	/^    BOOLEAN,$/;"	e	enum:__anon19
 BREAKPOINT	libdrakvuf/libdrakvuf.h	/^    BREAKPOINT,$/;"	e	enum:trap_type
 CC	Makefile	/^CC = gcc$/;"	m
 CC	dirwatch/Makefile	/^CC = gcc$/;"	m
@@ -146,7 +146,7 @@ CFLAGS	Makefile	/^CFLAGS = -g -O2$/;"	m
 CFLAGS	dirwatch/Makefile	/^CFLAGS = -g -O2$/;"	m
 CFLAGS	libdrakvuf/Makefile	/^CFLAGS = -g -O2$/;"	m
 CFLAGS	libinjector/Makefile	/^CFLAGS = -g -O2$/;"	m
-CFLAGS	plugins/Makefile	/^CFLAGS = -g -O2$/;"	m
+CFLAGS	plugins/Makefile	/^CFLAGS = -g #-O2$/;"	m
 CFLAGS	xen_helper/Makefile	/^CFLAGS = -g -O2$/;"	m
 CLEANUP_CMD	dirwatch/dirwatch.c	121;"	d	file:
 CLIENT_ID_UNIQUETHREAD	libdrakvuf/win-offsets.h	/^    CLIENT_ID_UNIQUETHREAD,$/;"	e	enum:win_offsets
@@ -229,7 +229,7 @@ CXXFLAGS	Makefile	/^CXXFLAGS = -g -O2 -std=gnu++11 "-D__STRICT_ANSI__"$/;"	m
 CXXFLAGS	dirwatch/Makefile	/^CXXFLAGS = -g -O2 -std=gnu++11$/;"	m
 CXXFLAGS	libdrakvuf/Makefile	/^CXXFLAGS = -g -O2 -std=gnu++11$/;"	m
 CXXFLAGS	libinjector/Makefile	/^CXXFLAGS = -g -O2 -std=gnu++11$/;"	m
-CXXFLAGS	plugins/Makefile	/^CXXFLAGS = -g -O2 -std=gnu++11 "-D__STRICT_ANSI__"$/;"	m
+CXXFLAGS	plugins/Makefile	/^CXXFLAGS = -g -std=gnu++11 "-D__STRICT_ANSI__" #-O2$/;"	m
 CXXFLAGS	xen_helper/Makefile	/^CXXFLAGS = -g -O2 -std=gnu++11$/;"	m
 CXXLD	Makefile	/^CXXLD = $(CXX)$/;"	m
 CXXLD	plugins/Makefile	/^CXXLD = $(CXX)$/;"	m
@@ -243,7 +243,7 @@ CYGPATH_W	plugins/Makefile	/^CYGPATH_W = echo$/;"	m
 CYGPATH_W	xen_helper/Makefile	/^CYGPATH_W = echo$/;"	m
 DEBUG	libdrakvuf/libdrakvuf.h	/^    DEBUG,$/;"	e	enum:trap_type
 DEBUGMON_H	plugins/debugmon/debugmon.h	106;"	d
-DEBUGOBJECTINFOCLASS	plugins/syscalls/winscproto.h	/^    DEBUGOBJECTINFOCLASS,$/;"	e	enum:__anon12
+DEBUGOBJECTINFOCLASS	plugins/syscalls/winscproto.h	/^    DEBUGOBJECTINFOCLASS,$/;"	e	enum:__anon19
 DEFAULT_FORMAT32	plugins/exmon/private.h	111;"	d
 DEFAULT_FORMAT64	plugins/exmon/private.h	112;"	d
 DEFAULT_FORMAT_USER	plugins/exmon/private.h	116;"	d
@@ -266,12 +266,12 @@ DEPDIR	libdrakvuf/Makefile	/^DEPDIR = .deps$/;"	m
 DEPDIR	libinjector/Makefile	/^DEPDIR = .deps$/;"	m
 DEPDIR	plugins/Makefile	/^DEPDIR = .deps$/;"	m
 DEPDIR	xen_helper/Makefile	/^DEPDIR = .deps$/;"	m
-DEVICE_POWER_STATE	plugins/syscalls/winscproto.h	/^    DEVICE_POWER_STATE,$/;"	e	enum:__anon12
-DIR_IN	plugins/syscalls/winscproto.h	/^    DIR_IN,$/;"	e	enum:__anon11
-DIR_INOUT	plugins/syscalls/winscproto.h	/^    DIR_INOUT,$/;"	e	enum:__anon11
-DIR_MISSING	plugins/syscalls/winscproto.h	/^    DIR_MISSING$/;"	e	enum:__anon11
-DIR_OUT	plugins/syscalls/winscproto.h	/^    DIR_OUT,$/;"	e	enum:__anon11
-DIR_RESERVED	plugins/syscalls/winscproto.h	/^    DIR_RESERVED,$/;"	e	enum:__anon11
+DEVICE_POWER_STATE	plugins/syscalls/winscproto.h	/^    DEVICE_POWER_STATE,$/;"	e	enum:__anon19
+DIR_IN	plugins/syscalls/winscproto.h	/^    DIR_IN,$/;"	e	enum:__anon18
+DIR_INOUT	plugins/syscalls/winscproto.h	/^    DIR_INOUT,$/;"	e	enum:__anon18
+DIR_MISSING	plugins/syscalls/winscproto.h	/^    DIR_MISSING$/;"	e	enum:__anon18
+DIR_OUT	plugins/syscalls/winscproto.h	/^    DIR_OUT,$/;"	e	enum:__anon18
+DIR_RESERVED	plugins/syscalls/winscproto.h	/^    DIR_RESERVED,$/;"	e	enum:__anon18
 DISPATCHER_PROCESS_OBJECT	libdrakvuf/win-processes.c	/^    DISPATCHER_PROCESS_OBJECT = 3,$/;"	e	enum:dispatcher_object	file:
 DISPATCHER_THREAD_OBJECT	libdrakvuf/win-processes.c	/^    DISPATCHER_THREAD_OBJECT  = 6$/;"	e	enum:dispatcher_object	file:
 DISPATCHER_TYPE	libdrakvuf/win-offsets.h	/^    DISPATCHER_TYPE,$/;"	e	enum:win_offsets
@@ -342,7 +342,7 @@ EGREP	libdrakvuf/Makefile	/^EGREP = \/bin\/grep -E$/;"	m
 EGREP	libinjector/Makefile	/^EGREP = \/bin\/grep -E$/;"	m
 EGREP	plugins/Makefile	/^EGREP = \/bin\/grep -E$/;"	m
 EGREP	xen_helper/Makefile	/^EGREP = \/bin\/grep -E$/;"	m
-ENLISTMENT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    ENLISTMENT_INFORMATION_CLASS,$/;"	e	enum:__anon12
+ENLISTMENT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    ENLISTMENT_INFORMATION_CLASS,$/;"	e	enum:__anon19
 EPROCESS_NAME	plugins/exmon/exmon.cpp	/^    EPROCESS_NAME,$/;"	e	enum:offset	file:
 EPROCESS_OBJECTTABLE	libdrakvuf/win-offsets.h	/^    EPROCESS_OBJECTTABLE,$/;"	e	enum:win_offsets
 EPROCESS_PCB	libdrakvuf/win-offsets.h	/^    EPROCESS_PCB,$/;"	e	enum:win_offsets
@@ -362,9 +362,9 @@ ETAGS	plugins/Makefile	/^ETAGS = etags$/;"	m
 ETAGS	xen_helper/Makefile	/^ETAGS = etags$/;"	m
 ETHREAD_CID	libdrakvuf/win-offsets.h	/^    ETHREAD_CID,$/;"	e	enum:win_offsets
 ETHREAD_TCB	libdrakvuf/win-offsets.h	/^    ETHREAD_TCB,$/;"	e	enum:win_offsets
-EVENT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    EVENT_INFORMATION_CLASS,$/;"	e	enum:__anon12
-EVENT_TYPE	plugins/syscalls/winscproto.h	/^    EVENT_TYPE,$/;"	e	enum:__anon12
-EXECUTION_STATE	plugins/syscalls/winscproto.h	/^    EXECUTION_STATE,$/;"	e	enum:__anon12
+EVENT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    EVENT_INFORMATION_CLASS,$/;"	e	enum:__anon19
+EVENT_TYPE	plugins/syscalls/winscproto.h	/^    EVENT_TYPE,$/;"	e	enum:__anon19
+EXECUTION_STATE	plugins/syscalls/winscproto.h	/^    EXECUTION_STATE,$/;"	e	enum:__anon19
 EXEEXT	Makefile	/^EXEEXT = $/;"	m
 EXEEXT	dirwatch/Makefile	/^EXEEXT = $/;"	m
 EXEEXT	libdrakvuf/Makefile	/^EXEEXT = $/;"	m
@@ -384,13 +384,13 @@ FILEDELETE_H	plugins/filedelete/filedelete.h	106;"	d
 FILETRACER_H	plugins/filetracer/filetracer.h	106;"	d
 FILETRACER_PRIVATE_H	plugins/filetracer/private.h	106;"	d
 FILE_DISPOSITION_INFORMATION	plugins/filedelete/filedelete.cpp	113;"	d	file:
-FILE_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    FILE_INFORMATION_CLASS,$/;"	e	enum:__anon12
+FILE_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    FILE_INFORMATION_CLASS,$/;"	e	enum:__anon19
 FILE_OBJECT_FILENAME	plugins/filedelete/filedelete.cpp	/^    FILE_OBJECT_FILENAME,$/;"	e	enum:offset	file:
 FILE_OBJECT_SECTIONOBJECTPOINTER	plugins/filedelete/filedelete.cpp	/^    FILE_OBJECT_SECTIONOBJECTPOINTER,$/;"	e	enum:offset	file:
 FILE_OBJECT_SIZE	plugins/filedelete/filedelete.cpp	/^    FILE_OBJECT_SIZE,$/;"	e	enum:offset	file:
 FIN_WAIT1	plugins/socketmon/private.h	/^    FIN_WAIT1 = 5,$/;"	e	enum:tcp_state
 FIN_WAIT2	plugins/socketmon/private.h	/^    FIN_WAIT2 = 6,$/;"	e	enum:tcp_state
-FS_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    FS_INFORMATION_CLASS,$/;"	e	enum:__anon12
+FS_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    FS_INFORMATION_CLASS,$/;"	e	enum:__anon19
 GLIB_CFLAGS	Makefile	/^GLIB_CFLAGS = -I\/usr\/include\/glib-2.0 -I\/usr\/lib\/x86_64-linux-gnu\/glib-2.0\/include$/;"	m
 GLIB_CFLAGS	dirwatch/Makefile	/^GLIB_CFLAGS = -I\/usr\/include\/glib-2.0 -I\/usr\/lib\/x86_64-linux-gnu\/glib-2.0\/include$/;"	m
 GLIB_CFLAGS	libdrakvuf/Makefile	/^GLIB_CFLAGS = -I\/usr\/include\/glib-2.0 -I\/usr\/lib\/x86_64-linux-gnu\/glib-2.0\/include$/;"	m
@@ -409,7 +409,7 @@ GREP	libdrakvuf/Makefile	/^GREP = \/bin\/grep$/;"	m
 GREP	libinjector/Makefile	/^GREP = \/bin\/grep$/;"	m
 GREP	plugins/Makefile	/^GREP = \/bin\/grep$/;"	m
 GREP	xen_helper/Makefile	/^GREP = \/bin\/grep$/;"	m
-HANDLE	plugins/syscalls/winscproto.h	/^    HANDLE,$/;"	e	enum:__anon12
+HANDLE	plugins/syscalls/winscproto.h	/^    HANDLE,$/;"	e	enum:__anon19
 HANDLE_MULTIPLIER	libdrakvuf/win-handles.c	118;"	d	file:
 HANDLE_TABLE_HANDLECOUNT	libdrakvuf/win-offsets.h	/^    HANDLE_TABLE_HANDLECOUNT,$/;"	e	enum:win_offsets
 HANDLE_TABLE_HANDLECOUNT	plugins/filedelete/filedelete.cpp	/^    HANDLE_TABLE_HANDLECOUNT,$/;"	e	enum:offset	file:
@@ -473,25 +473,25 @@ INSTALL_STRIP_PROGRAM	libdrakvuf/Makefile	/^INSTALL_STRIP_PROGRAM = $(install_sh
 INSTALL_STRIP_PROGRAM	libinjector/Makefile	/^INSTALL_STRIP_PROGRAM = $(install_sh) -c -s$/;"	m
 INSTALL_STRIP_PROGRAM	plugins/Makefile	/^INSTALL_STRIP_PROGRAM = $(install_sh) -c -s$/;"	m
 INSTALL_STRIP_PROGRAM	xen_helper/Makefile	/^INSTALL_STRIP_PROGRAM = $(install_sh) -c -s$/;"	m
-IO_COMPLETION_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    IO_COMPLETION_INFORMATION_CLASS,$/;"	e	enum:__anon12
-IO_SESSION_STATE	plugins/syscalls/winscproto.h	/^    IO_SESSION_STATE,$/;"	e	enum:__anon12
-JOBOBJECTINFOCLASS	plugins/syscalls/winscproto.h	/^    JOBOBJECTINFOCLASS,$/;"	e	enum:__anon12
-KAFFINITY	plugins/syscalls/winscproto.h	/^    KAFFINITY,$/;"	e	enum:__anon12
+IO_COMPLETION_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    IO_COMPLETION_INFORMATION_CLASS,$/;"	e	enum:__anon19
+IO_SESSION_STATE	plugins/syscalls/winscproto.h	/^    IO_SESSION_STATE,$/;"	e	enum:__anon19
+JOBOBJECTINFOCLASS	plugins/syscalls/winscproto.h	/^    JOBOBJECTINFOCLASS,$/;"	e	enum:__anon19
+KAFFINITY	plugins/syscalls/winscproto.h	/^    KAFFINITY,$/;"	e	enum:__anon19
 KERNEL_MODE	libdrakvuf/libdrakvuf.h	/^    KERNEL_MODE,$/;"	e	enum:privilege_mode
-KEY_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    KEY_INFORMATION_CLASS,$/;"	e	enum:__anon12
-KEY_SET_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    KEY_SET_INFORMATION_CLASS,$/;"	e	enum:__anon12
-KEY_VALUE_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    KEY_VALUE_INFORMATION_CLASS,$/;"	e	enum:__anon12
+KEY_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    KEY_INFORMATION_CLASS,$/;"	e	enum:__anon19
+KEY_SET_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    KEY_SET_INFORMATION_CLASS,$/;"	e	enum:__anon19
+KEY_VALUE_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    KEY_VALUE_INFORMATION_CLASS,$/;"	e	enum:__anon19
 KIINITIALPCR	libdrakvuf/win-offsets.h	/^    KIINITIALPCR,$/;"	e	enum:win_offsets
 KPCR_PRCB	libdrakvuf/win-offsets.h	/^    KPCR_PRCB,$/;"	e	enum:win_offsets
 KPCR_PRCBDATA	libdrakvuf/win-offsets.h	/^    KPCR_PRCBDATA,$/;"	e	enum:win_offsets
 KPRCB_CURRENTTHREAD	libdrakvuf/win-offsets.h	/^    KPRCB_CURRENTTHREAD,$/;"	e	enum:win_offsets
 KPROCESS_HEADER	libdrakvuf/win-offsets.h	/^    KPROCESS_HEADER,$/;"	e	enum:win_offsets
-KPROFILE_SOURCE	plugins/syscalls/winscproto.h	/^    KPROFILE_SOURCE,$/;"	e	enum:__anon12
+KPROFILE_SOURCE	plugins/syscalls/winscproto.h	/^    KPROFILE_SOURCE,$/;"	e	enum:__anon19
 KTHREAD_HEADER	libdrakvuf/win-offsets.h	/^    KTHREAD_HEADER,$/;"	e	enum:win_offsets
 KTHREAD_PREVIOUSMODE	libdrakvuf/win-offsets.h	/^    KTHREAD_PREVIOUSMODE,$/;"	e	enum:win_offsets
 KTHREAD_PROCESS	libdrakvuf/win-offsets.h	/^    KTHREAD_PROCESS,$/;"	e	enum:win_offsets
 KTHREAD_TRAPFRAME	libinjector/private.h	/^    KTHREAD_TRAPFRAME,$/;"	e	enum:offset
-KTMOBJECT_TYPE	plugins/syscalls/winscproto.h	/^    KTMOBJECT_TYPE,$/;"	e	enum:__anon12
+KTMOBJECT_TYPE	plugins/syscalls/winscproto.h	/^    KTMOBJECT_TYPE,$/;"	e	enum:__anon19
 KTRAP_FRAME_EAX	plugins/exmon/exmon.cpp	/^    KTRAP_FRAME_EAX,$/;"	e	enum:offset	file:
 KTRAP_FRAME_EBP	plugins/exmon/exmon.cpp	/^    KTRAP_FRAME_EBP,$/;"	e	enum:offset	file:
 KTRAP_FRAME_EBX	plugins/exmon/exmon.cpp	/^    KTRAP_FRAME_EBX,$/;"	e	enum:offset	file:
@@ -515,13 +515,13 @@ KTRAP_FRAME_RIP	libinjector/private.h	/^    KTRAP_FRAME_RIP,$/;"	e	enum:offset
 KTRAP_FRAME_RIP	plugins/exmon/exmon.cpp	/^    KTRAP_FRAME_RIP,$/;"	e	enum:offset	file:
 KTRAP_FRAME_RSI	plugins/exmon/exmon.cpp	/^    KTRAP_FRAME_RSI,$/;"	e	enum:offset	file:
 KTRAP_FRAME_RSP	plugins/exmon/exmon.cpp	/^    KTRAP_FRAME_RSP,$/;"	e	enum:offset	file:
-LANGID	plugins/syscalls/winscproto.h	/^    LANGID,$/;"	e	enum:__anon12
+LANGID	plugins/syscalls/winscproto.h	/^    LANGID,$/;"	e	enum:__anon19
 LAYER_2MB	plugins/packeranalyser/packeranalyser.h	/^enum page_layer {LAYER_PDPT, LAYER_PDT, LAYER_PT, LAYER_PAGE, LAYER_2MB};$/;"	e	enum:page_layer
 LAYER_PAGE	plugins/packeranalyser/packeranalyser.h	/^enum page_layer {LAYER_PDPT, LAYER_PDT, LAYER_PT, LAYER_PAGE, LAYER_2MB};$/;"	e	enum:page_layer
 LAYER_PDPT	plugins/packeranalyser/packeranalyser.h	/^enum page_layer {LAYER_PDPT, LAYER_PDT, LAYER_PT, LAYER_PAGE, LAYER_2MB};$/;"	e	enum:page_layer
 LAYER_PDT	plugins/packeranalyser/packeranalyser.h	/^enum page_layer {LAYER_PDPT, LAYER_PDT, LAYER_PT, LAYER_PAGE, LAYER_2MB};$/;"	e	enum:page_layer
 LAYER_PT	plugins/packeranalyser/packeranalyser.h	/^enum page_layer {LAYER_PDPT, LAYER_PDT, LAYER_PT, LAYER_PAGE, LAYER_2MB};$/;"	e	enum:page_layer
-LCID	plugins/syscalls/winscproto.h	/^    LCID,$/;"	e	enum:__anon12
+LCID	plugins/syscalls/winscproto.h	/^    LCID,$/;"	e	enum:__anon19
 LD	Makefile	/^LD = \/usr\/bin\/ld -m elf_x86_64$/;"	m
 LD	dirwatch/Makefile	/^LD = \/usr\/bin\/ld -m elf_x86_64$/;"	m
 LD	libdrakvuf/Makefile	/^LD = \/usr\/bin\/ld -m elf_x86_64$/;"	m
@@ -582,12 +582,12 @@ LN_S	libdrakvuf/Makefile	/^LN_S = ln -s$/;"	m
 LN_S	libinjector/Makefile	/^LN_S = ln -s$/;"	m
 LN_S	plugins/Makefile	/^LN_S = ln -s$/;"	m
 LN_S	xen_helper/Makefile	/^LN_S = ln -s$/;"	m
-LONG	plugins/syscalls/winscproto.h	/^    LONG,$/;"	e	enum:__anon12
+LONG	plugins/syscalls/winscproto.h	/^    LONG,$/;"	e	enum:__anon19
 LOOKUP_DTB	libdrakvuf/libdrakvuf.h	/^    LOOKUP_DTB,$/;"	e	enum:lookup_type
 LOOKUP_NAME	libdrakvuf/libdrakvuf.h	/^    LOOKUP_NAME,$/;"	e	enum:lookup_type
 LOOKUP_NONE	libdrakvuf/libdrakvuf.h	/^    LOOKUP_NONE,$/;"	e	enum:lookup_type
 LOOKUP_PID	libdrakvuf/libdrakvuf.h	/^    LOOKUP_PID,$/;"	e	enum:lookup_type
-LPGUID	plugins/syscalls/winscproto.h	/^    LPGUID,$/;"	e	enum:__anon12
+LPGUID	plugins/syscalls/winscproto.h	/^    LPGUID,$/;"	e	enum:__anon19
 LTCOMPILE	Makefile	/^LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \\$/;"	m
 LTCOMPILE	dirwatch/Makefile	/^LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \\$/;"	m
 LTCOMPILE	libdrakvuf/Makefile	/^LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \\$/;"	m
@@ -627,17 +627,17 @@ MANIFEST_TOOL	xen_helper/Makefile	/^MANIFEST_TOOL = :$/;"	m
 MAXIMUM_MODE	libdrakvuf/libdrakvuf.h	/^    MAXIMUM_MODE$/;"	e	enum:privilege_mode
 MAX_HEADER_SIZE	libdrakvuf/win-exports.c	123;"	d	file:
 MEMACCESS	libdrakvuf/libdrakvuf.h	/^    MEMACCESS,$/;"	e	enum:trap_type
-MEMORY_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    MEMORY_INFORMATION_CLASS,$/;"	e	enum:__anon12
-MEMORY_RESERVE_TYPE	plugins/syscalls/winscproto.h	/^    MEMORY_RESERVE_TYPE,$/;"	e	enum:__anon12
+MEMORY_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    MEMORY_INFORMATION_CLASS,$/;"	e	enum:__anon19
+MEMORY_RESERVE_TYPE	plugins/syscalls/winscproto.h	/^    MEMORY_RESERVE_TYPE,$/;"	e	enum:__anon19
 MIN_KERNEL_BOUNDARY	libdrakvuf/linux-processes.c	119;"	d	file:
-MISSING	plugins/syscalls/winscproto.h	/^    MISSING,$/;"	e	enum:__anon12
+MISSING	plugins/syscalls/winscproto.h	/^    MISSING,$/;"	e	enum:__anon19
 MKDIR_P	Makefile	/^MKDIR_P = \/bin\/mkdir -p$/;"	m
 MKDIR_P	dirwatch/Makefile	/^MKDIR_P = \/bin\/mkdir -p$/;"	m
 MKDIR_P	libdrakvuf/Makefile	/^MKDIR_P = \/bin\/mkdir -p$/;"	m
 MKDIR_P	libinjector/Makefile	/^MKDIR_P = \/bin\/mkdir -p$/;"	m
 MKDIR_P	plugins/Makefile	/^MKDIR_P = \/bin\/mkdir -p$/;"	m
 MKDIR_P	xen_helper/Makefile	/^MKDIR_P = \/bin\/mkdir -p$/;"	m
-MUTANT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    MUTANT_INFORMATION_CLASS,$/;"	e	enum:__anon12
+MUTANT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    MUTANT_INFORMATION_CLASS,$/;"	e	enum:__anon19
 MaxPoolType	plugins/poolmon/private.h	/^    MaxPoolType,$/;"	e	enum:pool_type
 NM	Makefile	/^NM = \/usr\/bin\/nm -B$/;"	m
 NM	dirwatch/Makefile	/^NM = \/usr\/bin\/nm -B$/;"	m
@@ -663,9 +663,9 @@ NORMAL_UNINSTALL	libdrakvuf/Makefile	/^NORMAL_UNINSTALL = :$/;"	m
 NORMAL_UNINSTALL	libinjector/Makefile	/^NORMAL_UNINSTALL = :$/;"	m
 NORMAL_UNINSTALL	plugins/Makefile	/^NORMAL_UNINSTALL = :$/;"	m
 NORMAL_UNINSTALL	xen_helper/Makefile	/^NORMAL_UNINSTALL = :$/;"	m
-NOTIFICATION_MASK	plugins/syscalls/winscproto.h	/^    NOTIFICATION_MASK,$/;"	e	enum:__anon12
-NTAPI	plugins/syscalls/winscproto.h	/^    NTAPI,$/;"	e	enum:__anon12
-NTSTATUS	plugins/syscalls/winscproto.h	/^    NTSTATUS,$/;"	e	enum:__anon12
+NOTIFICATION_MASK	plugins/syscalls/winscproto.h	/^    NOTIFICATION_MASK,$/;"	e	enum:__anon19
+NTAPI	plugins/syscalls/winscproto.h	/^    NTAPI,$/;"	e	enum:__anon19
+NTSTATUS	plugins/syscalls/winscproto.h	/^    NTSTATUS,$/;"	e	enum:__anon19
 NT_TIB_STACKBASE	libinjector/private.h	/^    NT_TIB_STACKBASE,$/;"	e	enum:offset
 NT_TIB_STACKLIMIT	libinjector/private.h	/^    NT_TIB_STACKLIMIT,$/;"	e	enum:offset
 NUM_SYSCALLS	plugins/syscalls/winscproto.h	110;"	d
@@ -691,12 +691,12 @@ OBJDUMP	libdrakvuf/Makefile	/^OBJDUMP = objdump$/;"	m
 OBJDUMP	libinjector/Makefile	/^OBJDUMP = objdump$/;"	m
 OBJDUMP	plugins/Makefile	/^OBJDUMP = objdump$/;"	m
 OBJDUMP	xen_helper/Makefile	/^OBJDUMP = objdump$/;"	m
-OBJECT_ATTRIBUTES	plugins/syscalls/winscproto.h	/^    OBJECT_ATTRIBUTES,$/;"	e	enum:__anon12
+OBJECT_ATTRIBUTES	plugins/syscalls/winscproto.h	/^    OBJECT_ATTRIBUTES,$/;"	e	enum:__anon19
 OBJECT_HEADER_BODY	libdrakvuf/win-offsets.h	/^    OBJECT_HEADER_BODY,$/;"	e	enum:win_offsets
 OBJECT_HEADER_BODY	plugins/filedelete/filedelete.cpp	/^    OBJECT_HEADER_BODY,$/;"	e	enum:offset	file:
 OBJECT_HEADER_TYPEINDEX	libdrakvuf/win-offsets.h	/^    OBJECT_HEADER_TYPEINDEX,$/;"	e	enum:win_offsets
 OBJECT_HEADER_TYPEINDEX	plugins/filedelete/filedelete.cpp	/^    OBJECT_HEADER_TYPEINDEX,$/;"	e	enum:offset	file:
-OBJECT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    OBJECT_INFORMATION_CLASS,$/;"	e	enum:__anon12
+OBJECT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    OBJECT_INFORMATION_CLASS,$/;"	e	enum:__anon19
 OBJEXT	Makefile	/^OBJEXT = o$/;"	m
 OBJEXT	dirwatch/Makefile	/^OBJEXT = o$/;"	m
 OBJEXT	libdrakvuf/Makefile	/^OBJEXT = o$/;"	m
@@ -720,9 +720,9 @@ OTOOL64	libdrakvuf/Makefile	/^OTOOL64 = $/;"	m
 OTOOL64	libinjector/Makefile	/^OTOOL64 = $/;"	m
 OTOOL64	plugins/Makefile	/^OTOOL64 = $/;"	m
 OTOOL64	xen_helper/Makefile	/^OTOOL64 = $/;"	m
-OUTPUT_CSV	plugins/plugins.h	/^    OUTPUT_CSV,$/;"	e	enum:__anon6
-OUTPUT_DEFAULT	plugins/plugins.h	/^    OUTPUT_DEFAULT,$/;"	e	enum:__anon6
-PACCESS_MASK	plugins/syscalls/winscproto.h	/^    PACCESS_MASK,$/;"	e	enum:__anon12
+OUTPUT_CSV	plugins/plugins.h	/^    OUTPUT_CSV,$/;"	e	enum:__anon13
+OUTPUT_DEFAULT	plugins/plugins.h	/^    OUTPUT_DEFAULT,$/;"	e	enum:__anon13
+PACCESS_MASK	plugins/syscalls/winscproto.h	/^    PACCESS_MASK,$/;"	e	enum:__anon19
 PACKAGE	Makefile	/^PACKAGE = drakvuf$/;"	m
 PACKAGE	dirwatch/Makefile	/^PACKAGE = drakvuf$/;"	m
 PACKAGE	libdrakvuf/Makefile	/^PACKAGE = drakvuf$/;"	m
@@ -765,45 +765,45 @@ PACKAGE_VERSION	libdrakvuf/Makefile	/^PACKAGE_VERSION = 0.5-f221cf0$/;"	m
 PACKAGE_VERSION	libinjector/Makefile	/^PACKAGE_VERSION = 0.5-f221cf0$/;"	m
 PACKAGE_VERSION	plugins/Makefile	/^PACKAGE_VERSION = 0.5-f221cf0$/;"	m
 PACKAGE_VERSION	xen_helper/Makefile	/^PACKAGE_VERSION = 0.5-f221cf0$/;"	m
-PALPC_CONTEXT_ATTR	plugins/syscalls/winscproto.h	/^    PALPC_CONTEXT_ATTR,$/;"	e	enum:__anon12
-PALPC_DATA_VIEW_ATTR	plugins/syscalls/winscproto.h	/^    PALPC_DATA_VIEW_ATTR,$/;"	e	enum:__anon12
-PALPC_HANDLE	plugins/syscalls/winscproto.h	/^    PALPC_HANDLE,$/;"	e	enum:__anon12
-PALPC_MESSAGE_ATTRIBUTES	plugins/syscalls/winscproto.h	/^    PALPC_MESSAGE_ATTRIBUTES,$/;"	e	enum:__anon12
-PALPC_PORT_ATTRIBUTES	plugins/syscalls/winscproto.h	/^    PALPC_PORT_ATTRIBUTES,$/;"	e	enum:__anon12
-PALPC_SECURITY_ATTR	plugins/syscalls/winscproto.h	/^    PALPC_SECURITY_ATTR,$/;"	e	enum:__anon12
+PALPC_CONTEXT_ATTR	plugins/syscalls/winscproto.h	/^    PALPC_CONTEXT_ATTR,$/;"	e	enum:__anon19
+PALPC_DATA_VIEW_ATTR	plugins/syscalls/winscproto.h	/^    PALPC_DATA_VIEW_ATTR,$/;"	e	enum:__anon19
+PALPC_HANDLE	plugins/syscalls/winscproto.h	/^    PALPC_HANDLE,$/;"	e	enum:__anon19
+PALPC_MESSAGE_ATTRIBUTES	plugins/syscalls/winscproto.h	/^    PALPC_MESSAGE_ATTRIBUTES,$/;"	e	enum:__anon19
+PALPC_PORT_ATTRIBUTES	plugins/syscalls/winscproto.h	/^    PALPC_PORT_ATTRIBUTES,$/;"	e	enum:__anon19
+PALPC_SECURITY_ATTR	plugins/syscalls/winscproto.h	/^    PALPC_SECURITY_ATTR,$/;"	e	enum:__anon19
 PATH_SEPARATOR	Makefile	/^PATH_SEPARATOR = :$/;"	m
 PATH_SEPARATOR	dirwatch/Makefile	/^PATH_SEPARATOR = :$/;"	m
 PATH_SEPARATOR	libdrakvuf/Makefile	/^PATH_SEPARATOR = :$/;"	m
 PATH_SEPARATOR	libinjector/Makefile	/^PATH_SEPARATOR = :$/;"	m
 PATH_SEPARATOR	plugins/Makefile	/^PATH_SEPARATOR = :$/;"	m
 PATH_SEPARATOR	xen_helper/Makefile	/^PATH_SEPARATOR = :$/;"	m
-PBOOLEAN	plugins/syscalls/winscproto.h	/^    PBOOLEAN,$/;"	e	enum:__anon12
-PBOOT_ENTRY	plugins/syscalls/winscproto.h	/^    PBOOT_ENTRY,$/;"	e	enum:__anon12
-PBOOT_OPTIONS	plugins/syscalls/winscproto.h	/^    PBOOT_OPTIONS,$/;"	e	enum:__anon12
-PCHAR	plugins/syscalls/winscproto.h	/^    PCHAR,$/;"	e	enum:__anon12
-PCLIENT_ID	plugins/syscalls/winscproto.h	/^    PCLIENT_ID,$/;"	e	enum:__anon12
-PCONTEXT	plugins/syscalls/winscproto.h	/^    PCONTEXT,$/;"	e	enum:__anon12
-PCRM_PROTOCOL_ID	plugins/syscalls/winscproto.h	/^    PCRM_PROTOCOL_ID,$/;"	e	enum:__anon12
-PDBGUI_WAIT_STATE_CHANGE	plugins/syscalls/winscproto.h	/^    PDBGUI_WAIT_STATE_CHANGE,$/;"	e	enum:__anon12
+PBOOLEAN	plugins/syscalls/winscproto.h	/^    PBOOLEAN,$/;"	e	enum:__anon19
+PBOOT_ENTRY	plugins/syscalls/winscproto.h	/^    PBOOT_ENTRY,$/;"	e	enum:__anon19
+PBOOT_OPTIONS	plugins/syscalls/winscproto.h	/^    PBOOT_OPTIONS,$/;"	e	enum:__anon19
+PCHAR	plugins/syscalls/winscproto.h	/^    PCHAR,$/;"	e	enum:__anon19
+PCLIENT_ID	plugins/syscalls/winscproto.h	/^    PCLIENT_ID,$/;"	e	enum:__anon19
+PCONTEXT	plugins/syscalls/winscproto.h	/^    PCONTEXT,$/;"	e	enum:__anon19
+PCRM_PROTOCOL_ID	plugins/syscalls/winscproto.h	/^    PCRM_PROTOCOL_ID,$/;"	e	enum:__anon19
+PDBGUI_WAIT_STATE_CHANGE	plugins/syscalls/winscproto.h	/^    PDBGUI_WAIT_STATE_CHANGE,$/;"	e	enum:__anon19
 PEB_IMAGEBASADDRESS	libdrakvuf/win-offsets.h	/^    PEB_IMAGEBASADDRESS,$/;"	e	enum:win_offsets
 PEB_LDR	libdrakvuf/win-offsets.h	/^    PEB_LDR,$/;"	e	enum:win_offsets
 PEB_LDR_DATA_INLOADORDERMODULELIST	libdrakvuf/win-offsets.h	/^    PEB_LDR_DATA_INLOADORDERMODULELIST,$/;"	e	enum:win_offsets
 PEB_SESSIONID	libdrakvuf/win-offsets.h	/^    PEB_SESSIONID,$/;"	e	enum:win_offsets
-PEFI_DRIVER_ENTRY	plugins/syscalls/winscproto.h	/^    PEFI_DRIVER_ENTRY,$/;"	e	enum:__anon12
-PEXCEPTION_RECORD	plugins/syscalls/winscproto.h	/^    PEXCEPTION_RECORD,$/;"	e	enum:__anon12
-PFILE_BASIC_INFORMATION	plugins/syscalls/winscproto.h	/^    PFILE_BASIC_INFORMATION,$/;"	e	enum:__anon12
-PFILE_IO_COMPLETION_INFORMATION	plugins/syscalls/winscproto.h	/^    PFILE_IO_COMPLETION_INFORMATION,$/;"	e	enum:__anon12
-PFILE_NETWORK_OPEN_INFORMATION	plugins/syscalls/winscproto.h	/^    PFILE_NETWORK_OPEN_INFORMATION,$/;"	e	enum:__anon12
-PFILE_PATH	plugins/syscalls/winscproto.h	/^    PFILE_PATH,$/;"	e	enum:__anon12
-PFILE_SEGMENT_ELEMENT	plugins/syscalls/winscproto.h	/^    PFILE_SEGMENT_ELEMENT,$/;"	e	enum:__anon12
-PGENERIC_MAPPING	plugins/syscalls/winscproto.h	/^    PGENERIC_MAPPING,$/;"	e	enum:__anon12
-PGROUP_AFFINITY	plugins/syscalls/winscproto.h	/^    PGROUP_AFFINITY,$/;"	e	enum:__anon12
-PHANDLE	plugins/syscalls/winscproto.h	/^    PHANDLE,$/;"	e	enum:__anon12
-PINITIAL_TEB	plugins/syscalls/winscproto.h	/^    PINITIAL_TEB,$/;"	e	enum:__anon12
-PIO_APC_ROUTINE	plugins/syscalls/winscproto.h	/^    PIO_APC_ROUTINE,$/;"	e	enum:__anon12
-PIO_STATUS_BLOCK	plugins/syscalls/winscproto.h	/^    PIO_STATUS_BLOCK,$/;"	e	enum:__anon12
-PJOB_SET_ARRAY	plugins/syscalls/winscproto.h	/^    PJOB_SET_ARRAY,$/;"	e	enum:__anon12
-PKEY_VALUE_ENTRY	plugins/syscalls/winscproto.h	/^    PKEY_VALUE_ENTRY,$/;"	e	enum:__anon12
+PEFI_DRIVER_ENTRY	plugins/syscalls/winscproto.h	/^    PEFI_DRIVER_ENTRY,$/;"	e	enum:__anon19
+PEXCEPTION_RECORD	plugins/syscalls/winscproto.h	/^    PEXCEPTION_RECORD,$/;"	e	enum:__anon19
+PFILE_BASIC_INFORMATION	plugins/syscalls/winscproto.h	/^    PFILE_BASIC_INFORMATION,$/;"	e	enum:__anon19
+PFILE_IO_COMPLETION_INFORMATION	plugins/syscalls/winscproto.h	/^    PFILE_IO_COMPLETION_INFORMATION,$/;"	e	enum:__anon19
+PFILE_NETWORK_OPEN_INFORMATION	plugins/syscalls/winscproto.h	/^    PFILE_NETWORK_OPEN_INFORMATION,$/;"	e	enum:__anon19
+PFILE_PATH	plugins/syscalls/winscproto.h	/^    PFILE_PATH,$/;"	e	enum:__anon19
+PFILE_SEGMENT_ELEMENT	plugins/syscalls/winscproto.h	/^    PFILE_SEGMENT_ELEMENT,$/;"	e	enum:__anon19
+PGENERIC_MAPPING	plugins/syscalls/winscproto.h	/^    PGENERIC_MAPPING,$/;"	e	enum:__anon19
+PGROUP_AFFINITY	plugins/syscalls/winscproto.h	/^    PGROUP_AFFINITY,$/;"	e	enum:__anon19
+PHANDLE	plugins/syscalls/winscproto.h	/^    PHANDLE,$/;"	e	enum:__anon19
+PINITIAL_TEB	plugins/syscalls/winscproto.h	/^    PINITIAL_TEB,$/;"	e	enum:__anon19
+PIO_APC_ROUTINE	plugins/syscalls/winscproto.h	/^    PIO_APC_ROUTINE,$/;"	e	enum:__anon19
+PIO_STATUS_BLOCK	plugins/syscalls/winscproto.h	/^    PIO_STATUS_BLOCK,$/;"	e	enum:__anon19
+PJOB_SET_ARRAY	plugins/syscalls/winscproto.h	/^    PJOB_SET_ARRAY,$/;"	e	enum:__anon19
+PKEY_VALUE_ENTRY	plugins/syscalls/winscproto.h	/^    PKEY_VALUE_ENTRY,$/;"	e	enum:__anon19
 PKG_CONFIG	Makefile	/^PKG_CONFIG = \/usr\/bin\/pkg-config$/;"	m
 PKG_CONFIG	dirwatch/Makefile	/^PKG_CONFIG = \/usr\/bin\/pkg-config$/;"	m
 PKG_CONFIG	libdrakvuf/Makefile	/^PKG_CONFIG = \/usr\/bin\/pkg-config$/;"	m
@@ -822,10 +822,10 @@ PKG_CONFIG_PATH	libdrakvuf/Makefile	/^PKG_CONFIG_PATH = $/;"	m
 PKG_CONFIG_PATH	libinjector/Makefile	/^PKG_CONFIG_PATH = $/;"	m
 PKG_CONFIG_PATH	plugins/Makefile	/^PKG_CONFIG_PATH = $/;"	m
 PKG_CONFIG_PATH	xen_helper/Makefile	/^PKG_CONFIG_PATH = $/;"	m
-PKTMOBJECT_CURSOR	plugins/syscalls/winscproto.h	/^    PKTMOBJECT_CURSOR,$/;"	e	enum:__anon12
-PLARGE_INTEGER	plugins/syscalls/winscproto.h	/^    PLARGE_INTEGER,$/;"	e	enum:__anon12
-PLCID	plugins/syscalls/winscproto.h	/^    PLCID,$/;"	e	enum:__anon12
-PLONG	plugins/syscalls/winscproto.h	/^    PLONG,$/;"	e	enum:__anon12
+PKTMOBJECT_CURSOR	plugins/syscalls/winscproto.h	/^    PKTMOBJECT_CURSOR,$/;"	e	enum:__anon19
+PLARGE_INTEGER	plugins/syscalls/winscproto.h	/^    PLARGE_INTEGER,$/;"	e	enum:__anon19
+PLCID	plugins/syscalls/winscproto.h	/^    PLCID,$/;"	e	enum:__anon19
+PLONG	plugins/syscalls/winscproto.h	/^    PLONG,$/;"	e	enum:__anon19
 PLUGIN_CPUIDMON	plugins/plugins.h	/^    PLUGIN_CPUIDMON,$/;"	e	enum:drakvuf_plugin
 PLUGIN_DEBUGMON	plugins/plugins.h	/^    PLUGIN_DEBUGMON,$/;"	e	enum:drakvuf_plugin
 PLUGIN_EXMON	plugins/plugins.h	/^    PLUGIN_EXMON,$/;"	e	enum:drakvuf_plugin
@@ -837,12 +837,12 @@ PLUGIN_POOLMON	plugins/plugins.h	/^    PLUGIN_POOLMON,$/;"	e	enum:drakvuf_plugin
 PLUGIN_SOCKETMON	plugins/plugins.h	/^    PLUGIN_SOCKETMON,$/;"	e	enum:drakvuf_plugin
 PLUGIN_SSDTMON	plugins/plugins.h	/^    PLUGIN_SSDTMON,$/;"	e	enum:drakvuf_plugin
 PLUGIN_SYSCALLS	plugins/plugins.h	/^    PLUGIN_SYSCALLS,$/;"	e	enum:drakvuf_plugin
-PLUGPLAY_CONTROL_CLASS	plugins/syscalls/winscproto.h	/^    PLUGPLAY_CONTROL_CLASS,$/;"	e	enum:__anon12
-PLUID	plugins/syscalls/winscproto.h	/^    PLUID,$/;"	e	enum:__anon12
+PLUGPLAY_CONTROL_CLASS	plugins/syscalls/winscproto.h	/^    PLUGPLAY_CONTROL_CLASS,$/;"	e	enum:__anon19
+PLUID	plugins/syscalls/winscproto.h	/^    PLUID,$/;"	e	enum:__anon19
 PM2BIT	libdrakvuf/vmi.h	110;"	d
-PNTSTATUS	plugins/syscalls/winscproto.h	/^    PNTSTATUS,$/;"	e	enum:__anon12
-POBJECT_ATTRIBUTES	plugins/syscalls/winscproto.h	/^    POBJECT_ATTRIBUTES,$/;"	e	enum:__anon12
-POBJECT_TYPE_LIST	plugins/syscalls/winscproto.h	/^    POBJECT_TYPE_LIST,$/;"	e	enum:__anon12
+PNTSTATUS	plugins/syscalls/winscproto.h	/^    PNTSTATUS,$/;"	e	enum:__anon19
+POBJECT_ATTRIBUTES	plugins/syscalls/winscproto.h	/^    POBJECT_ATTRIBUTES,$/;"	e	enum:__anon19
+POBJECT_TYPE_LIST	plugins/syscalls/winscproto.h	/^    POBJECT_TYPE_LIST,$/;"	e	enum:__anon19
 POOLMON_H	plugins/poolmon/poolmon.h	106;"	d
 POOLTAG_FILE	plugins/filetracer/filetracer.cpp	134;"	d	file:
 POOLTAG_PRIVATE_H	plugins/poolmon/private.h	106;"	d
@@ -852,7 +852,7 @@ POOLTAG_UDPA	plugins/socketmon/socketmon.cpp	142;"	d	file:
 POOL_HEADER_BLOCKSIZE	libdrakvuf/win-offsets.h	/^    POOL_HEADER_BLOCKSIZE,$/;"	e	enum:win_offsets
 POOL_HEADER_POOLTAG	libdrakvuf/win-offsets.h	/^    POOL_HEADER_POOLTAG,$/;"	e	enum:win_offsets
 POOL_HEADER_POOLTYPE	libdrakvuf/win-offsets.h	/^    POOL_HEADER_POOLTYPE,$/;"	e	enum:win_offsets
-PORT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    PORT_INFORMATION_CLASS,$/;"	e	enum:__anon12
+PORT_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    PORT_INFORMATION_CLASS,$/;"	e	enum:__anon19
 POST	libdrakvuf/libdrakvuf.h	/^    POST$/;"	e	enum:memaccess_type
 POST_INSTALL	Makefile	/^POST_INSTALL = :$/;"	m
 POST_INSTALL	dirwatch/Makefile	/^POST_INSTALL = :$/;"	m
@@ -866,18 +866,18 @@ POST_UNINSTALL	libdrakvuf/Makefile	/^POST_UNINSTALL = :$/;"	m
 POST_UNINSTALL	libinjector/Makefile	/^POST_UNINSTALL = :$/;"	m
 POST_UNINSTALL	plugins/Makefile	/^POST_UNINSTALL = :$/;"	m
 POST_UNINSTALL	xen_helper/Makefile	/^POST_UNINSTALL = :$/;"	m
-POWER_ACTION	plugins/syscalls/winscproto.h	/^    POWER_ACTION,$/;"	e	enum:__anon12
-POWER_INFORMATION_LEVEL	plugins/syscalls/winscproto.h	/^    POWER_INFORMATION_LEVEL,$/;"	e	enum:__anon12
-PPLUGPLAY_EVENT_BLOCK	plugins/syscalls/winscproto.h	/^    PPLUGPLAY_EVENT_BLOCK,$/;"	e	enum:__anon12
-PPORT_MESSAGE	plugins/syscalls/winscproto.h	/^    PPORT_MESSAGE,$/;"	e	enum:__anon12
-PPORT_VIEW	plugins/syscalls/winscproto.h	/^    PPORT_VIEW,$/;"	e	enum:__anon12
-PPRIVILEGE_SET	plugins/syscalls/winscproto.h	/^    PPRIVILEGE_SET,$/;"	e	enum:__anon12
-PPROCESS_ATTRIBUTE_LIST	plugins/syscalls/winscproto.h	/^    PPROCESS_ATTRIBUTE_LIST,$/;"	e	enum:__anon12
-PPROCESS_CREATE_INFO	plugins/syscalls/winscproto.h	/^    PPROCESS_CREATE_INFO,$/;"	e	enum:__anon12
-PPS_APC_ROUTINE	plugins/syscalls/winscproto.h	/^    PPS_APC_ROUTINE,$/;"	e	enum:__anon12
-PPS_ATTRIBUTE_LIST	plugins/syscalls/winscproto.h	/^    PPS_ATTRIBUTE_LIST,$/;"	e	enum:__anon12
+POWER_ACTION	plugins/syscalls/winscproto.h	/^    POWER_ACTION,$/;"	e	enum:__anon19
+POWER_INFORMATION_LEVEL	plugins/syscalls/winscproto.h	/^    POWER_INFORMATION_LEVEL,$/;"	e	enum:__anon19
+PPLUGPLAY_EVENT_BLOCK	plugins/syscalls/winscproto.h	/^    PPLUGPLAY_EVENT_BLOCK,$/;"	e	enum:__anon19
+PPORT_MESSAGE	plugins/syscalls/winscproto.h	/^    PPORT_MESSAGE,$/;"	e	enum:__anon19
+PPORT_VIEW	plugins/syscalls/winscproto.h	/^    PPORT_VIEW,$/;"	e	enum:__anon19
+PPRIVILEGE_SET	plugins/syscalls/winscproto.h	/^    PPRIVILEGE_SET,$/;"	e	enum:__anon19
+PPROCESS_ATTRIBUTE_LIST	plugins/syscalls/winscproto.h	/^    PPROCESS_ATTRIBUTE_LIST,$/;"	e	enum:__anon19
+PPROCESS_CREATE_INFO	plugins/syscalls/winscproto.h	/^    PPROCESS_CREATE_INFO,$/;"	e	enum:__anon19
+PPS_APC_ROUTINE	plugins/syscalls/winscproto.h	/^    PPS_APC_ROUTINE,$/;"	e	enum:__anon19
+PPS_ATTRIBUTE_LIST	plugins/syscalls/winscproto.h	/^    PPS_ATTRIBUTE_LIST,$/;"	e	enum:__anon19
 PRE	libdrakvuf/libdrakvuf.h	/^    PRE,$/;"	e	enum:memaccess_type
-PREMOTE_PORT_VIEW	plugins/syscalls/winscproto.h	/^    PREMOTE_PORT_VIEW,$/;"	e	enum:__anon12
+PREMOTE_PORT_VIEW	plugins/syscalls/winscproto.h	/^    PREMOTE_PORT_VIEW,$/;"	e	enum:__anon19
 PRE_INSTALL	Makefile	/^PRE_INSTALL = :$/;"	m
 PRE_INSTALL	dirwatch/Makefile	/^PRE_INSTALL = :$/;"	m
 PRE_INSTALL	libdrakvuf/Makefile	/^PRE_INSTALL = :$/;"	m
@@ -898,31 +898,31 @@ PRINT_DEBUG	libinjector/private.h	112;"	d
 PRINT_DEBUG	libinjector/private.h	118;"	d
 PRINT_DEBUG	plugins/private.h	120;"	d
 PRINT_DEBUG	plugins/private.h	126;"	d
-PROCESSINFOCLASS	plugins/syscalls/winscproto.h	/^    PROCESSINFOCLASS,$/;"	e	enum:__anon12
+PROCESSINFOCLASS	plugins/syscalls/winscproto.h	/^    PROCESSINFOCLASS,$/;"	e	enum:__anon19
 PROGRAMS	Makefile	/^PROGRAMS = $(bin_PROGRAMS)$/;"	m
 PROGRAMS	dirwatch/Makefile	/^PROGRAMS = $(bin_PROGRAMS)$/;"	m
-PRTL_ATOM	plugins/syscalls/winscproto.h	/^    PRTL_ATOM,$/;"	e	enum:__anon12
-PRTL_USER_PROCESS_PARAMETERS	plugins/syscalls/winscproto.h	/^    PRTL_USER_PROCESS_PARAMETERS,$/;"	e	enum:__anon12
-PSECURITY_DESCRIPTOR	plugins/syscalls/winscproto.h	/^    PSECURITY_DESCRIPTOR,$/;"	e	enum:__anon12
-PSECURITY_QUALITY_OF_SERVICE	plugins/syscalls/winscproto.h	/^    PSECURITY_QUALITY_OF_SERVICE,$/;"	e	enum:__anon12
-PSID	plugins/syscalls/winscproto.h	/^    PSID,$/;"	e	enum:__anon12
-PSIZE_T	plugins/syscalls/winscproto.h	/^    PSIZE_T,$/;"	e	enum:__anon12
-PTIMER_APC_ROUTINE	plugins/syscalls/winscproto.h	/^    PTIMER_APC_ROUTINE,$/;"	e	enum:__anon12
-PTOKEN_DEFAULT_DACL	plugins/syscalls/winscproto.h	/^    PTOKEN_DEFAULT_DACL,$/;"	e	enum:__anon12
-PTOKEN_GROUPS	plugins/syscalls/winscproto.h	/^    PTOKEN_GROUPS,$/;"	e	enum:__anon12
-PTOKEN_OWNER	plugins/syscalls/winscproto.h	/^    PTOKEN_OWNER,$/;"	e	enum:__anon12
-PTOKEN_PRIMARY_GROUP	plugins/syscalls/winscproto.h	/^    PTOKEN_PRIMARY_GROUP,$/;"	e	enum:__anon12
-PTOKEN_PRIVILEGES	plugins/syscalls/winscproto.h	/^    PTOKEN_PRIVILEGES,$/;"	e	enum:__anon12
-PTOKEN_SOURCE	plugins/syscalls/winscproto.h	/^    PTOKEN_SOURCE,$/;"	e	enum:__anon12
-PTOKEN_USER	plugins/syscalls/winscproto.h	/^    PTOKEN_USER,$/;"	e	enum:__anon12
-PTRANSACTION_NOTIFICATION	plugins/syscalls/winscproto.h	/^    PTRANSACTION_NOTIFICATION,$/;"	e	enum:__anon12
-PULARGE_INTEGER	plugins/syscalls/winscproto.h	/^    PULARGE_INTEGER,$/;"	e	enum:__anon12
-PULONG	plugins/syscalls/winscproto.h	/^    PULONG,$/;"	e	enum:__anon12
-PULONG_PTR	plugins/syscalls/winscproto.h	/^    PULONG_PTR,$/;"	e	enum:__anon12
-PUNICODE_STRING	plugins/syscalls/winscproto.h	/^    PUNICODE_STRING,$/;"	e	enum:__anon12
-PUSHORT	plugins/syscalls/winscproto.h	/^    PUSHORT,$/;"	e	enum:__anon12
-PVOID	plugins/syscalls/winscproto.h	/^    PVOID,$/;"	e	enum:__anon12
-PWSTR	plugins/syscalls/winscproto.h	/^    PWSTR,$/;"	e	enum:__anon12
+PRTL_ATOM	plugins/syscalls/winscproto.h	/^    PRTL_ATOM,$/;"	e	enum:__anon19
+PRTL_USER_PROCESS_PARAMETERS	plugins/syscalls/winscproto.h	/^    PRTL_USER_PROCESS_PARAMETERS,$/;"	e	enum:__anon19
+PSECURITY_DESCRIPTOR	plugins/syscalls/winscproto.h	/^    PSECURITY_DESCRIPTOR,$/;"	e	enum:__anon19
+PSECURITY_QUALITY_OF_SERVICE	plugins/syscalls/winscproto.h	/^    PSECURITY_QUALITY_OF_SERVICE,$/;"	e	enum:__anon19
+PSID	plugins/syscalls/winscproto.h	/^    PSID,$/;"	e	enum:__anon19
+PSIZE_T	plugins/syscalls/winscproto.h	/^    PSIZE_T,$/;"	e	enum:__anon19
+PTIMER_APC_ROUTINE	plugins/syscalls/winscproto.h	/^    PTIMER_APC_ROUTINE,$/;"	e	enum:__anon19
+PTOKEN_DEFAULT_DACL	plugins/syscalls/winscproto.h	/^    PTOKEN_DEFAULT_DACL,$/;"	e	enum:__anon19
+PTOKEN_GROUPS	plugins/syscalls/winscproto.h	/^    PTOKEN_GROUPS,$/;"	e	enum:__anon19
+PTOKEN_OWNER	plugins/syscalls/winscproto.h	/^    PTOKEN_OWNER,$/;"	e	enum:__anon19
+PTOKEN_PRIMARY_GROUP	plugins/syscalls/winscproto.h	/^    PTOKEN_PRIMARY_GROUP,$/;"	e	enum:__anon19
+PTOKEN_PRIVILEGES	plugins/syscalls/winscproto.h	/^    PTOKEN_PRIVILEGES,$/;"	e	enum:__anon19
+PTOKEN_SOURCE	plugins/syscalls/winscproto.h	/^    PTOKEN_SOURCE,$/;"	e	enum:__anon19
+PTOKEN_USER	plugins/syscalls/winscproto.h	/^    PTOKEN_USER,$/;"	e	enum:__anon19
+PTRANSACTION_NOTIFICATION	plugins/syscalls/winscproto.h	/^    PTRANSACTION_NOTIFICATION,$/;"	e	enum:__anon19
+PULARGE_INTEGER	plugins/syscalls/winscproto.h	/^    PULARGE_INTEGER,$/;"	e	enum:__anon19
+PULONG	plugins/syscalls/winscproto.h	/^    PULONG,$/;"	e	enum:__anon19
+PULONG_PTR	plugins/syscalls/winscproto.h	/^    PULONG_PTR,$/;"	e	enum:__anon19
+PUNICODE_STRING	plugins/syscalls/winscproto.h	/^    PUNICODE_STRING,$/;"	e	enum:__anon19
+PUSHORT	plugins/syscalls/winscproto.h	/^    PUSHORT,$/;"	e	enum:__anon19
+PVOID	plugins/syscalls/winscproto.h	/^    PVOID,$/;"	e	enum:__anon19
+PWSTR	plugins/syscalls/winscproto.h	/^    PWSTR,$/;"	e	enum:__anon19
 PagedPool	plugins/poolmon/private.h	/^    PagedPool,$/;"	e	enum:pool_type
 PagedPoolCacheAligned	plugins/poolmon/private.h	/^    PagedPoolCacheAligned,$/;"	e	enum:pool_type
 PagedPoolCacheAlignedSession	plugins/poolmon/private.h	/^    PagedPoolCacheAlignedSession          = NonPagedPoolCacheAlignedSession + 1,$/;"	e	enum:pool_type
@@ -936,14 +936,14 @@ RANLIB	xen_helper/Makefile	/^RANLIB = ranlib$/;"	m
 RECURSIVE_CLEAN_TARGETS	Makefile	/^RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\\$/;"	m
 RECURSIVE_TARGETS	Makefile	/^RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \\$/;"	m
 REGISTER	libdrakvuf/libdrakvuf.h	/^    REGISTER,$/;"	e	enum:trap_type
-RESOURCEMANAGER_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    RESOURCEMANAGER_INFORMATION_CLASS,$/;"	e	enum:__anon12
-RTL_ATOM	plugins/syscalls/winscproto.h	/^    RTL_ATOM,$/;"	e	enum:__anon12
+RESOURCEMANAGER_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    RESOURCEMANAGER_INFORMATION_CLASS,$/;"	e	enum:__anon19
+RTL_ATOM	plugins/syscalls/winscproto.h	/^    RTL_ATOM,$/;"	e	enum:__anon19
 SECTIONOBJECTPOINTER_DATASECTIONOBJECT	plugins/filedelete/filedelete.cpp	/^    SECTIONOBJECTPOINTER_DATASECTIONOBJECT,$/;"	e	enum:offset	file:
 SECTIONOBJECTPOINTER_IMAGESECTIONOBJECT	plugins/filedelete/filedelete.cpp	/^    SECTIONOBJECTPOINTER_IMAGESECTIONOBJECT,$/;"	e	enum:offset	file:
 SECTIONOBJECTPOINTER_SHAREDCACHEMAP	plugins/filedelete/filedelete.cpp	/^    SECTIONOBJECTPOINTER_SHAREDCACHEMAP,$/;"	e	enum:offset	file:
-SECTION_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    SECTION_INFORMATION_CLASS,$/;"	e	enum:__anon12
-SECTION_INHERIT	plugins/syscalls/winscproto.h	/^    SECTION_INHERIT,$/;"	e	enum:__anon12
-SECURITY_INFORMATION	plugins/syscalls/winscproto.h	/^    SECURITY_INFORMATION,$/;"	e	enum:__anon12
+SECTION_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    SECTION_INFORMATION_CLASS,$/;"	e	enum:__anon19
+SECTION_INHERIT	plugins/syscalls/winscproto.h	/^    SECTION_INHERIT,$/;"	e	enum:__anon19
+SECURITY_INFORMATION	plugins/syscalls/winscproto.h	/^    SECURITY_INFORMATION,$/;"	e	enum:__anon19
 SED	Makefile	/^SED = \/bin\/sed$/;"	m
 SED	dirwatch/Makefile	/^SED = \/bin\/sed$/;"	m
 SED	libdrakvuf/Makefile	/^SED = \/bin\/sed$/;"	m
@@ -953,7 +953,7 @@ SED	xen_helper/Makefile	/^SED = \/bin\/sed$/;"	m
 SEGMENT_CONTROLAREA	plugins/filedelete/filedelete.cpp	/^    SEGMENT_CONTROLAREA,$/;"	e	enum:offset	file:
 SEGMENT_SIZEOFSEGMENT	plugins/filedelete/filedelete.cpp	/^    SEGMENT_SIZEOFSEGMENT,$/;"	e	enum:offset	file:
 SEGMENT_TOTALNUMBEROFPTES	plugins/filedelete/filedelete.cpp	/^    SEGMENT_TOTALNUMBEROFPTES,$/;"	e	enum:offset	file:
-SEMAPHORE_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    SEMAPHORE_INFORMATION_CLASS,$/;"	e	enum:__anon12
+SEMAPHORE_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    SEMAPHORE_INFORMATION_CLASS,$/;"	e	enum:__anon19
 SET_MAKE	Makefile	/^SET_MAKE = $/;"	m
 SET_MAKE	dirwatch/Makefile	/^SET_MAKE = $/;"	m
 SET_MAKE	libdrakvuf/Makefile	/^SET_MAKE = $/;"	m
@@ -966,9 +966,9 @@ SHELL	libdrakvuf/Makefile	/^SHELL = \/bin\/bash$/;"	m
 SHELL	libinjector/Makefile	/^SHELL = \/bin\/bash$/;"	m
 SHELL	plugins/Makefile	/^SHELL = \/bin\/bash$/;"	m
 SHELL	xen_helper/Makefile	/^SHELL = \/bin\/bash$/;"	m
-SHUTDOWN_ACTION	plugins/syscalls/winscproto.h	/^    SHUTDOWN_ACTION,$/;"	e	enum:__anon12
+SHUTDOWN_ACTION	plugins/syscalls/winscproto.h	/^    SHUTDOWN_ACTION,$/;"	e	enum:__anon19
 SIZE	plugins/packeranalyser/packeranalyser.cpp	13;"	d	file:
-SIZE_T	plugins/syscalls/winscproto.h	/^    SIZE_T,$/;"	e	enum:__anon12
+SIZE_T	plugins/syscalls/winscproto.h	/^    SIZE_T,$/;"	e	enum:__anon19
 SOCKETMON_H	plugins/socketmon/socketmon.h	106;"	d
 SOCKETMON_PRIVATE_H	plugins/socketmon/private.h	106;"	d
 SOURCES	Makefile	/^SOURCES = $(drakvuf_SOURCES) $(injector_SOURCES) \\$/;"	m
@@ -997,27 +997,27 @@ SW_SHOWDEFAULT	libinjector/injector.c	149;"	d	file:
 SYN_RCVD	plugins/socketmon/private.h	/^    SYN_RCVD = 3,$/;"	e	enum:tcp_state
 SYN_SENT	plugins/socketmon/private.h	/^    SYN_SENT = 2,$/;"	e	enum:tcp_state
 SYSCALLS_H	plugins/syscalls/syscalls.h	106;"	d
-SYSDBG_COMMAND	plugins/syscalls/winscproto.h	/^    SYSDBG_COMMAND,$/;"	e	enum:__anon12
-SYSTEM_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    SYSTEM_INFORMATION_CLASS,$/;"	e	enum:__anon12
-SYSTEM_POWER_STATE	plugins/syscalls/winscproto.h	/^    SYSTEM_POWER_STATE,$/;"	e	enum:__anon12
+SYSDBG_COMMAND	plugins/syscalls/winscproto.h	/^    SYSDBG_COMMAND,$/;"	e	enum:__anon19
+SYSTEM_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    SYSTEM_INFORMATION_CLASS,$/;"	e	enum:__anon19
+SYSTEM_POWER_STATE	plugins/syscalls/winscproto.h	/^    SYSTEM_POWER_STATE,$/;"	e	enum:__anon19
 TAG_COUNT	plugins/poolmon/private.h	153;"	d
 TASK_STRUCT_COMM	libdrakvuf/linux-offsets.h	/^    TASK_STRUCT_COMM,$/;"	e	enum:linux_offsets
 TASK_STRUCT_CRED	libdrakvuf/linux-offsets.h	/^    TASK_STRUCT_CRED,$/;"	e	enum:linux_offsets
 TASK_STRUCT_PID	libdrakvuf/linux-offsets.h	/^    TASK_STRUCT_PID,$/;"	e	enum:linux_offsets
 TASK_STRUCT_TGID	libdrakvuf/linux-offsets.h	/^    TASK_STRUCT_TGID,$/;"	e	enum:linux_offsets
 TCPDUMP_CMD	dirwatch/dirwatch.c	122;"	d	file:
-THREADINFOCLASS	plugins/syscalls/winscproto.h	/^    THREADINFOCLASS,$/;"	e	enum:__anon12
-TIMER_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    TIMER_INFORMATION_CLASS,$/;"	e	enum:__anon12
-TIMER_SET_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    TIMER_SET_INFORMATION_CLASS,$/;"	e	enum:__anon12
-TIMER_TYPE	plugins/syscalls/winscproto.h	/^    TIMER_TYPE,$/;"	e	enum:__anon12
+THREADINFOCLASS	plugins/syscalls/winscproto.h	/^    THREADINFOCLASS,$/;"	e	enum:__anon19
+TIMER_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    TIMER_INFORMATION_CLASS,$/;"	e	enum:__anon19
+TIMER_SET_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    TIMER_SET_INFORMATION_CLASS,$/;"	e	enum:__anon19
+TIMER_TYPE	plugins/syscalls/winscproto.h	/^    TIMER_TYPE,$/;"	e	enum:__anon19
 TIME_WAIT	plugins/socketmon/private.h	/^    TIME_WAIT = 12,$/;"	e	enum:tcp_state
-TOKEN_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    TOKEN_INFORMATION_CLASS,$/;"	e	enum:__anon12
-TOKEN_TYPE	plugins/syscalls/winscproto.h	/^    TOKEN_TYPE,$/;"	e	enum:__anon12
-TRANSACTIONMANAGER_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    TRANSACTIONMANAGER_INFORMATION_CLASS,$/;"	e	enum:__anon12
-TRANSACTION_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    TRANSACTION_INFORMATION_CLASS,$/;"	e	enum:__anon12
+TOKEN_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    TOKEN_INFORMATION_CLASS,$/;"	e	enum:__anon19
+TOKEN_TYPE	plugins/syscalls/winscproto.h	/^    TOKEN_TYPE,$/;"	e	enum:__anon19
+TRANSACTIONMANAGER_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    TRANSACTIONMANAGER_INFORMATION_CLASS,$/;"	e	enum:__anon19
+TRANSACTION_INFORMATION_CLASS	plugins/syscalls/winscproto.h	/^    TRANSACTION_INFORMATION_CLASS,$/;"	e	enum:__anon19
 TRAP	libdrakvuf/vmi.h	112;"	d
-ULONG	plugins/syscalls/winscproto.h	/^    ULONG,$/;"	e	enum:__anon12
-ULONG_PTR	plugins/syscalls/winscproto.h	/^    ULONG_PTR,$/;"	e	enum:__anon12
+ULONG	plugins/syscalls/winscproto.h	/^    ULONG,$/;"	e	enum:__anon19
+ULONG_PTR	plugins/syscalls/winscproto.h	/^    ULONG_PTR,$/;"	e	enum:__anon19
 UNICODE_STRING_BUFFER	libdrakvuf/win-offsets.h	/^    UNICODE_STRING_BUFFER,$/;"	e	enum:win_offsets
 UNICODE_STRING_BUFFER	plugins/filedelete/filedelete.cpp	/^    UNICODE_STRING_BUFFER,$/;"	e	enum:offset	file:
 UNICODE_STRING_LENGTH	libdrakvuf/win-offsets.h	/^    UNICODE_STRING_LENGTH,$/;"	e	enum:win_offsets
@@ -1028,8 +1028,8 @@ UNUSED	drakvuf.h	133;"	d
 UNUSED	libdrakvuf/private.h	137;"	d
 USERIDSTR	plugins/private.h	113;"	d
 USER_MODE	libdrakvuf/libdrakvuf.h	/^    USER_MODE,$/;"	e	enum:privilege_mode
-USHORT	plugins/syscalls/winscproto.h	/^    USHORT,$/;"	e	enum:__anon12
-VDMSERVICECLASS	plugins/syscalls/winscproto.h	/^    VDMSERVICECLASS,$/;"	e	enum:__anon12
+USHORT	plugins/syscalls/winscproto.h	/^    USHORT,$/;"	e	enum:__anon19
+VDMSERVICECLASS	plugins/syscalls/winscproto.h	/^    VDMSERVICECLASS,$/;"	e	enum:__anon19
 VERSION	Makefile	/^VERSION = 0.5-f221cf0$/;"	m
 VERSION	dirwatch/Makefile	/^VERSION = 0.5-f221cf0$/;"	m
 VERSION	libdrakvuf/Makefile	/^VERSION = 0.5-f221cf0$/;"	m
@@ -1051,11 +1051,11 @@ VMI_LIBS	libdrakvuf/Makefile	/^VMI_LIBS = -L\/usr\/local\/lib -ljson-c -ldl -lvm
 VMI_LIBS	libinjector/Makefile	/^VMI_LIBS = -L\/usr\/local\/lib -ljson-c -ldl -lvmi$/;"	m
 VMI_LIBS	plugins/Makefile	/^VMI_LIBS = -L\/usr\/local\/lib -ljson-c -ldl -lvmi$/;"	m
 VMI_LIBS	xen_helper/Makefile	/^VMI_LIBS = -L\/usr\/local\/lib -ljson-c -ldl -lvmi$/;"	m
-VOID	plugins/syscalls/winscproto.h	/^    VOID,$/;"	e	enum:__anon12
-WAIT_TYPE	plugins/syscalls/winscproto.h	/^    WAIT_TYPE,$/;"	e	enum:__anon12
-WIN32_PROTECTION_MASK	plugins/syscalls/winscproto.h	/^    WIN32_PROTECTION_MASK,$/;"	e	enum:__anon12
+VOID	plugins/syscalls/winscproto.h	/^    VOID,$/;"	e	enum:__anon19
+WAIT_TYPE	plugins/syscalls/winscproto.h	/^    WAIT_TYPE,$/;"	e	enum:__anon19
+WIN32_PROTECTION_MASK	plugins/syscalls/winscproto.h	/^    WIN32_PROTECTION_MASK,$/;"	e	enum:__anon19
 WIN7_TYPEINDEX_LAST	plugins/filedelete/filedelete.cpp	114;"	d	file:
-WINAPI	plugins/syscalls/winscproto.h	/^    WINAPI,$/;"	e	enum:__anon12
+WINAPI	plugins/syscalls/winscproto.h	/^    WINAPI,$/;"	e	enum:__anon19
 WIN_EXPORTS_H	libdrakvuf/win-exports.h	106;"	d
 WIN_H	libdrakvuf/win.h	106;"	d
 WIN_HANDLES_H	libdrakvuf/win-handles.h	106;"	d
@@ -1063,7 +1063,7 @@ WIN_OFFSETS_H	libdrakvuf/win-offsets.h	106;"	d
 WIN_OFFSETS_MAP_H	libdrakvuf/win-offsets-map.h	106;"	d
 WIN_SYMBOLS_H_	libdrakvuf/rekall-profile.h	106;"	d
 WIN_SYMBOLS_H_	libdrakvuf/win-symbols.h	106;"	d
-WORKERFACTORYINFOCLASS	plugins/syscalls/winscproto.h	/^    WORKERFACTORYINFOCLASS$/;"	e	enum:__anon12
+WORKERFACTORYINFOCLASS	plugins/syscalls/winscproto.h	/^    WORKERFACTORYINFOCLASS$/;"	e	enum:__anon19
 XC_WANT_COMPAT_MAP_FOREIGN_API	xen_helper/xen_helper.c	105;"	d	file:
 XEN_HELPER_H	xen_helper/xen_helper.h	106;"	d
 _GNU_SOURCE	libdrakvuf/rekall-profile.c	105;"	d	file:
@@ -1075,10 +1075,10 @@ __INVALID_TRAP_TYPE	libdrakvuf/libdrakvuf.h	/^    __INVALID_TRAP_TYPE,$/;"	e	enu
 __LINUX_OFFSETS_MAX	libdrakvuf/linux-offsets.h	/^    __LINUX_OFFSETS_MAX$/;"	e	enum:linux_offsets
 __OFFSET_MAX	plugins/exmon/exmon.cpp	/^    __OFFSET_MAX$/;"	e	enum:offset	file:
 __OFFSET_MAX	plugins/filedelete/filedelete.cpp	/^    __OFFSET_MAX$/;"	e	enum:offset	file:
-__OUTPUT_MAX	plugins/plugins.h	/^    __OUTPUT_MAX$/;"	e	enum:__anon6
+__OUTPUT_MAX	plugins/plugins.h	/^    __OUTPUT_MAX$/;"	e	enum:__anon13
 __TCP_STATE_MAX	plugins/socketmon/private.h	/^    __TCP_STATE_MAX$/;"	e	enum:tcp_state
 __WIN_OFFSETS_MAX	libdrakvuf/win-offsets.h	/^    __WIN_OFFSETS_MAX$/;"	e	enum:win_offsets
-_key	plugins/objmon/objmon.cpp	/^        char _key[4];$/;"	m	union:ckey::__anon1	file:
+_key	plugins/objmon/objmon.cpp	/^        char _key[4];$/;"	m	union:ckey::__anon8	file:
 _pad	plugins/socketmon/private.h	/^    uint32_t _pad;$/;"	m	struct:addr_info_x86
 _pad	plugins/socketmon/private.h	/^    uint64_t _pad;$/;"	m	struct:addr_info_x64
 _pad	plugins/socketmon/private.h	/^    uint8_t _pad[0x10];$/;"	m	struct:local_address_x64
@@ -1152,7 +1152,7 @@ ac_ct_DUMPBIN	libdrakvuf/Makefile	/^ac_ct_DUMPBIN = $/;"	m
 ac_ct_DUMPBIN	libinjector/Makefile	/^ac_ct_DUMPBIN = $/;"	m
 ac_ct_DUMPBIN	plugins/Makefile	/^ac_ct_DUMPBIN = $/;"	m
 ac_ct_DUMPBIN	xen_helper/Makefile	/^ac_ct_DUMPBIN = $/;"	m
-access	libdrakvuf/libdrakvuf.h	/^            vmi_mem_access_t access;$/;"	m	struct:drakvuf_trap::__anon17::__anon21
+access	libdrakvuf/libdrakvuf.h	/^            vmi_mem_access_t access;$/;"	m	struct:drakvuf_trap::__anon2::__anon6
 access	libdrakvuf/private.h	/^    vmi_mem_access_t access;$/;"	m	struct:memaccess
 access	libdrakvuf/private.h	/^    vmi_mem_access_t access;$/;"	m	struct:memcb_pass
 active	libdrakvuf/private.h	/^    bool active;$/;"	m	struct:remapped_gfn
@@ -1163,10 +1163,10 @@ add_to_first_layer	plugins/packeranalyser/layers.cpp	/^void add_to_first_layer(d
 add_to_layer	plugins/packeranalyser/layers.cpp	/^void add_to_layer(drakvuf_t drakvuf, packeranalyser *p, uint64_t page_gfn, int layer_index){$/;"	f
 add_to_layer_with_address	plugins/packeranalyser/layers.cpp	/^void add_to_layer_with_address(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t from_va, uint64_t page_gfn){$/;"	f
 add_trap	plugins/packeranalyser/page_table_watch.cpp	/^void add_trap(uint64_t gfn, packeranalyser *p, drakvuf_t drakvuf, vmi_instance_t vmi, page_layer pl, table_trap *parent, int init, int index){$/;"	f
-addr	libdrakvuf/libdrakvuf.h	/^                addr_t addr;$/;"	m	union:drakvuf_trap::__anon17::__anon18::__anon20
+addr	libdrakvuf/libdrakvuf.h	/^                addr_t addr;$/;"	m	union:drakvuf_trap::__anon2::__anon3::__anon5
 addr_info_x64	plugins/socketmon/private.h	/^struct addr_info_x64 {$/;"	s
 addr_info_x86	plugins/socketmon/private.h	/^struct addr_info_x86 {$/;"	s
-addr_type	libdrakvuf/libdrakvuf.h	/^            addr_type_t addr_type;$/;"	m	struct:drakvuf_trap::__anon17::__anon18
+addr_type	libdrakvuf/libdrakvuf.h	/^            addr_type_t addr_type;$/;"	m	struct:drakvuf_trap::__anon2::__anon3
 addr_type	libdrakvuf/libdrakvuf.h	/^typedef enum addr_type {$/;"	g
 addr_type_t	libdrakvuf/libdrakvuf.h	/^} addr_type_t;$/;"	t	typeref:enum:addr_type
 address_pointer	plugins/packeranalyser/packeranalyser.h	/^    addr_t address_pointer;$/;"	m	struct:return_address_data
@@ -1454,7 +1454,7 @@ apc_mode	libinjector/injector.c	/^    uint8_t apc_mode;$/;"	m	struct:kapc_32	fil
 apc_mode	libinjector/injector.c	/^    uint8_t apc_mode;$/;"	m	struct:kapc_64	file:
 apc_state_index	libinjector/injector.c	/^    uint8_t apc_state_index;$/;"	m	struct:kapc_32	file:
 apc_state_index	libinjector/injector.c	/^    uint8_t apc_state_index;$/;"	m	struct:kapc_64	file:
-args	plugins/syscalls/winscproto.h	/^    win_arg_t args[17];$/;"	m	struct:__anon14
+args	plugins/syscalls/winscproto.h	/^    win_arg_t args[17];$/;"	m	struct:__anon21
 bin_PROGRAMS	Makefile	/^bin_PROGRAMS = drakvuf$(EXEEXT) xen_memclone$(EXEEXT) \\$/;"	m
 bin_PROGRAMS	dirwatch/Makefile	/^bin_PROGRAMS = dirwatch$(EXEEXT)$/;"	m
 bindir	Makefile	/^bindir = ${exec_prefix}\/bin$/;"	m
@@ -1465,14 +1465,14 @@ bindir	plugins/Makefile	/^bindir = ${exec_prefix}\/bin$/;"	m
 bindir	xen_helper/Makefile	/^bindir = ${exec_prefix}\/bin$/;"	m
 blink	libinjector/injector.c	/^    uint32_t blink;$/;"	m	struct:list_entry_32	file:
 blink	libinjector/injector.c	/^    uint64_t blink;$/;"	m	struct:list_entry_64	file:
-block_size	plugins/filetracer/private.h	/^            uint16_t block_size :9; \/\/ bits 0-9$/;"	m	struct:pool_header_x86::__anon2::__anon3
-block_size	plugins/filetracer/private.h	/^            uint32_t block_size :8;$/;"	m	struct:pool_header_x64::__anon4::__anon5
-block_size	plugins/socketmon/private.h	/^            uint16_t block_size :9; \/\/ bits 0-9$/;"	m	struct:pool_header_x86::__anon7::__anon8
-block_size	plugins/socketmon/private.h	/^            uint32_t block_size :8;$/;"	m	struct:pool_header_x64::__anon9::__anon10
+block_size	plugins/filetracer/private.h	/^            uint16_t block_size :9; \/\/ bits 0-9$/;"	m	struct:pool_header_x86::__anon9::__anon10
+block_size	plugins/filetracer/private.h	/^            uint32_t block_size :8;$/;"	m	struct:pool_header_x64::__anon11::__anon12
+block_size	plugins/socketmon/private.h	/^            uint16_t block_size :9; \/\/ bits 0-9$/;"	m	struct:pool_header_x86::__anon14::__anon15
+block_size	plugins/socketmon/private.h	/^            uint32_t block_size :8;$/;"	m	struct:pool_header_x64::__anon16::__anon17
 bp	libdrakvuf/vmi.c	/^static uint8_t bp = TRAP;$/;"	v	file:
 bp	libinjector/injector.c	/^    drakvuf_trap_t bp, cr3_event;$/;"	m	struct:injector	file:
-breakpoint	libdrakvuf/libdrakvuf.h	/^        } breakpoint;$/;"	m	union:drakvuf_trap::__anon17	typeref:struct:drakvuf_trap::__anon17::__anon18
-breakpoint	libdrakvuf/private.h	/^        struct breakpoint breakpoint;$/;"	m	union:wrapper::__anon22	typeref:struct:wrapper::__anon22::breakpoint
+breakpoint	libdrakvuf/libdrakvuf.h	/^        } breakpoint;$/;"	m	union:drakvuf_trap::__anon2	typeref:struct:drakvuf_trap::__anon2::__anon3
+breakpoint	libdrakvuf/private.h	/^        struct breakpoint breakpoint;$/;"	m	union:wrapper::__anon7	typeref:struct:wrapper::__anon7::breakpoint
 breakpoint	libdrakvuf/private.h	/^struct breakpoint {$/;"	s
 breakpoint_lookup_gfn	libdrakvuf/private.h	/^    GHashTable *breakpoint_lookup_gfn;  \/\/ key: gfn (size uint64_t)$/;"	m	struct:drakvuf
 breakpoint_lookup_pa	libdrakvuf/private.h	/^    GHashTable *breakpoint_lookup_pa;   \/\/ key: PA of trap$/;"	m	struct:drakvuf
@@ -1549,7 +1549,7 @@ count	libdrakvuf/libdrakvuf.h	/^    uint64_t count;$/;"	m	struct:symbols
 counter	libdrakvuf/private.h	/^    unsigned int counter;$/;"	m	struct:free_trap_wrapper
 counter	plugins/filetracer/filetracer.cpp	/^    unsigned long counter;$/;"	m	struct:rettrap_struct	file:
 counter	plugins/socketmon/socketmon.cpp	/^    unsigned long counter;$/;"	m	struct:rettrap_struct	file:
-cpuid	libdrakvuf/libdrakvuf.h	/^        const cpuid_event_t *cpuid; \/* For CPUID traps *\/$/;"	m	union:drakvuf_trap_info::__anon16
+cpuid	libdrakvuf/libdrakvuf.h	/^        const cpuid_event_t *cpuid; \/* For CPUID traps *\/$/;"	m	union:drakvuf_trap_info::__anon1
 cpuid	libdrakvuf/private.h	/^    GSList *cr0, *cr3, *cr4, *debug, *cpuid;$/;"	m	struct:drakvuf
 cpuid	plugins/cpuidmon/cpuidmon.h	/^        drakvuf_trap_t cpuid;$/;"	m	class:cpuidmon
 cpuid_cb	libdrakvuf/vmi.c	/^event_response_t cpuid_cb(vmi_instance_t vmi, vmi_event_t *event) {$/;"	f
@@ -1572,8 +1572,8 @@ createtime	plugins/socketmon/private.h	/^    uint64_t createtime;$/;"	m	struct:t
 createtime	plugins/socketmon/private.h	/^    uint64_t createtime;$/;"	m	struct:tcp_listener_x86
 createtime	plugins/socketmon/private.h	/^    uint64_t createtime;$/;"	m	struct:udp_endpoint_x64
 createtime	plugins/socketmon/private.h	/^    uint64_t createtime;$/;"	m	struct:udp_endpoint_x86
-current_exec_layer	plugins/packeranalyser/packeranalyser.h	/^	int current_exec_layer = -1, current_write_layer = -1;$/;"	m	class:packeranalyser
-current_write_layer	plugins/packeranalyser/packeranalyser.h	/^	int current_exec_layer = -1, current_write_layer = -1;$/;"	m	class:packeranalyser
+current_exec_layer	plugins/packeranalyser/packeranalyser.h	/^	int current_exec_layer = 0;$/;"	m	class:packeranalyser
+custom_layer_cmp_gfn	plugins/packeranalyser/layers.cpp	/^int custom_layer_cmp_gfn(const void* tmp1, const void* tmp2){$/;"	f
 custom_page_write_cmp_address	plugins/packeranalyser/page_table_watch.cpp	/^int custom_page_write_cmp_address(const void* tmp1, const void* tmp2){$/;"	f
 custom_table_trap_ins_index	plugins/packeranalyser/page_table_watch.cpp	/^int custom_table_trap_ins_index(const void* tmp1, const void* tmp2){$/;"	f
 custom_taple_trap_cmp_gfn	plugins/packeranalyser/page_table_watch.cpp	/^int custom_taple_trap_cmp_gfn(const void* tmp1, const void* tmp2){$/;"	f
@@ -1592,7 +1592,7 @@ datarootdir	libdrakvuf/Makefile	/^datarootdir = ${prefix}\/share$/;"	m
 datarootdir	libinjector/Makefile	/^datarootdir = ${prefix}\/share$/;"	m
 datarootdir	plugins/Makefile	/^datarootdir = ${prefix}\/share$/;"	m
 datarootdir	xen_helper/Makefile	/^datarootdir = ${prefix}\/share$/;"	m
-debug	libdrakvuf/libdrakvuf.h	/^        const debug_event_t *debug; \/* For DEBUG traps *\/$/;"	m	union:drakvuf_trap_info::__anon16
+debug	libdrakvuf/libdrakvuf.h	/^        const debug_event_t *debug; \/* For DEBUG traps *\/$/;"	m	union:drakvuf_trap_info::__anon1
 debug	libdrakvuf/private.h	/^    GSList *cr0, *cr3, *cr4, *debug, *cpuid;$/;"	m	struct:drakvuf
 debug	plugins/debugmon/debugmon.h	/^        drakvuf_trap_t debug;$/;"	m	class:debugmon
 debug_cb	libdrakvuf/vmi.c	/^event_response_t debug_cb(vmi_instance_t vmi, vmi_event_t *event) {$/;"	f
@@ -1608,8 +1608,8 @@ depcomp	libinjector/Makefile	/^depcomp = $(SHELL) $(top_srcdir)\/depcomp$/;"	m
 depcomp	plugins/Makefile	/^depcomp = $(SHELL) $(top_srcdir)\/depcomp$/;"	m
 depcomp	xen_helper/Makefile	/^depcomp = $(SHELL) $(top_srcdir)\/depcomp$/;"	m
 description	plugins/poolmon/private.h	/^    const char* description;$/;"	m	struct:pooltag
-dir	plugins/syscalls/winscproto.h	/^    win_arg_direction_t dir;$/;"	m	struct:__anon13
-dir_opt	plugins/syscalls/winscproto.h	/^    const char* dir_opt;$/;"	m	struct:__anon13
+dir	plugins/syscalls/winscproto.h	/^    win_arg_direction_t dir;$/;"	m	struct:__anon20
+dir_opt	plugins/syscalls/winscproto.h	/^    const char* dir_opt;$/;"	m	struct:__anon20
 dirwatch_DEPENDENCIES	dirwatch/Makefile	/^dirwatch_DEPENDENCIES = ..\/xen_helper\/libxenhelper.la$/;"	m
 dirwatch_LDADD	dirwatch/Makefile	/^dirwatch_LDADD = ..\/xen_helper\/libxenhelper.la$/;"	m
 dirwatch_OBJECTS	dirwatch/Makefile	/^dirwatch_OBJECTS = $(am_dirwatch_OBJECTS)$/;"	m
@@ -1696,7 +1696,7 @@ drakvuf_trap_free_t	libdrakvuf/libdrakvuf.h	/^typedef void (*drakvuf_trap_free_t
 drakvuf_trap_info	libdrakvuf/libdrakvuf.h	/^typedef struct drakvuf_trap_info {$/;"	s
 drakvuf_trap_info_t	libdrakvuf/libdrakvuf.h	/^} drakvuf_trap_info_t;$/;"	t	typeref:struct:drakvuf_trap_info
 drakvuf_trap_t	libdrakvuf/libdrakvuf.h	/^typedef struct drakvuf_trap drakvuf_trap_t;$/;"	t	typeref:struct:drakvuf_trap
-dtb	libdrakvuf/libdrakvuf.h	/^                addr_t dtb;$/;"	m	union:drakvuf_trap::__anon17::__anon18::__anon19
+dtb	libdrakvuf/libdrakvuf.h	/^                addr_t dtb;$/;"	m	union:drakvuf_trap::__anon2::__anon3::__anon4
 dump_folder	plugins/filedelete/filedelete.h	/^        const char *dump_folder;$/;"	m	class:filedelete
 dump_folder	plugins/plugins.h	/^    const char *dump_folder;$/;"	m	struct:filedelete_config
 dvidir	Makefile	/^dvidir = ${docdir}$/;"	m
@@ -1732,6 +1732,7 @@ exec_prefix	libdrakvuf/Makefile	/^exec_prefix = ${prefix}$/;"	m
 exec_prefix	libinjector/Makefile	/^exec_prefix = ${prefix}$/;"	m
 exec_prefix	plugins/Makefile	/^exec_prefix = ${prefix}$/;"	m
 exec_prefix	xen_helper/Makefile	/^exec_prefix = ${prefix}$/;"	m
+exec_trap	plugins/packeranalyser/packeranalyser.h	/^    drakvuf_trap_t *exec_trap;$/;"	m	struct:frame
 executed_from	plugins/packeranalyser/packeranalyser.h	/^    int wrote_from = -1, executed_from = -1;$/;"	m	struct:layer_entry
 execution_cb_trap	plugins/packeranalyser/packeranalyser.h	/^        GSList *get_address_trap, *execution_cb_trap;$/;"	m	class:packeranalyser
 exmon	plugins/exmon/exmon.cpp	/^exmon::exmon(drakvuf_t drakvuf, const void *config, output_format_t output) {$/;"	f	class:exmon
@@ -1758,10 +1759,10 @@ find_kernbase	libdrakvuf/win.c	/^static bool find_kernbase(drakvuf_t drakvuf) {$
 find_process	libdrakvuf/os.h	/^    bool (*find_process)$/;"	m	struct:os_interface
 find_thread	dirwatch/dirwatch.c	/^static inline int find_thread()$/;"	f	file:
 first_cb_trap	plugins/packeranalyser/packeranalyser.h	/^    	drakvuf_trap_t first_cb_trap, ntpvm_cb_trap, ntcontinuecb_trap, thrd_cb_trap;$/;"	m	class:packeranalyser
-flags	plugins/filetracer/private.h	/^        uint16_t flags;$/;"	m	union:pool_header_x86::__anon2
-flags	plugins/filetracer/private.h	/^        uint32_t flags;$/;"	m	union:pool_header_x64::__anon4
-flags	plugins/socketmon/private.h	/^        uint16_t flags;$/;"	m	union:pool_header_x86::__anon7
-flags	plugins/socketmon/private.h	/^        uint32_t flags;$/;"	m	union:pool_header_x64::__anon9
+flags	plugins/filetracer/private.h	/^        uint16_t flags;$/;"	m	union:pool_header_x86::__anon9
+flags	plugins/filetracer/private.h	/^        uint32_t flags;$/;"	m	union:pool_header_x64::__anon11
+flags	plugins/socketmon/private.h	/^        uint16_t flags;$/;"	m	union:pool_header_x86::__anon14
+flags	plugins/socketmon/private.h	/^        uint32_t flags;$/;"	m	union:pool_header_x64::__anon16
 flink	libinjector/injector.c	/^    uint32_t flink;$/;"	m	struct:list_entry_32	file:
 flink	libinjector/injector.c	/^    uint64_t flink;$/;"	m	struct:list_entry_64	file:
 format	plugins/cpuidmon/cpuidmon.h	/^        output_format_t format;$/;"	m	class:cpuidmon
@@ -1797,7 +1798,7 @@ get_process_name	libdrakvuf/os.h	/^    char* (*get_process_name)$/;"	m	struct:os
 get_process_pid	libdrakvuf/os.h	/^    vmi_pid_t (*get_process_pid)$/;"	m	struct:os_interface
 get_process_userid	libdrakvuf/os.h	/^    int64_t (*get_process_userid)$/;"	m	struct:os_interface
 get_thread_previous_mode	libdrakvuf/os.h	/^    bool (*get_thread_previous_mode)$/;"	m	struct:os_interface
-gfn	libdrakvuf/libdrakvuf.h	/^            addr_t gfn;$/;"	m	struct:drakvuf_trap::__anon17::__anon21
+gfn	libdrakvuf/libdrakvuf.h	/^            addr_t gfn;$/;"	m	struct:drakvuf_trap::__anon2::__anon6
 gfn	libdrakvuf/private.h	/^    addr_t gfn;$/;"	m	struct:memaccess
 gfn	libdrakvuf/private.h	/^    uint64_t gfn;$/;"	m	struct:memcb_pass
 gfn	plugins/packeranalyser/packeranalyser.h	/^    uint64_t gfn;$/;"	m	struct:frame
@@ -1960,7 +1961,7 @@ kernel_apc_pending	libinjector/injector.c	/^    uint8_t kernel_apc_pending;$/;"	
 kernel_apc_pending	libinjector/injector.c	/^    uint8_t kernel_apc_pending;$/;"	m	struct:kapc_state_64	file:
 kernel_routine	libinjector/injector.c	/^    uint32_t kernel_routine;$/;"	m	struct:kapc_32	file:
 kernel_routine	libinjector/injector.c	/^    uint64_t kernel_routine;$/;"	m	struct:kapc_64	file:
-key	plugins/objmon/objmon.cpp	/^        uint32_t key;$/;"	m	union:ckey::__anon1	file:
+key	plugins/objmon/objmon.cpp	/^        uint32_t key;$/;"	m	union:ckey::__anon8	file:
 key_offset	plugins/objmon/objmon.h	/^        addr_t key_offset;$/;"	m	class:objmon
 kiservicelimit	plugins/ssdtmon/ssdtmon.h	/^        uint32_t kiservicelimit;$/;"	m	class:ssdtmon
 kiservicetable	plugins/ssdtmon/ssdtmon.h	/^        addr_t kiservicetable;$/;"	m	class:ssdtmon
@@ -2036,7 +2037,7 @@ localstatedir	libinjector/Makefile	/^localstatedir = ${prefix}\/var$/;"	m
 localstatedir	plugins/Makefile	/^localstatedir = ${prefix}\/var$/;"	m
 localstatedir	xen_helper/Makefile	/^localstatedir = ${prefix}\/var$/;"	m
 locks	dirwatch/dirwatch.c	/^static GMutex locks[128];$/;"	v	file:
-lookup_type	libdrakvuf/libdrakvuf.h	/^            lookup_type_t lookup_type;$/;"	m	struct:drakvuf_trap::__anon17::__anon18
+lookup_type	libdrakvuf/libdrakvuf.h	/^            lookup_type_t lookup_type;$/;"	m	struct:drakvuf_trap::__anon2::__anon3
 lookup_type	libdrakvuf/libdrakvuf.h	/^typedef enum lookup_type {$/;"	g
 lookup_type_t	libdrakvuf/libdrakvuf.h	/^} lookup_type_t;$/;"	t	typeref:enum:lookup_type
 loop	drakvuf.cpp	/^void drakvuf_c::loop()$/;"	f	class:drakvuf_c
@@ -2063,8 +2064,8 @@ mandir	plugins/Makefile	/^mandir = ${datarootdir}\/man$/;"	m
 mandir	xen_helper/Makefile	/^mandir = ${datarootdir}\/man$/;"	m
 mem_callback	libinjector/injector.c	/^event_response_t mem_callback(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {$/;"	f
 mem_event	libdrakvuf/private.h	/^    vmi_event_t mem_event;$/;"	m	struct:drakvuf
-memaccess	libdrakvuf/libdrakvuf.h	/^        } memaccess;$/;"	m	union:drakvuf_trap::__anon17	typeref:struct:drakvuf_trap::__anon17::__anon21
-memaccess	libdrakvuf/private.h	/^        struct memaccess memaccess;$/;"	m	union:wrapper::__anon22	typeref:struct:wrapper::__anon22::memaccess
+memaccess	libdrakvuf/libdrakvuf.h	/^        } memaccess;$/;"	m	union:drakvuf_trap::__anon2	typeref:struct:drakvuf_trap::__anon2::__anon6
+memaccess	libdrakvuf/private.h	/^        struct memaccess memaccess;$/;"	m	union:wrapper::__anon7	typeref:struct:wrapper::__anon7::memaccess
 memaccess	libdrakvuf/private.h	/^struct memaccess {$/;"	s
 memaccess_lookup_gfn	libdrakvuf/private.h	/^    GHashTable *memaccess_lookup_gfn;  \/\/ key: gfn of trap$/;"	m	struct:drakvuf
 memaccess_lookup_trap	libdrakvuf/private.h	/^    GHashTable *memaccess_lookup_trap; \/\/ key: trap pointer$/;"	m	struct:drakvuf
@@ -2088,12 +2089,12 @@ mkinstalldirs	xen_helper/Makefile	/^mkinstalldirs = $(install_sh) -d$/;"	m
 mmpte_size	plugins/filedelete/filedelete.h	/^        size_t control_area_size, mmpte_size;$/;"	m	class:filedelete
 modlist_sym2va	libdrakvuf/win-exports.c	/^modlist_sym2va(drakvuf_t drakvuf, addr_t list_head, access_context_t *ctx,$/;"	f	file:
 modlist_va2sym	libdrakvuf/win-exports.c	/^modlist_va2sym(drakvuf_t drakvuf, addr_t list_head, addr_t va,$/;"	f	file:
-module	libdrakvuf/libdrakvuf.h	/^            const char *module;$/;"	m	struct:drakvuf_trap::__anon17::__anon18
+module	libdrakvuf/libdrakvuf.h	/^            const char *module;$/;"	m	struct:drakvuf_trap::__anon2::__anon3
 name	libdrakvuf/libdrakvuf.h	/^    const char *name; \/\/ Only used for informational\/debugging purposes$/;"	m	struct:drakvuf_trap
 name	libdrakvuf/libdrakvuf.h	/^    const char *name;$/;"	m	struct:symbol
 name	libdrakvuf/libdrakvuf.h	/^    const char *name;$/;"	m	struct:symbols
-name	plugins/syscalls/winscproto.h	/^    const char* name;$/;"	m	struct:__anon13
-name	plugins/syscalls/winscproto.h	/^    const char* name;$/;"	m	struct:__anon14
+name	plugins/syscalls/winscproto.h	/^    const char* name;$/;"	m	struct:__anon20
+name	plugins/syscalls/winscproto.h	/^    const char* name;$/;"	m	struct:__anon21
 noinst_LTLIBRARIES	libdrakvuf/Makefile	/^noinst_LTLIBRARIES = libdrakvuf.la$/;"	m
 noinst_LTLIBRARIES	libinjector/Makefile	/^noinst_LTLIBRARIES = libinjector.la$/;"	m
 noinst_LTLIBRARIES	plugins/Makefile	/^noinst_LTLIBRARIES = libdrakvufplugins.la$/;"	m
@@ -2105,7 +2106,7 @@ normal_routine	libinjector/injector.c	/^    uint64_t normal_routine;$/;"	m	struc
 ntcontinue_cb	plugins/packeranalyser/packeranalyser.cpp	/^static event_response_t ntcontinue_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {$/;"	f	file:
 ntcontinuecb_trap	plugins/packeranalyser/packeranalyser.h	/^    	drakvuf_trap_t first_cb_trap, ntpvm_cb_trap, ntcontinuecb_trap, thrd_cb_trap;$/;"	m	class:packeranalyser
 ntpvm_cb_trap	plugins/packeranalyser/packeranalyser.h	/^    	drakvuf_trap_t first_cb_trap, ntpvm_cb_trap, ntcontinuecb_trap, thrd_cb_trap;$/;"	m	class:packeranalyser
-num_args	plugins/syscalls/winscproto.h	/^    unsigned int num_args;$/;"	m	struct:__anon14
+num_args	plugins/syscalls/winscproto.h	/^    unsigned int num_args;$/;"	m	struct:__anon21
 o	libdrakvuf/private.h	/^    xen_pfn_t o;$/;"	m	struct:remapped_gfn
 obj_base	plugins/socketmon/socketmon.cpp	/^    addr_t obj_base;$/;"	m	struct:watch	file:
 obj_base_pa	plugins/socketmon/socketmon.cpp	/^    addr_t obj_base_pa;$/;"	m	struct:watch	file:
@@ -2139,7 +2140,7 @@ os_interface_t	libdrakvuf/os.h	/^} os_interface_t;$/;"	t	typeref:struct:os_inter
 osi	libdrakvuf/private.h	/^    os_interface_t osi;$/;"	m	struct:drakvuf
 out_folder	dirwatch/dirwatch.c	/^static const char *out_folder;$/;"	v	file:
 output	plugins/plugins.h	/^        output_format_t output;$/;"	m	class:drakvuf_plugins
-output_format_t	plugins/plugins.h	/^} output_format_t;$/;"	t	typeref:enum:__anon6
+output_format_t	plugins/plugins.h	/^} output_format_t;$/;"	t	typeref:enum:__anon13
 owner	plugins/socketmon/private.h	/^    uint32_t owner;$/;"	m	struct:tcp_endpoint_x86
 owner	plugins/socketmon/private.h	/^    uint32_t owner;$/;"	m	struct:tcp_listener_x86
 owner	plugins/socketmon/private.h	/^    uint32_t owner;$/;"	m	struct:udp_endpoint_x86
@@ -2174,7 +2175,7 @@ pdfdir	libdrakvuf/Makefile	/^pdfdir = ${docdir}$/;"	m
 pdfdir	libinjector/Makefile	/^pdfdir = ${docdir}$/;"	m
 pdfdir	plugins/Makefile	/^pdfdir = ${docdir}$/;"	m
 pdfdir	xen_helper/Makefile	/^pdfdir = ${docdir}$/;"	m
-pid	libdrakvuf/libdrakvuf.h	/^                vmi_pid_t pid;$/;"	m	union:drakvuf_trap::__anon17::__anon18::__anon19
+pid	libdrakvuf/libdrakvuf.h	/^                vmi_pid_t pid;$/;"	m	union:drakvuf_trap::__anon2::__anon3::__anon4
 pid	libinjector/injector.c	/^    uint32_t pid, tid;$/;"	m	struct:injector	file:
 pid	plugins/packeranalyser/packeranalyser.h	/^        int trap=0, pid=0;$/;"	m	class:packeranalyser
 pkgdatadir	Makefile	/^pkgdatadir = $(datadir)\/drakvuf$/;"	m
@@ -2217,19 +2218,19 @@ pool_header_x64	plugins/filetracer/private.h	/^struct pool_header_x64 {$/;"	s
 pool_header_x64	plugins/socketmon/private.h	/^struct pool_header_x64 {$/;"	s
 pool_header_x86	plugins/filetracer/private.h	/^struct pool_header_x86 {$/;"	s
 pool_header_x86	plugins/socketmon/private.h	/^struct pool_header_x86 {$/;"	s
-pool_index	plugins/filetracer/private.h	/^            uint16_t pool_index :7;$/;"	m	struct:pool_header_x86::__anon2::__anon3
-pool_index	plugins/filetracer/private.h	/^            uint32_t pool_index :8;$/;"	m	struct:pool_header_x64::__anon4::__anon5
-pool_index	plugins/socketmon/private.h	/^            uint16_t pool_index :7;$/;"	m	struct:pool_header_x86::__anon7::__anon8
-pool_index	plugins/socketmon/private.h	/^            uint32_t pool_index :8;$/;"	m	struct:pool_header_x64::__anon9::__anon10
+pool_index	plugins/filetracer/private.h	/^            uint16_t pool_index :7;$/;"	m	struct:pool_header_x86::__anon9::__anon10
+pool_index	plugins/filetracer/private.h	/^            uint32_t pool_index :8;$/;"	m	struct:pool_header_x64::__anon11::__anon12
+pool_index	plugins/socketmon/private.h	/^            uint16_t pool_index :7;$/;"	m	struct:pool_header_x86::__anon14::__anon15
+pool_index	plugins/socketmon/private.h	/^            uint32_t pool_index :8;$/;"	m	struct:pool_header_x64::__anon16::__anon17
 pool_tag	plugins/filetracer/private.h	/^    uint32_t pool_tag;$/;"	m	struct:pool_header_x64
 pool_tag	plugins/filetracer/private.h	/^    uint32_t pool_tag;$/;"	m	struct:pool_header_x86
 pool_tag	plugins/socketmon/private.h	/^    uint32_t pool_tag;$/;"	m	struct:pool_header_x64
 pool_tag	plugins/socketmon/private.h	/^    uint32_t pool_tag;$/;"	m	struct:pool_header_x86
-pool_type	plugins/filetracer/private.h	/^            uint16_t pool_type :7; \/\/ bits 10-16$/;"	m	struct:pool_header_x86::__anon2::__anon3
-pool_type	plugins/filetracer/private.h	/^            uint32_t pool_type :8;$/;"	m	struct:pool_header_x64::__anon4::__anon5
+pool_type	plugins/filetracer/private.h	/^            uint16_t pool_type :7; \/\/ bits 10-16$/;"	m	struct:pool_header_x86::__anon9::__anon10
+pool_type	plugins/filetracer/private.h	/^            uint32_t pool_type :8;$/;"	m	struct:pool_header_x64::__anon11::__anon12
 pool_type	plugins/poolmon/private.h	/^enum pool_type {$/;"	g
-pool_type	plugins/socketmon/private.h	/^            uint16_t pool_type :7; \/\/ bits 10-16$/;"	m	struct:pool_header_x86::__anon7::__anon8
-pool_type	plugins/socketmon/private.h	/^            uint32_t pool_type :8;$/;"	m	struct:pool_header_x64::__anon9::__anon10
+pool_type	plugins/socketmon/private.h	/^            uint16_t pool_type :7; \/\/ bits 10-16$/;"	m	struct:pool_header_x86::__anon14::__anon15
+pool_type	plugins/socketmon/private.h	/^            uint32_t pool_type :8;$/;"	m	struct:pool_header_x64::__anon16::__anon17
 pool_types	plugins/poolmon/private.h	/^static const char *pool_types[MaxPoolType] = {$/;"	v
 poolalloc	plugins/filetracer/filetracer.h	/^        drakvuf_trap_t poolalloc;$/;"	m	class:filetracer
 poolalloc	plugins/socketmon/socketmon.h	/^        drakvuf_trap_t poolalloc;$/;"	m	class:socketmon
@@ -2252,16 +2253,17 @@ prefix	plugins/Makefile	/^prefix = \/usr\/local$/;"	m
 prefix	xen_helper/Makefile	/^prefix = \/usr\/local$/;"	m
 prepare	dirwatch/dirwatch.c	/^static void prepare(char *sample, struct start_drakvuf *start)$/;"	f	file:
 prepare_lock	dirwatch/dirwatch.c	/^static GMutex prepare_lock;$/;"	v	file:
-previous_size	plugins/filetracer/private.h	/^            uint16_t previous_size :9;$/;"	m	struct:pool_header_x86::__anon2::__anon3
-previous_size	plugins/filetracer/private.h	/^            uint32_t previous_size :8;$/;"	m	struct:pool_header_x64::__anon4::__anon5
-previous_size	plugins/socketmon/private.h	/^            uint16_t previous_size :9;$/;"	m	struct:pool_header_x86::__anon7::__anon8
-previous_size	plugins/socketmon/private.h	/^            uint32_t previous_size :8;$/;"	m	struct:pool_header_x64::__anon9::__anon10
-print_layers	plugins/packeranalyser/layers.cpp	/^void print_layers(GList *layers){$/;"	f
+previous_size	plugins/filetracer/private.h	/^            uint16_t previous_size :9;$/;"	m	struct:pool_header_x86::__anon9::__anon10
+previous_size	plugins/filetracer/private.h	/^            uint32_t previous_size :8;$/;"	m	struct:pool_header_x64::__anon11::__anon12
+previous_size	plugins/socketmon/private.h	/^            uint16_t previous_size :9;$/;"	m	struct:pool_header_x86::__anon14::__anon15
+previous_size	plugins/socketmon/private.h	/^            uint32_t previous_size :8;$/;"	m	struct:pool_header_x64::__anon16::__anon17
+print_frame	plugins/packeranalyser/layers.cpp	/^void print_frame(gpointer *frame_ptr){$/;"	f
+print_layers	plugins/packeranalyser/layers.cpp	/^void print_layers(packeranalyser *p){$/;"	f
 print_list_entries	plugins/packeranalyser/packeranalyser.cpp	/^void print_list_entries(void *item, void *stuff){$/;"	f
 print_sharing_info	xen_helper/xen_helper.c	/^void print_sharing_info(xen_interface_t *xen, domid_t domID) {$/;"	f
 privilege_mode	libdrakvuf/libdrakvuf.h	/^typedef enum privilege_mode {$/;"	g
 privilege_mode_t	libdrakvuf/libdrakvuf.h	/^} privilege_mode_t ;$/;"	t	typeref:enum:privilege_mode
-proc	libdrakvuf/libdrakvuf.h	/^                const char *proc;$/;"	m	union:drakvuf_trap::__anon17::__anon18::__anon19
+proc	libdrakvuf/libdrakvuf.h	/^                const char *proc;$/;"	m	union:drakvuf_trap::__anon2::__anon3::__anon4
 process	libinjector/injector.c	/^    uint32_t process;$/;"	m	struct:kapc_state_32	file:
 process	libinjector/injector.c	/^    uint64_t process;$/;"	m	struct:kapc_state_64	file:
 process_billed	plugins/filetracer/private.h	/^    uint64_t process_billed; \/\/ _EPROCESS *$/;"	m	struct:pool_header_x64
@@ -2292,7 +2294,7 @@ r_p	plugins/packeranalyser/packeranalyser.h	/^        const char *r_p;$/;"	m	cla
 rc	libinjector/injector.c	/^    int rc;$/;"	m	struct:injector	file:
 recover_address	plugins/packeranalyser/packeranalyser.cpp	/^int recover_address(drakvuf_t drakvuf, drakvuf_trap_info_t *info, vmi_instance_t *vmi, addr_t address_pointer){$/;"	f
 recover_address_cb	plugins/packeranalyser/packeranalyser.cpp	/^static event_response_t recover_address_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {$/;"	f	file:
-reg	libdrakvuf/libdrakvuf.h	/^        register_t reg;$/;"	m	union:drakvuf_trap::__anon17
+reg	libdrakvuf/libdrakvuf.h	/^        register_t reg;$/;"	m	union:drakvuf_trap::__anon2
 reg_size	plugins/packeranalyser/packeranalyser.h	/^        uint8_t reg_size;$/;"	m	class:packeranalyser
 reg_size	plugins/syscalls/syscalls.h	/^        uint8_t reg_size;$/;"	m	class:syscalls
 regs	libdrakvuf/libdrakvuf.h	/^    x86_registers_t *regs;$/;"	m	struct:drakvuf_trap_info
@@ -2315,7 +2317,7 @@ remoteport	plugins/socketmon/private.h	/^    uint16_t remoteport;$/;"	m	struct:t
 remove_trap	libdrakvuf/vmi.c	/^void remove_trap(drakvuf_t drakvuf,$/;"	f
 remove_traps	libdrakvuf/private.h	/^    GHashTable *remove_traps;$/;"	m	struct:drakvuf
 resume	drakvuf.cpp	/^void drakvuf_c::resume()$/;"	f	class:drakvuf_c
-ret	plugins/syscalls/winscproto.h	/^    win_type_t ret;$/;"	m	struct:__anon14
+ret	plugins/syscalls/winscproto.h	/^    win_type_t ret;$/;"	m	struct:__anon21
 rettrap_struct	plugins/filetracer/filetracer.cpp	/^struct rettrap_struct {$/;"	s	file:
 rettrap_struct	plugins/socketmon/socketmon.cpp	/^struct rettrap_struct {$/;"	s	file:
 rettraps	plugins/filetracer/filetracer.h	/^        GHashTable *rettraps;$/;"	m	class:filetracer
@@ -2331,7 +2333,7 @@ runstatedir	libdrakvuf/Makefile	/^runstatedir = ${localstatedir}\/run$/;"	m
 runstatedir	libinjector/Makefile	/^runstatedir = ${localstatedir}\/run$/;"	m
 runstatedir	plugins/Makefile	/^runstatedir = ${localstatedir}\/run$/;"	m
 runstatedir	xen_helper/Makefile	/^runstatedir = ${localstatedir}\/run$/;"	m
-rva	libdrakvuf/libdrakvuf.h	/^                addr_t rva;$/;"	m	union:drakvuf_trap::__anon17::__anon18::__anon20
+rva	libdrakvuf/libdrakvuf.h	/^                addr_t rva;$/;"	m	union:drakvuf_trap::__anon2::__anon3::__anon5
 rva	libdrakvuf/libdrakvuf.h	/^    addr_t rva;$/;"	m	struct:symbol
 s	plugins/socketmon/socketmon.cpp	/^    socketmon *s;$/;"	m	struct:rettrap_struct	file:
 s	plugins/socketmon/socketmon.cpp	/^    socketmon *s;$/;"	m	struct:watch	file:
@@ -2342,7 +2344,7 @@ sbindir	libdrakvuf/Makefile	/^sbindir = ${exec_prefix}\/sbin$/;"	m
 sbindir	libinjector/Makefile	/^sbindir = ${exec_prefix}\/sbin$/;"	m
 sbindir	plugins/Makefile	/^sbindir = ${exec_prefix}\/sbin$/;"	m
 sbindir	xen_helper/Makefile	/^sbindir = ${exec_prefix}\/sbin$/;"	m
-sc	plugins/syscalls/winscproto.h	/^    syscalls *sc;$/;"	m	struct:__anon15
+sc	plugins/syscalls/winscproto.h	/^    syscalls *sc;$/;"	m	struct:__anon22
 set_os_linux	libdrakvuf/linux.c	/^bool set_os_linux(drakvuf_t drakvuf) {$/;"	f
 set_os_windows	libdrakvuf/win.c	/^bool set_os_windows(drakvuf_t drakvuf) {$/;"	f
 setinformation	plugins/filedelete/filedelete.cpp	/^static event_response_t setinformation(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {$/;"	f	file:
@@ -2399,8 +2401,8 @@ symbols	libdrakvuf/libdrakvuf.h	/^    symbol_t *symbols; \/\/ array of size coun
 symbols	libdrakvuf/libdrakvuf.h	/^typedef struct symbols {$/;"	s
 symbols_t	libdrakvuf/libdrakvuf.h	/^} symbols_t;$/;"	t	typeref:struct:symbols
 syscall_cb	plugins/packeranalyser/packeranalyser.cpp	/^static event_response_t syscall_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {$/;"	f	file:
-syscall_index	plugins/syscalls/winscproto.h	/^    int syscall_index;$/;"	m	struct:__anon15
-syscall_wrapper_t	plugins/syscalls/winscproto.h	/^} syscall_wrapper_t;$/;"	t	typeref:struct:__anon15
+syscall_index	plugins/syscalls/winscproto.h	/^    int syscall_index;$/;"	m	struct:__anon22
+syscall_wrapper_t	plugins/syscalls/winscproto.h	/^} syscall_wrapper_t;$/;"	t	typeref:struct:__anon22
 syscalls	plugins/syscalls/syscalls.cpp	/^syscalls::syscalls(drakvuf_t drakvuf, const void *config, output_format_t output) {$/;"	f	class:syscalls
 syscalls	plugins/syscalls/syscalls.h	/^class syscalls: public plugin {$/;"	c
 sysconfdir	Makefile	/^sysconfdir = ${prefix}\/etc$/;"	m
@@ -2484,7 +2486,6 @@ trap	plugins/exmon/exmon.h	/^        drakvuf_trap_t trap = {$/;"	m	class:exmon
 trap	plugins/filetracer/filetracer.cpp	/^    drakvuf_trap_t *trap;$/;"	m	struct:rettrap_struct	file:
 trap	plugins/objmon/objmon.h	/^        drakvuf_trap_t trap = {$/;"	m	class:objmon
 trap	plugins/packeranalyser/packeranalyser.h	/^        int trap=0, pid=0;$/;"	m	class:packeranalyser
-trap	plugins/packeranalyser/packeranalyser.h	/^    drakvuf_trap_t *trap;$/;"	m	struct:frame
 trap	plugins/poolmon/poolmon.h	/^        drakvuf_trap_t trap;$/;"	m	class:poolmon
 trap	plugins/socketmon/socketmon.cpp	/^    drakvuf_trap_t *trap;$/;"	m	struct:rettrap_struct	file:
 trap_pa	libdrakvuf/libdrakvuf.h	/^    addr_t trap_pa;$/;"	m	struct:drakvuf_trap_info
@@ -2494,13 +2495,13 @@ traps	libdrakvuf/private.h	/^    GSList *traps; \/* List of DRAKVUF traps regist
 traps	libdrakvuf/private.h	/^    GSList *traps;$/;"	m	struct:memcb_pass
 traps	plugins/filedelete/filedelete.h	/^        drakvuf_trap_t traps[4] = {$/;"	m	class:filedelete
 traps	plugins/syscalls/syscalls.h	/^        GSList *traps;$/;"	m	class:syscalls
-type	libdrakvuf/libdrakvuf.h	/^            memaccess_type_t type;$/;"	m	struct:drakvuf_trap::__anon17::__anon21
+type	libdrakvuf/libdrakvuf.h	/^            memaccess_type_t type;$/;"	m	struct:drakvuf_trap::__anon2::__anon6
 type	libdrakvuf/libdrakvuf.h	/^    trap_type_t type;$/;"	m	struct:drakvuf_trap
 type	libdrakvuf/libdrakvuf.h	/^    uint8_t type;$/;"	m	struct:symbol
 type	libdrakvuf/private.h	/^    trap_type_t type;$/;"	m	struct:wrapper
 type	libinjector/injector.c	/^    uint8_t type;$/;"	m	struct:kapc_32	file:
 type	libinjector/injector.c	/^    uint8_t type;$/;"	m	struct:kapc_64	file:
-type	plugins/syscalls/winscproto.h	/^    win_type_t type;$/;"	m	struct:__anon13
+type	plugins/syscalls/winscproto.h	/^    win_type_t type;$/;"	m	struct:__anon20
 udp_endpoint_x64	plugins/socketmon/private.h	/^struct udp_endpoint_x64 {$/;"	s
 udp_endpoint_x86	plugins/socketmon/private.h	/^struct udp_endpoint_x86 {$/;"	s
 udpa_x64_write_cb	plugins/socketmon/socketmon.cpp	/^static event_response_t udpa_x64_write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {$/;"	f	file:
@@ -2525,8 +2526,8 @@ wShowWindow	libinjector/injector.c	/^    uint16_t wShowWindow;$/;"	m	struct:star
 wait_for_process	drakvuf.cpp	/^bool drakvuf_c::wait_for_process(const char *processname)$/;"	f	class:drakvuf_c
 wait_for_process_cb	drakvuf.cpp	/^static event_response_t wait_for_process_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {$/;"	f	file:
 watch	plugins/socketmon/socketmon.cpp	/^struct watch {$/;"	s	file:
-win_arg_direction_t	plugins/syscalls/winscproto.h	/^} win_arg_direction_t;$/;"	t	typeref:enum:__anon11
-win_arg_t	plugins/syscalls/winscproto.h	/^} win_arg_t;$/;"	t	typeref:struct:__anon13
+win_arg_direction_t	plugins/syscalls/winscproto.h	/^} win_arg_direction_t;$/;"	t	typeref:enum:__anon18
+win_arg_t	plugins/syscalls/winscproto.h	/^} win_arg_t;$/;"	t	typeref:struct:__anon20
 win_cb	plugins/syscalls/syscalls.cpp	/^static event_response_t win_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {$/;"	f	file:
 win_find_eprocess	libdrakvuf/win-processes.c	/^bool win_find_eprocess(drakvuf_t drakvuf, vmi_pid_t find_pid, const char *find_procname, addr_t *eprocess_addr) {$/;"	f
 win_get_current_process	libdrakvuf/win-processes.c	/^addr_t win_get_current_process(drakvuf_t drakvuf, uint64_t vcpu_id) {$/;"	f
@@ -2546,13 +2547,14 @@ win_is_eprocess	libdrakvuf/win-processes.c	/^bool win_is_eprocess( drakvuf_t dra
 win_is_ethread	libdrakvuf/win-processes.c	/^bool win_is_ethread( drakvuf_t drakvuf, addr_t dtb, addr_t ethread_addr )$/;"	f
 win_offset_names	libdrakvuf/win-offsets-map.h	/^static const char *win_offset_names[__WIN_OFFSETS_MAX][2] = {$/;"	v
 win_offsets	libdrakvuf/win-offsets.h	/^enum win_offsets {$/;"	g
-win_syscall_t	plugins/syscalls/winscproto.h	/^} win_syscall_t;$/;"	t	typeref:struct:__anon14
+win_syscall_t	plugins/syscalls/winscproto.h	/^} win_syscall_t;$/;"	t	typeref:struct:__anon21
 win_syscalls	plugins/syscalls/winscproto.h	/^static const win_syscall_t win_syscalls[] = {$/;"	v
-win_type_t	plugins/syscalls/winscproto.h	/^} win_type_t;$/;"	t	typeref:enum:__anon12
+win_type_t	plugins/syscalls/winscproto.h	/^} win_type_t;$/;"	t	typeref:enum:__anon19
 wrapper	libdrakvuf/private.h	/^struct wrapper {$/;"	s
 write_cb	plugins/packeranalyser/packeranalyser.cpp	/^event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {\/\/Page was now written to, so let's see if it gets executed$/;"	f
 write_cb	plugins/ssdtmon/ssdtmon.cpp	/^event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t* info) {$/;"	f
 write_page_to_file	plugins/packeranalyser/packeranalyser.cpp	/^void write_page_to_file(vmi_instance_t vmi, drakvuf_trap_info_t *info) {$/;"	f
+write_trap	plugins/packeranalyser/packeranalyser.h	/^    drakvuf_trap_t *write_trap;$/;"	m	struct:frame
 writetraps	plugins/filetracer/filetracer.h	/^        GSList *writetraps;$/;"	m	class:filetracer
 writetraps	plugins/socketmon/socketmon.h	/^        GSList *writetraps;$/;"	m	class:socketmon
 wrote_from	plugins/packeranalyser/packeranalyser.h	/^    int wrote_from = -1, executed_from = -1;$/;"	m	struct:layer_entry
