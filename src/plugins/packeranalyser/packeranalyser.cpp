@@ -133,7 +133,6 @@ static event_response_t recover_address_cb(drakvuf_t drakvuf, drakvuf_trap_info_
     return_address_data *rad = (return_address_data*)info->trap->data;
     packeranalyser *p = (packeranalyser *)rad->p;
     addr_t address_pointer = (addr_t)rad->address_pointer;
-    drakvuf_trap_t *new_trap = NULL;
 
 
     vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
@@ -199,11 +198,6 @@ static event_response_t recover_address_cb(drakvuf_t drakvuf, drakvuf_trap_info_
 
     //printf("New execution_cb_trap registered gfn: 0x%" PRIx32 " address: 0x%" PRIx32 "\n", (unsigned int)gfn, buf32[0]);
 
-    if ( !drakvuf_add_trap(drakvuf, new_trap) ){
-        printf("Couldn't add trap\n");; 
-    } else {
-        p->execution_cb_trap = g_slist_prepend(p->execution_cb_trap, new_trap);
-    }
 
     drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
 

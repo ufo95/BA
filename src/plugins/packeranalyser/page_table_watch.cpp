@@ -359,6 +359,8 @@ int pae_walk_from_entry(vmi_instance_t vmi, packeranalyser *p, drakvuf_t drakvuf
 
     int index = pa & VMI_BIT_MASK(3,11)>>3;//Get the index from the pa: | gfn | index in the table | offset |
 
+    //printf("pae_walk_from_entry: parent_layer: %i", parent->layer);
+
     switch (parent->layer){
         case LAYER_PDPT:
             if((pa-get_pdptb(vmi_pid_to_dtb(vmi, p->pid)))>(3*sizeof(uint64_t))){//The entry->pa is not pointing at our pdpt so ignore it

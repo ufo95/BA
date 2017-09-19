@@ -108,6 +108,7 @@ void add_to_first_layer(drakvuf_t drakvuf, packeranalyser *p, uint64_t page_gfn)
 
 //add_to_next_layer gets called when a new address is written from a layer
 void add_to_layer_with_address(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p, uint64_t from_va, uint64_t page_gfn){
+	//printf("%s \n", __FUNCTION__);
 	addr_t from_pa = vmi_pagetable_lookup(vmi, vmi_pid_to_dtb(vmi, p->pid), from_va);	
 	int from_layer = get_layer_with_gfn(p->layers, from_pa>>12);
 	int to_layer = get_layer_with_gfn(p->layers, page_gfn);
@@ -120,7 +121,7 @@ void add_to_layer_with_address(drakvuf_t drakvuf, vmi_instance_t vmi, packeranal
 		add_to_layer(drakvuf, p, page_gfn, p->current_exec_layer+1);
 		printf("page_gfn: 0x%" PRIx64 " from_va 0x%" PRIx64 " from_pa: 0x%" PRIx64 "\n", page_gfn, from_va, from_pa);
 		printf("add_to_layer_with_address: current: %i from: %i to: %i\n", p->current_exec_layer, from_layer, to_layer);//From layer should be the same as p->current_exec_layer
-	} else {//This page is already in a layer maybe update the written_from var.
+	} else {//This page is already in a layer maybe update the written_from var. If so that means multi frame packer
 		layer_entry *to_entry = (layer_entry *)g_list_nth_data(p->layers, to_layer);
 		if(to_entry->wrote_from<from_layer)
 			to_entry->wrote_from=from_layer;
@@ -134,21 +135,25 @@ void switch_to_layer_with_address(drakvuf_t drakvuf, packeranalyser *p, uint64_t
 	int to_layer = get_layer_with_gfn(p->layers, pa>>12);	
 	int from_layer = p->current_exec_layer;
 	
-	printf("switch_to_layer_with_address: Going to switch from: %i, to %i\n", from_layer, to_layer);
+	printf("switch_to_layer_with_address: Going to switch from: %i, to %i current: %i\n", from_layer, to_layer, p->current_exec_layer);
 	if(to_layer == from_layer){
 		print_layers(p);
 		printf("Why should this happen?, 0x%" PRIx64 "\n", pa);
 		return;
 	}
-	GSList *to_layer_iterator = (GSList *)g_list_nth(p->layers, to_layer);
-	
+	layer_entry *le = (layer_entry *)g_list_nth_data(p->layers, to_layer);
+	GSList *to_layer_iterator = (GSList *)le->frames;
+
 	//remove traps from the new executing layer
+	int i = -1;
 	while(to_layer_iterator!=NULL){//use for_each?
+		i++;
 		tmp = (frame *)to_layer_iterator->data;
 			if(tmp && ((!tmp->exec_trap && tmp->write_trap)
 			   || (tmp->exec_trap && !tmp->write_trap))){
 				printf("%" PRIx64 " Exec: %p Write: %p\n", tmp->gfn, tmp->exec_trap, tmp->write_trap);	
 				printf("FOOOO!\n");
+				print_layers(p);
 				exit(1);
 			}
 		if(tmp&&tmp->exec_trap&&tmp->write_trap){
@@ -164,7 +169,8 @@ void switch_to_layer_with_address(drakvuf_t drakvuf, packeranalyser *p, uint64_t
 
 	GSList *from_layer_iterator = NULL;
 	if(p->current_exec_layer>=0){
-		from_layer_iterator = (GSList *)g_list_nth(p->layers, from_layer);
+		layer_entry *from_layer_entry = (layer_entry *)g_list_nth_data(p->layers, from_layer);
+		from_layer_iterator = (GSList *)from_layer_entry->frames;
 	}
 
 	//add traps to the old executing layer
