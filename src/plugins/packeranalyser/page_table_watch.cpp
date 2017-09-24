@@ -86,7 +86,7 @@ void add_2mb_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyse
 			mb_trap->memaccess.access = VMI_MEMACCESS_W;
 			mb_trap->memaccess.type = POST;
 			mb_trap->type = MEMACCESS;
-			mb_trap->cb = write_cb;
+			mb_trap->cb = initial_write_cb;
 			mb_trap->data = p;
         		drakvuf_add_trap(drakvuf, mb_trap);
 		} else {
@@ -138,7 +138,7 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
 		new_trap->memaccess.access = VMI_MEMACCESS_W;
 		new_trap->memaccess.type = POST;
 		new_trap->type = MEMACCESS;
-		new_trap->cb = write_cb;
+		new_trap->cb = initial_write_cb;
 		new_trap->data = p;
 
 		drakvuf_add_trap(drakvuf, new_trap);
@@ -185,9 +185,9 @@ void add_page_watch_pae(drakvuf_t drakvuf, vmi_instance_t vmi, packeranalyser *p
 
 
 
-        if (init==0){
+        /*if (init==0){
             printf("PTE_Adress: 0x%" PRIx64 " Page: 0x%" PRIx64 " PTE: 0x%" PRIx64 "\n", pte_address, page_gfn, pte);
-        }
+        }*/
     }
 
     return;

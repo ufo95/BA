@@ -17,57 +17,69 @@ void print_list_entries(void *item, void *stuff){
 
     printf("GFN: 0x%" PRIx64 " Layer: %i\n", tmp->gfn, tmp->layer);
 }
-
-void write_page_to_file(vmi_instance_t vmi, drakvuf_trap_info_t *info) {
-    const char dirpath[28] = "/tmp/packeranalyser_output/";
+void dump_layer_to_folder(packeranalyser *p, vmi_instance_t vmi, int layer_index){
+    const char const_dirpath[28] = "/tmp/packeranalyser_output/";
     FILE *fd = NULL;
-    char *filepath = (char *)g_malloc0(sizeof(dirpath)+sizeof(addr_t));
+
+    int dirpath_len = sizeof(const_dirpath)+14;
+    char *dirpath = (char *)g_malloc0(dirpath_len);
+    char *filepath = (char *)g_malloc0(dirpath_len+64);
     uint64_t buf = 0;
     int file_index = 1;
-    addr_t paddr = info->trap_pa & VMI_BIT_MASK(12,63);
+    addr_t paddr = 0;
 
+
+    snprintf(dirpath, dirpath_len, "%s%i/", const_dirpath, p->number_of_transition);
+
+    mkdir(const_dirpath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH | S_IWOTH );
     mkdir(dirpath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH | S_IWOTH );
 
-    snprintf(filepath, sizeof(dirpath)+sizeof(addr_t), "%s%" PRIx64, dirpath, paddr);
-    
-    while(access(filepath, F_OK) != -1){
-        snprintf(filepath, sizeof(dirpath)+sizeof(addr_t), "%s%" PRIx64, dirpath, paddr+file_index);
-        file_index++;
+    layer_entry *le = (layer_entry *)g_list_nth_data(p->layers, layer_index);
+    GSList *layer_to_dump = le->frames;
+    frame *current_frame;
+
+
+    for(int j = 0; j < (int)g_slist_length(le->frames); j++){
+	    current_frame =(frame *)layer_to_dump->data;
+	    paddr = current_frame->gfn<<12;
+
+	    snprintf(filepath, strlen(dirpath)+sizeof(addr_t), "%s%" PRIx64, dirpath, paddr);
+	    
+	    while(access(filepath, F_OK) != -1){
+		snprintf(filepath, strlen(dirpath)+sizeof(addr_t), "%s%" PRIx64, dirpath, paddr+file_index);
+		file_index++;
+	    }
+
+	    fd = fopen(filepath, "w");
+
+	    if(!fd){
+		g_free(filepath);
+		printf("write_page_to_file error opening the file:%s\n", filepath);
+		return;
+	    }
+
+	    for (int i = 0; i < 512; ++i){
+		vmi_read_64_pa(vmi, paddr, &buf);
+		fwrite(&buf, 8, 1, fd);
+		paddr+=8;
+	    }
+    	    fclose(fd);
+	    layer_to_dump = layer_to_dump->next;
     }
 
-    fd = fopen(filepath, "w");
 
-    if(fd==NULL){
-        g_free(filepath);
-        printf("write_page_to_file error opening the file:%s\n", filepath);
-        return;
-    }
-
-    printf("trap_pa: 0x%" PRIx64 " paddr: 0x%" PRIx64 "\n", info->trap_pa, paddr);
-
-    for (int i = 0; i < 512; ++i){
-        vmi_read_64_pa(vmi, paddr, &buf);
-        fwrite(&buf, 8, 1, fd);
-        paddr+=8;
-    }
-    
-
-
-    fclose(fd);
 
     g_free(filepath);
     return;
+
+
 }
 
 event_response_t page_exec_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){//a page outside our current layer got executed
 	packeranalyser *p = (packeranalyser *)info->trap->data;
-	drakvuf_lock_and_get_vmi(drakvuf);
-	
-	
+    	vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
 
-	printf("page_exec_cb\n");
-
-	switch_to_layer_with_address(drakvuf, p, info->trap_pa);
+	switch_to_layer_with_address(drakvuf, vmi, p, info->trap_pa);
 
 	drakvuf_release_vmi(drakvuf);
 	//printf("Switched from layer %i to %i\n", old_layer, p->current_layer);
@@ -76,6 +88,23 @@ event_response_t page_exec_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info){//a 
 }
 
 
+event_response_t initial_write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page was now written to, so let's see if it gets executed
+	uint64_t page_gfn = 0;
+	packeranalyser *p = (packeranalyser *)info->trap->data;
+	vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
+	
+	page_gfn = info->trap_pa>>12; 
+
+	//Page is now added to a layer, its traps are handled by the layers system, so we can remove it here.
+    	drakvuf_remove_trap(drakvuf, info->trap, (drakvuf_trap_free_t)free);
+
+	add_to_layer_with_address(drakvuf, vmi, p, info->regs->rip, page_gfn);
+
+	drakvuf_release_vmi(drakvuf);
+
+	return 0;
+}
+
 event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page was now written to, so let's see if it gets executed
 	uint64_t page_gfn = 0;
 
@@ -83,10 +112,12 @@ event_response_t write_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *info) {//Page 
 	vmi_instance_t vmi = drakvuf_lock_and_get_vmi(drakvuf);
 
 	page_gfn = info->trap_pa>>12; 
-    
+
 	//printf("write_cb: rip: 0x%" PRIx64  " \n", info->regs->rip);
 	add_to_layer_with_address(drakvuf, vmi, p, info->regs->rip, page_gfn);
+	
 	drakvuf_release_vmi(drakvuf);
+
 
 	return 0;
 }
@@ -100,7 +131,6 @@ event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *in
     GList *list_entry = NULL;
     table_trap *entry =  NULL;
     uint64_t page_gfn = info->trap_pa>>12;
-
 
     list_entry = (GList *)g_list_find_custom(p->table_traps, &page_gfn, custom_table_trap_cmp_gfn);//Get the coressponding trable_traps entry
     
@@ -118,7 +148,6 @@ event_response_t page_table_access_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *in
     g_list_foreach(p->table_traps, print_list_entries, NULL);*/
 
     pae_walk_from_entry(vmi, p, drakvuf, entry, info->trap_pa);
-
     //printf("Table_lengths: table_traps: %i page_write_traps: %i page_written_exec_traps: %i\n", g_slist_length(p->table_traps), g_slist_length(p->page_write_traps), g_slist_length(p->page_written_exec_traps));
 
 exit:
@@ -421,8 +450,8 @@ static event_response_t ntcontinue_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *in
 
     if ( !drakvuf_get_function_rva(p->r_p, "NtAllocateVirtualMemory", &p->first_cb_trap.breakpoint.rva) )
         throw -1;
-    if ( !drakvuf_add_trap(drakvuf, &p->first_cb_trap) )
-        throw -1; 
+    //if ( !drakvuf_add_trap(drakvuf, &p->first_cb_trap) )
+    //    throw -1; 
 
     if ( !drakvuf_get_function_rva(p->r_p, "NtProtectVirtualMemory", &p->ntpvm_cb_trap.breakpoint.rva) )
         throw -1;
@@ -431,8 +460,8 @@ static event_response_t ntcontinue_cb(drakvuf_t drakvuf, drakvuf_trap_info_t *in
 
    if ( !drakvuf_get_function_rva(p->r_p, "NtMapViewOfSection", &p->thrd_cb_trap.breakpoint.rva) )
         throw -1;
-    if ( !drakvuf_add_trap(drakvuf, &p->thrd_cb_trap) )
-        throw -1;
+   //if ( !drakvuf_add_trap(drakvuf, &p->thrd_cb_trap) )
+   //     throw -1;
 
 
     return 0;
@@ -481,14 +510,13 @@ packeranalyser::packeranalyser(drakvuf_t drakvuf, const void *config_p, output_f
 
     if ( !drakvuf_get_function_rva(this->r_p, "NtContinue", &this->ntcontinuecb_trap.breakpoint.rva) )
         throw -1;
-    if ( !drakvuf_add_trap(drakvuf, &this->ntcontinuecb_trap) )
-        throw -1; 
+    //if ( !drakvuf_add_trap(drakvuf, &this->ntcontinuecb_trap) )
+    //    throw -1; 
 
 
     this->pm = vmi_get_page_mode(vmi, 0);
     add_page_table_watch(drakvuf, this, vmi, 1);
 
-    printf("Layer 0 frame 1: %p\n", (void *)g_slist_nth((GSList *)this->layers->data, 1));
     printf("add_page_table_watch\n");
       
 
